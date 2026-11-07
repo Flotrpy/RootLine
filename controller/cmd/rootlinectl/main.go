@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -41,7 +42,7 @@ Usage:
   rootlinectl netem loss <container> <pct> | netem clear <container>
   rootlinectl incident run --fault <f> --replica <n> [--warmup]
   rootlinectl campaign --plan plans/pilot.yaml [--progress <file>]
-  rootlinectl remediate --action <type> --target <t> --incident <id>
+  rootlinectl remediate --action <type> --target <t> --incident <id> [--jsonl <file>]
   rootlinectl serve [--addr :8088]
 
 Environment (defaults in brackets):
@@ -301,6 +302,7 @@ func remediateCmd(ctx context.Context, args []string, out io.Writer, d deps) err
 	action := fs.String("action", "", "restart | disable_feature | clear_network_fault | no_action")
 	target := fs.String("target", "", "service or edge")
 	id := fs.String("incident", "", "incident id, e.g. paymentFailure-r1")
+	jsonl := fs.String("jsonl", "", "also append the result as one JSON line to this file")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -314,7 +316,32 @@ func remediateCmd(ctx context.Context, args []string, out io.Writer, d deps) err
 	if err != nil {
 		return err
 	}
+	if *jsonl != "" {
+		if err := appendJSONL(*jsonl, res); err != nil {
+			return err
+		}
+	}
 	return printJSON(out, res)
+}
+
+// appendJSONL appends v as one compact JSON line, the format the analysis
+// reads remediation trials from.
+func appendJSONL(path string, v any) error {
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+	if err := enc.Encode(v); err != nil {
+		return err
+	}
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+	if err != nil {
+		return err
+	}
+	if _, err := f.Write(buf.Bytes()); err != nil {
+		_ = f.Close()
+		return err
+	}
+	return f.Close()
 }
 
 func serveCmd(ctx context.Context, args []string, d deps) error {

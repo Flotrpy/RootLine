@@ -81,3 +81,19 @@ func TestParseToxic(t *testing.T) {
 		}
 	}
 }
+
+func TestAppendJSONL(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "trials.jsonl")
+	for _, v := range []map[string]string{{"edge": "checkout->payment"}, {"edge": "b"}} {
+		if err := appendJSONL(p, v); err != nil {
+			t.Fatal(err)
+		}
+	}
+	raw, err := os.ReadFile(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(raw) != "{\"edge\":\"checkout->payment\"}\n{\"edge\":\"b\"}\n" {
+		t.Fatalf("got %q", raw)
+	}
+}
