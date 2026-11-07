@@ -1,4 +1,4 @@
-.PHONY: test lint test-go test-py lint-go lint-py build
+.PHONY: test lint test-go test-py lint-go lint-py build reproduce
 
 GO_MODULES := controller snapshotter
 # Python code linted by ruff (config in ruff.toml); harness/ owns the venv.
@@ -25,3 +25,7 @@ build:
 	@mkdir -p bin
 	cd controller && go build -o ../bin/rootlinectl ./cmd/rootlinectl
 	cd snapshotter && go build -o ../bin/snapshotter ./cmd/snapshotter
+
+# Regenerate every table and figure in paper/figures/ from data/ (offline).
+reproduce:
+	uv run --project harness python -m analysis reproduce
