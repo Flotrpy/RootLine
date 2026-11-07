@@ -102,6 +102,18 @@ def sweep(answers: dict[str, dict[str, Answer]], thetas=THETAS) -> pl.DataFrame:
     return pl.DataFrame(rows)
 
 
+def decisions(answers: dict[str, dict[str, Answer]], theta: float) -> dict[str, bool]:
+    """Per snapshot: is the cascade's accepted answer correct at theta?"""
+    out = {}
+    for inc, per_tier in answers.items():
+        for tier in TIERS:
+            a = per_tier[tier]
+            if tier == "C" or a.accept_at >= theta:
+                out[inc] = a.correct
+                break
+    return out
+
+
 def single_tiers(answers: dict[str, dict[str, Answer]]) -> pl.DataFrame:
     """Each tier alone, as the reference for the cascade."""
     n = len(answers)

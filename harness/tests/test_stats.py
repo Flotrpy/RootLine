@@ -56,3 +56,14 @@ def test_holm() -> None:
     assert holm([0.03, 0.01, 0.02]) == pytest.approx([0.04, 0.03, 0.04])
     assert holm([0.5, 0.9]) == pytest.approx([1.0, 1.0])
     assert holm([]) == []
+
+
+def test_fisher_exact() -> None:
+    from analysis.stats import fisher_exact
+
+    # Tea-tasting table [[3, 1], [1, 3]]: two-sided p = 0.4857.
+    assert fisher_exact(3, 4, 1, 4) == pytest.approx(0.4857, abs=1e-4)
+    assert fisher_exact(5, 5, 0, 5) == pytest.approx(0.00794, abs=1e-4)
+    assert fisher_exact(2, 4, 2, 4) == pytest.approx(1.0)
+    with pytest.raises(ValueError):
+        fisher_exact(5, 4, 0, 4)

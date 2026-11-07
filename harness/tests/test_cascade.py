@@ -3,7 +3,7 @@ import json
 import polars as pl
 import pytest
 
-from cascade.sweep import THETAS, rq4, select, single_tiers, sweep
+from cascade.sweep import THETAS, decisions, rq4, select, single_tiers, sweep
 from rootline_harness.runner import RUN_COLUMNS
 
 
@@ -111,3 +111,11 @@ def test_ambiguous_tier_needs_explicit_models() -> None:
         select(pl.concat([RUNS, extra]))
     picked = select(pl.concat([RUNS, extra]), {"A": "model-A", "B": "model-B", "C": "model-C"})
     assert len(picked) == 4
+
+
+def test_decisions_match_sweep() -> None:
+    answers = select(RUNS)
+    for theta in (0.3, 0.75):
+        acc = sweep(answers, thetas=(theta,))["accuracy"][0]
+        d = decisions(answers, theta)
+        assert sum(d.values()) / len(d) == pytest.approx(acc)

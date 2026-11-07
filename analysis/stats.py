@@ -100,3 +100,25 @@ def holm(p_values: Sequence[float]) -> list[float]:
         running = max(running, (m - rank) * p_values[i])
         adjusted[i] = min(1.0, running)
     return adjusted
+
+
+def fisher_exact(a_hits: int, a_n: int, b_hits: int, b_n: int) -> float:
+    """Two-sided Fisher exact test for two independent proportions.
+
+    Used where the groups are different snapshots (e.g. network vs
+    application faults in RQ2), so a paired test does not apply. Sums the
+    probabilities of every table at least as unlikely as the observed one.
+    """
+    if not (0 <= a_hits <= a_n and 0 <= b_hits <= b_n):
+        raise ValueError("hits must be between 0 and n")
+    total_hits, n = a_hits + b_hits, a_n + b_n
+    if n == 0:
+        return 1.0
+
+    def prob(k: int) -> float:
+        return math.comb(a_n, k) * math.comb(b_n, total_hits - k) / math.comb(n, total_hits)
+
+    lo, hi = max(0, total_hits - b_n), min(a_n, total_hits)
+    observed = prob(a_hits)
+    p = sum(prob(k) for k in range(lo, hi + 1) if prob(k) <= observed * (1 + 1e-9))
+    return min(1.0, p)
