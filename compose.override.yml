@@ -1,0 +1,113 @@
+# Rootline wiring for the OpenTelemetry Demo.
+#
+# Run from the demo checkout, pinned to the release tag in DEMO_GIT_TAG:
+#   export ROOTLINE_DIR=/path/to/RootLine
+#   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" up -d
+#
+# What it adds:
+#   - one Toxiproxy per edge (checkout->payment, frontend->product-catalog),
+#     each with a netem sidecar sharing its network namespace, so network
+#     faults on one edge never touch the other
+#   - checkout and frontend pointed at those proxies instead of the services
+#   - the snapshotter, fed by an extra OTLP/HTTP exporter on the collector
+#   - the load generator fixed at 20 users, started automatically
+#
+# TODO(flotrpy): after the first pull, pin every image to its digest
+# (controller/deploy/record-digests.sh prints them) and check the port and
+# address variable names against the pinned tag's docker-compose.yml and .env.
+
+x-toxiproxy: &toxiproxy
+  image: ghcr.io/shopify/toxiproxy:2.12.0
+  restart: unless-stopped
+  deploy:
+    resources:
+      limits:
+        memory: 64M
+
+x-netem: &netem
+  image: alpine:3.22
+  # iproute2 provides tc; the container only idles so rootlinectl can exec.
+  command: ["sh", "-c", "apk add --no-cache iproute2 >/dev/null && exec sleep infinity"]
+  cap_add: [NET_ADMIN]
+  restart: unless-stopped
+  deploy:
+    resources:
+      limits:
+        memory: 32M
+
+services:
+  toxiproxy-payment:
+    <<: *toxiproxy
+    container_name: toxiproxy-payment
+    command: ["-host=0.0.0.0", "-config=/config/toxiproxy.json"]
+    volumes:
+      - ${ROOTLINE_DIR:?set ROOTLINE_DIR}/controller/deploy/toxiproxy-payment.json:/config/toxiproxy.json:ro
+    ports:
+      - "127.0.0.1:8474:8474"
+    depends_on: [payment]
+
+  netem-payment:
+    <<: *netem
+    container_name: netem-payment
+    network_mode: "service:toxiproxy-payment"
+    depends_on: [toxiproxy-payment]
+
+  toxiproxy-catalog:
+    <<: *toxiproxy
+    container_name: toxiproxy-catalog
+    command: ["-host=0.0.0.0", "-config=/config/toxiproxy.json"]
+    volumes:
+      - ${ROOTLINE_DIR:?set ROOTLINE_DIR}/controller/deploy/toxiproxy-catalog.json:/config/toxiproxy.json:ro
+    ports:
+      - "127.0.0.1:8475:8474"
+    depends_on: [product-catalog]
+
+  netem-catalog:
+    <<: *netem
+    container_name: netem-catalog
+    network_mode: "service:toxiproxy-catalog"
+    depends_on: [toxiproxy-catalog]
+
+  checkout:
+    environment:
+      - PAYMENT_ADDR=toxiproxy-payment:${PAYMENT_PORT}
+    depends_on: [toxiproxy-payment]
+
+  frontend:
+    environment:
+      - PRODUCT_CATALOG_ADDR=toxiproxy-catalog:${PRODUCT_CATALOG_PORT}
+    depends_on: [toxiproxy-catalog]
+
+  load-generator:
+    environment:
+      - LOCUST_USERS=20
+      - LOCUST_SPAWN_RATE=2
+      - LOCUST_AUTOSTART=true
+
+  otel-collector:
+    volumes:
+      - ${ROOTLINE_DIR:?set ROOTLINE_DIR}/controller/deploy/otelcol-config-extras.yml:/etc/otelcol-config-extras.yml:ro
+    depends_on: [snapshotter]
+
+  snapshotter:
+    build:
+      context: ${ROOTLINE_DIR:?set ROOTLINE_DIR}/snapshotter
+      args:
+        GIT_SHA: ${ROOTLINE_GIT_SHA:-unknown}
+    container_name: snapshotter
+    environment:
+      - DEMO_GIT_TAG=${DEMO_GIT_TAG:-}
+      - COLLECTOR_VERSION=${COLLECTOR_VERSION:-}
+      - IMAGE_DIGESTS_FILE=/data/image-digests.json
+    volumes:
+      - ${ROOTLINE_DIR:?set ROOTLINE_DIR}/data:/data
+    ports:
+      - "127.0.0.1:8089:8089"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  # 16 GB hosts: candidates to trim if memory is tight. Disabling a service
+  # that a pipeline exports to also needs a collector config change.
+  # TODO(flotrpy): decide after the dry run (watch `docker stats`).

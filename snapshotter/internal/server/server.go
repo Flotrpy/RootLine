@@ -276,8 +276,16 @@ func (s *Server) Snapshot(req Request) (Result, error) {
 	return Result{Dir: final, Spans: len(spans), Metrics: len(metrics), Logs: len(logs)}, nil
 }
 
-// GitSHA reads the VCS revision Go embeds at build time.
+// BuildSHA is set with -ldflags in the Docker build, where the .git
+// directory, and so Go's embedded VCS info, is not available.
+var BuildSHA string
+
+// GitSHA returns the snapshotter's commit: BuildSHA if set, else the VCS
+// revision Go embeds at build time.
 func GitSHA() string {
+	if BuildSHA != "" {
+		return BuildSHA
+	}
 	info, ok := debug.ReadBuildInfo()
 	if !ok {
 		return "unknown"

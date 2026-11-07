@@ -1,0 +1,8 @@
+[
+  {
+    "name": "product-catalog",
+    "listen": "0.0.0.0:3550",
+    "upstream": "product-catalog:3550",
+    "enabled": true
+  }
+]
