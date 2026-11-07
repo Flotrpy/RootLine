@@ -1,0 +1,14 @@
+{
+  "logs": {
+    "schema": "ts:int64; service:utf8; severity:utf8; body:utf8; trace_id:utf8?",
+    "rows": 2
+  },
+  "metrics": {
+    "schema": "ts:int64; service:utf8; metric_name:utf8; value:float64; labels:utf8",
+    "rows": 10
+  },
+  "spans": {
+    "schema": "trace_id:utf8; span_id:utf8; parent_span_id:utf8?; service:utf8; operation:utf8; start_unix_nano:int64; duration_ns:int64; status_code:utf8; attributes:utf8",
+    "rows": 2
+  }
+}

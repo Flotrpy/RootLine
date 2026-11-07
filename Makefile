@@ -1,6 +1,6 @@
 .PHONY: test lint test-go test-py lint-go lint-py build
 
-GO_MODULES := controller
+GO_MODULES := controller snapshotter
 
 test: test-go test-py
 
@@ -19,4 +19,6 @@ lint-py:
 	@if [ -f harness/pyproject.toml ]; then cd harness && uv run ruff check . && uv run ruff format --check . && uv run pyright; fi
 
 build:
-	@mkdir -p bin && cd controller && go build -o ../bin/rootlinectl ./cmd/rootlinectl
+	@mkdir -p bin
+	cd controller && go build -o ../bin/rootlinectl ./cmd/rootlinectl
+	cd snapshotter && go build -o ../bin/snapshotter ./cmd/snapshotter
