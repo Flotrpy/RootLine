@@ -58,9 +58,55 @@ characterise what budget-constrained teams can achieve today, not the frontier.
 ## Quick start
 
 ```bash
-make test        # run every module's unit tests
-make lint        # run every linter
+make test        # unit tests for both Go modules and the Python harness
+make lint        # go vet, golangci-lint, ruff, pyright
+make build       # bin/rootlinectl and bin/snapshotter
 ```
+
+## Running the pilot
+
+Needs Docker, about 16 GB of RAM, and a checkout of the OpenTelemetry Demo
+at a pinned release tag. Docs: [architecture](docs/ARCHITECTURE.md),
+[data contracts](docs/DATA.md).
+
+1. Start the demo with Rootline's wiring, from the demo checkout:
+
+   ```bash
+   export ROOTLINE_DIR=/path/to/RootLine DEMO_GIT_TAG=<tag>
+   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" up -d --build
+   ```
+
+2. Record image digests for the manifests:
+
+   ```bash
+   COMPOSE="docker compose -f docker-compose.yml -f $ROOTLINE_DIR/compose.override.yml" "$ROOTLINE_DIR/controller/deploy/record-digests.sh"
+   ```
+
+3. From the RootLine checkout, check a flag round trip:
+
+   ```bash
+   export ROOTLINE_FLAGD_FILE=/path/to/opentelemetry-demo/src/flagd/demo.flagd.json
+   ./bin/rootlinectl flag set adHighCpu on && ./bin/rootlinectl flag reset --all
+   ```
+
+4. Gate 1, one full dry run (about 25 minutes with warm-up):
+
+   ```bash
+   ./bin/rootlinectl incident run --fault paymentFailure --replica 1 --warmup
+   cd harness && uv run python -m rootline_harness.packers ../data/snapshots/paymentFailure-r1 --condition combined
+   ```
+
+   Pass when `data/snapshots/paymentFailure-r1/` holds three Parquet files and
+   a manifest, `data/labels/paymentFailure-r1.json` exists, and the pack
+   shows payment errors near the top. Then move or delete that dry-run
+   snapshot so the campaign can write `paymentFailure-r1` again.
+
+5. Overnight collection (30 incidents, about 6.5 hours, safe to Ctrl-C and
+   rerun):
+
+   ```bash
+   ./bin/rootlinectl campaign --plan plans/pilot.yaml
+   ```
 
 ## Licence
 
