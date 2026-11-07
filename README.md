@@ -111,3 +111,40 @@ at a pinned release tag. Docs: [architecture](docs/ARCHITECTURE.md),
 ## Licence
 
 Code: Apache-2.0. Dataset: CC BY 4.0.
+
+## Running the models
+
+From the repository root, after the overnight campaign has written
+`data/snapshots/` and `data/labels/`. Models and provider caps live in
+`harness/rootline_harness/scheduler/` (`providers.py`, `ratelimits.yaml`).
+
+1. Gate 2, the same snapshot scored twice must match:
+
+   ```bash
+   uv run --project harness python -m rootline_harness.run gate2 --incident paymentFailure-r1 --model gpt-oss-120b@cerebras
+   ```
+
+2. Queue and run (resumable; waits out rate limits instead of hitting them):
+
+   ```bash
+   uv run --project harness python -m rootline_harness.run enqueue --models gpt-oss-120b@cerebras
+   uv run --project harness python -m rootline_harness.run work
+   uv run --project harness python -m rootline_harness.run status
+   uv run --project harness python -m rootline_harness.run export
+   ```
+
+   Add `--perturb p1` to `enqueue` for the anonymised-names runs.
+
+3. Live remediation trials with the best model's own actions:
+
+   ```bash
+   uv run --project harness python -m analysis plan-remediation
+   ```
+
+   Run the printed `rootlinectl remediate ... --jsonl data/runs/remediation.jsonl` commands.
+
+4. Regenerate every table and figure into `paper/figures/`, offline:
+
+   ```bash
+   make reproduce
+   ```
