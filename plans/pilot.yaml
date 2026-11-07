@@ -1,0 +1,8 @@
+# v0.1 pilot: 15 incident types x 2 replicas = 30 snapshots (about 6.5 h).
+# Run with: rootlinectl campaign --plan plans/pilot.yaml
+name: pilot
+replicas: 2
+# Empty list = every catalog fault, in catalog order.
+faults: []
+# Fixed seed so the run order is shuffled but reproducible.
+seed: 20261107
