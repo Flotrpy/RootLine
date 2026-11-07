@@ -97,3 +97,12 @@ def test_pack_json_round_trip(snapshot: Snapshot) -> None:
     pack = build_pack(snapshot, "combined", BUDGET)
     again = Pack.from_json(pack.to_json())
     assert again == pack
+
+
+def test_cli_prints_pack(snapshot_dir, capsys) -> None:
+    from rootline_harness.packers.__main__ import main
+
+    assert main([str(snapshot_dir), "--condition", "logs"]) == 0
+    out = capsys.readouterr()
+    assert out.out.startswith("## LOGS")
+    assert "prompt tokens" in out.err
