@@ -17,14 +17,16 @@ import (
 // Edge says how one service-to-service edge is wired in compose.override.yml.
 type Edge struct {
 	Proxy     string // Toxiproxy proxy name
-	Container string // container that carries the edge's traffic, for netem
+	Container string // netem sidecar sharing the edge proxy's network namespace
 }
 
 // DefaultEdges matches compose.override.yml. Each edge gets its own
-// Toxiproxy container so a netem rule on one edge never touches the other.
+// Toxiproxy container, and a netem sidecar that shares that container's
+// network namespace (the Toxiproxy image has no tc binary), so a netem rule
+// on one edge never touches the other.
 var DefaultEdges = map[string]Edge{
-	catalog.EdgeCheckoutPayment: {Proxy: "payment", Container: "toxiproxy-payment"},
-	catalog.EdgeFrontendCatalog: {Proxy: "product-catalog", Container: "toxiproxy-catalog"},
+	catalog.EdgeCheckoutPayment: {Proxy: "payment", Container: "netem-payment"},
+	catalog.EdgeFrontendCatalog: {Proxy: "product-catalog", Container: "netem-catalog"},
 }
 
 // ToxicName is the name every Rootline toxic gets inside Toxiproxy.

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,7 +19,10 @@ func testDeps(t *testing.T) deps {
 	if err := os.WriteFile(p, []byte(doc), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	return deps{cfg: config{FlagdFile: p, LabelsDir: t.TempDir()}}
+	return deps{
+		cfg: config{FlagdFile: p, LabelsDir: t.TempDir(), ToxiURLs: "payment=http://127.0.0.1:1"},
+		log: slog.New(slog.NewTextHandler(io.Discard, nil)),
+	}
 }
 
 func TestRunCommands(t *testing.T) {

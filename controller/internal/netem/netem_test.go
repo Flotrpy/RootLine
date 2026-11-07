@@ -31,7 +31,7 @@ func TestLoss(t *testing.T) {
 		want    []string
 		wantErr bool
 	}{
-		{"five percent", 5, []string{"exec", "toxiproxy-catalog", "tc", "qdisc", "replace", "dev", "eth0", "root", "netem", "loss", "5%"}, false},
+		{"five percent", 5, []string{"exec", "netem-catalog", "tc", "qdisc", "replace", "dev", "eth0", "root", "netem", "loss", "5%"}, false},
 		{"zero rejected", 0, nil, true},
 		{"over 100 rejected", 101, nil, true},
 	}
@@ -39,7 +39,7 @@ func TestLoss(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &fakeRunner{}
 			n := &Netem{Runner: r}
-			err := n.Loss(context.Background(), "toxiproxy-catalog", tt.pct)
+			err := n.Loss(context.Background(), "netem-catalog", tt.pct)
 			if (err != nil) != tt.wantErr {
 				t.Fatalf("err = %v", err)
 			}

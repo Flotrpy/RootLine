@@ -94,3 +94,32 @@ func TestClientErrors(t *testing.T) {
 		t.Fatalf("want 404 error, got %v", err)
 	}
 }
+
+func TestRouter(t *testing.T) {
+	a := httptest.NewServer(&fakeServer{toxics: map[string][]Toxic{}})
+	defer a.Close()
+	b := httptest.NewServer(&fakeServer{toxics: map[string][]Toxic{}})
+	defer b.Close()
+	r, err := ParseRouter("payment=" + a.URL + ", product-catalog=" + b.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx := context.Background()
+	if err := r.AddToxic(ctx, "payment", Toxic{Name: "x", Type: "latency"}); err != nil {
+		t.Fatal(err)
+	}
+	if got, _ := NewClient(a.URL).ListToxics(ctx, "payment"); len(got) != 1 {
+		t.Fatal("toxic did not reach the payment server")
+	}
+	if got, _ := NewClient(b.URL).ListToxics(ctx, "payment"); len(got) != 0 {
+		t.Fatal("toxic leaked to the catalog server")
+	}
+	if err := r.AddToxic(ctx, "cart", Toxic{Name: "x"}); err == nil {
+		t.Fatal("want error for unrouted proxy")
+	}
+	for _, bad := range []string{"", "payment", "=http://x", "payment="} {
+		if _, err := ParseRouter(bad); err == nil {
+			t.Errorf("%q: want error", bad)
+		}
+	}
+}

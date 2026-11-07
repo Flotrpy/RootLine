@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -104,4 +105,64 @@ func ClearAll(ctx context.Context, p Proxies, proxy string) error {
 		}
 	}
 	return nil
+}
+
+// Router sends each proxy's calls to the Toxiproxy server that owns it.
+// Rootline runs one Toxiproxy container per edge, so a netem rule on one
+// edge's container never touches the other edge.
+type Router map[string]Proxies
+
+func (r Router) route(proxy string) (Proxies, error) {
+	p, ok := r[proxy]
+	if !ok {
+		return nil, fmt.Errorf("no Toxiproxy server configured for proxy %q", proxy)
+	}
+	return p, nil
+}
+
+// AddToxic implements Proxies.
+func (r Router) AddToxic(ctx context.Context, proxy string, t Toxic) error {
+	p, err := r.route(proxy)
+	if err != nil {
+		return err
+	}
+	return p.AddToxic(ctx, proxy, t)
+}
+
+// ListToxics implements Proxies.
+func (r Router) ListToxics(ctx context.Context, proxy string) ([]Toxic, error) {
+	p, err := r.route(proxy)
+	if err != nil {
+		return nil, err
+	}
+	return p.ListToxics(ctx, proxy)
+}
+
+// RemoveToxic implements Proxies.
+func (r Router) RemoveToxic(ctx context.Context, proxy, toxic string) error {
+	p, err := r.route(proxy)
+	if err != nil {
+		return err
+	}
+	return p.RemoveToxic(ctx, proxy, toxic)
+}
+
+// ParseRouter reads "proxy=url,proxy=url" into a Router of HTTP clients.
+func ParseRouter(spec string) (Router, error) {
+	r := Router{}
+	for _, part := range strings.Split(spec, ",") {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		name, base, ok := strings.Cut(part, "=")
+		if !ok || name == "" || base == "" {
+			return nil, fmt.Errorf("bad Toxiproxy entry %q, want proxy=url", part)
+		}
+		r[name] = NewClient(base)
+	}
+	if len(r) == 0 {
+		return nil, fmt.Errorf("no Toxiproxy servers in %q", spec)
+	}
+	return r, nil
 }

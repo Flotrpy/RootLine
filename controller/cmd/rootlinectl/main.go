@@ -46,7 +46,7 @@ Usage:
 
 Environment (defaults in brackets):
   ROOTLINE_FLAGD_FILE  [opentelemetry-demo/src/flagd/demo.flagd.json]
-  TOXIPROXY_URL        [http://localhost:8474]
+  TOXIPROXY_URLS       [payment=http://localhost:8474,product-catalog=http://localhost:8475]
   PROMETHEUS_URL       [http://localhost:9090]
   SNAPSHOTTER_URL      [http://localhost:8089]
   ROOTLINE_LABELS_DIR  [data/labels]
@@ -54,7 +54,7 @@ Environment (defaults in brackets):
 
 // config is read from the environment.
 type config struct {
-	FlagdFile, ToxiURL, PromURL, SnapURL, LabelsDir string
+	FlagdFile, ToxiURLs, PromURL, SnapURL, LabelsDir string
 }
 
 func env(k, def string) string {
@@ -67,7 +67,7 @@ func env(k, def string) string {
 func loadConfig() config {
 	return config{
 		FlagdFile: env("ROOTLINE_FLAGD_FILE", "opentelemetry-demo/src/flagd/demo.flagd.json"),
-		ToxiURL:   env("TOXIPROXY_URL", "http://localhost:8474"),
+		ToxiURLs:  env("TOXIPROXY_URLS", "payment=http://localhost:8474,product-catalog=http://localhost:8475"),
 		PromURL:   env("PROMETHEUS_URL", "http://localhost:9090"),
 		SnapURL:   env("SNAPSHOTTER_URL", "http://localhost:8089"),
 		LabelsDir: env("ROOTLINE_LABELS_DIR", "data/labels"),
@@ -82,9 +82,15 @@ type deps struct {
 }
 
 func (d deps) injector() *inject.Injector {
+	router, err := toxi.ParseRouter(d.cfg.ToxiURLs)
+	if err != nil {
+		// Commands that touch Toxiproxy report the problem on first use.
+		router = toxi.Router{}
+		d.log.Warn("TOXIPROXY_URLS", "err", err)
+	}
 	return &inject.Injector{
 		Flags: flagd.NewStore(d.cfg.FlagdFile),
-		Toxi:  toxi.NewClient(d.cfg.ToxiURL),
+		Toxi:  router,
 		Netem: netem.New(),
 		Edges: inject.DefaultEdges,
 	}
