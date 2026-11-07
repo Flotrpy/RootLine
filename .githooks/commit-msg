@@ -1,0 +1,19 @@
+#!/bin/sh
+# Reject commit messages that carry tool attribution trailers.
+if grep -qiE '^(co-authored-by:|generated with|.*claude|.*anthropic)' "$1"; then
+  echo "commit-msg: AI attribution line found; remove it" >&2
+  exit 1
+fi
+# Enforce Conventional Commits on the subject line.
+subject=$(head -n1 "$1")
+case "$subject" in
+  Merge*) exit 0 ;;
+esac
+if ! printf '%s' "$subject" | grep -qE '^(feat|fix|test|docs|refactor|ci|build|chore)(\([a-z-]+\))?: .{1,}$'; then
+  echo "commit-msg: subject must be 'type(scope): summary'" >&2
+  exit 1
+fi
+if [ "${#subject}" -gt 72 ]; then
+  echo "commit-msg: subject is longer than 72 characters" >&2
+  exit 1
+fi

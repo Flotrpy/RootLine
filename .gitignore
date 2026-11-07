@@ -1,0 +1,44 @@
+# Data: snapshots go to Hugging Face, labels/runs/holdout stay private until release
+data/snapshots/*
+!data/snapshots/.gitkeep
+data/labels/*
+!data/labels/.gitkeep
+data/runs/*
+!data/runs/.gitkeep
+data/holdout/
+
+# Secrets
+.env
+.env.*
+*.pem
+
+# Go
+/bin/
+*.test
+*.out
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+
+# Rust
+target/
+
+# Web
+node_modules/
+.next/
+out/
+
+# Editors and local tool settings
+.idea/
+.vscode/
+.DS_Store
+.claude/settings.local.json
+
+# Typst
+paper/*.pdf
