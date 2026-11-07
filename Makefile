@@ -1,6 +1,8 @@
 .PHONY: test lint test-go test-py lint-go lint-py build
 
 GO_MODULES := controller snapshotter
+# Python code linted by ruff (config in ruff.toml); harness/ owns the venv.
+PY_DIRS := harness cascade baselines analysis
 
 test: test-go test-py
 
@@ -13,10 +15,11 @@ lint-go:
 	@for m in $(GO_MODULES); do (cd $$m && go vet ./... && golangci-lint run ./...) || exit 1; done
 
 test-py:
-	@if [ -f harness/pyproject.toml ]; then cd harness && uv run pytest -q; fi
+	@cd harness && uv run pytest -q
 
 lint-py:
-	@if [ -f harness/pyproject.toml ]; then cd harness && uv run ruff check . && uv run ruff format --check . && uv run pyright; fi
+	@uv run --project harness ruff check $(PY_DIRS) && uv run --project harness ruff format --check $(PY_DIRS)
+	@cd harness && uv run pyright
 
 build:
 	@mkdir -p bin
