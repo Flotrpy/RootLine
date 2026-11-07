@@ -8,8 +8,11 @@ authors = [{ name = "flotrpy" }]
 requires-python = ">=3.13"
 dependencies = [
     "drain3>=0.9.11",
+    "inspect-ai>=0.3",
+    "litellm>=1.50",
     "polars>=1.0",
     "pydantic>=2.7",
+    "pyyaml>=6",
     "tiktoken>=0.7",
 ]
 

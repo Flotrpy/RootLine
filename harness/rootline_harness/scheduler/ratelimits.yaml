@@ -1,0 +1,48 @@
+# Free-tier caps per provider. The scheduler never exceeds any of them:
+# per-minute caps over a rolling 60 s, per-day caps over a rolling 24 h
+# (stricter than a calendar-day reset, so it is safe either way).
+#
+# TODO(flotrpy): check each value against the provider's current free-tier
+# page before the first real run, and set them a little below the published
+# figure. null means "no cap" (local servers).
+#
+# Keys: rpm/rpd = requests per minute/day, tpm/tpd = tokens per minute/day.
+
+providers:
+  cerebras:
+    api_base: null
+    rpm: 30
+    rpd: 14000
+    tpm: 60000
+    tpd: 1000000
+  groq:
+    api_base: null
+    rpm: 30
+    rpd: 1000
+    tpm: 8000
+    tpd: 200000
+  gemini:
+    api_base: null
+    rpm: 10
+    rpd: 250
+    tpm: 250000
+    tpd: null
+  openrouter:
+    api_base: null
+    rpm: 20
+    rpd: 50
+    tpm: null
+    tpd: null
+  ollama:
+    api_base: http://localhost:11434
+    rpm: null
+    rpd: null
+    tpm: null
+    tpd: null
+  vllm:
+    # The Kaggle notebook's OpenAI-compatible endpoint.
+    api_base: http://localhost:8000/v1
+    rpm: null
+    rpd: null
+    tpm: null
+    tpd: null
