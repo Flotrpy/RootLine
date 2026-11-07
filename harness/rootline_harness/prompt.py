@@ -17,6 +17,22 @@ from rootline_harness.perturb import anonymise_pack, anonymise_text, mapping_for
 
 Perturbation = Literal["p0", "p1"]
 
+# Tokens held back so the one retry (prompt + validation error) still fits
+# the budget.
+RETRY_RESERVE = 160
+MAX_ERROR_CHARS = 300
+RETRY_SUFFIX = (
+    "\n\nYour previous answer was rejected: {error}\n"
+    "Reply again with ONE corrected JSON object and nothing else."
+)
+
+
+def retry_text(prompt_text: str, error: str) -> str:
+    """The original prompt with the validation error appended."""
+    err = " ".join(error.split())[:MAX_ERROR_CHARS]
+    return prompt_text + RETRY_SUFFIX.format(error=err)
+
+
 TEMPLATE = """You are the on-call engineer for a microservice web shop. Below is telemetry \
 from a 10-minute window; "fault onset" is the midpoint. The window may contain a fault, or \
 the system may be healthy.
@@ -67,6 +83,7 @@ def build_prompt(
     condition: Condition,
     perturbation: Perturbation = "p0",
     budget: int = PROMPT_BUDGET,
+    reserve: int = RETRY_RESERVE,
 ) -> Prompt:
     mapping = mapping_for(snap.incident_id) if perturbation == "p1" else None
     services = sorted(SERVICES)
@@ -80,11 +97,11 @@ def build_prompt(
     # re-check the final prompt; shrink and retry in the rare case it is over.
     margin = 0
     while True:
-        pack = build_pack(snap, condition, budget - overhead - margin)
+        pack = build_pack(snap, condition, budget - reserve - overhead - margin)
         if mapping:
             pack = anonymise_pack(pack, mapping)
         text = _render(services, edges, pack.render())
         tokens = count_tokens(text)
-        if tokens <= budget:
+        if tokens <= budget - reserve:
             return Prompt(text=text, tokens=tokens, pack=pack, mapping=mapping)
-        margin += tokens - budget + 16
+        margin += tokens - (budget - reserve) + 16

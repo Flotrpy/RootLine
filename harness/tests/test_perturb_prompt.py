@@ -5,7 +5,7 @@ import pytest
 from rootline_harness.catalog import SERVICES
 from rootline_harness.packers import CONDITIONS, PROMPT_BUDGET, Snapshot, count_tokens
 from rootline_harness.perturb import anonymise_text, invert, mapping_for
-from rootline_harness.prompt import build_prompt
+from rootline_harness.prompt import build_prompt, retry_text
 
 
 def test_mapping_is_deterministic_and_complete() -> None:
@@ -71,3 +71,10 @@ def test_prompt_lists_services_and_schema(snapshot: Snapshot) -> None:
     assert "payment" in p.text and "checkout->payment" in p.text
     assert '"abstain": bool' in p.text
     assert p.mapping is None
+
+
+@pytest.mark.parametrize("condition", CONDITIONS)
+def test_retry_prompt_still_fits(snapshot: Snapshot, condition) -> None:
+    p = build_prompt(snapshot, condition, "p1")
+    worst_error = "schema violation: " + "x" * 5000
+    assert count_tokens(retry_text(p.text, worst_error)) <= PROMPT_BUDGET
