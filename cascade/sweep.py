@@ -64,8 +64,10 @@ def select(
         tier_models = {}
         for tier in TIERS:
             models = sorted(df.filter(pl.col("tier") == tier)["model_id"].unique().to_list())
-            if len(models) != 1:
-                raise ValueError(f"tier {tier} has models {models}; pass tier_models")
+            if not models:
+                raise ValueError(f"needs one model per tier (A, B, C); tier {tier} has none")
+            if len(models) > 1:
+                raise ValueError(f"tier {tier} has several models {models}; pick one per tier")
             tier_models[tier] = models[0]
     answers: dict[str, dict[str, Answer]] = {}
     for tier, model in tier_models.items():

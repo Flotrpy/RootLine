@@ -107,7 +107,7 @@ def test_rq4_flags() -> None:
 
 def test_ambiguous_tier_needs_explicit_models() -> None:
     extra = frame([rec("i1", "A", top1=True, conf=0.9, tokens=1) | {"model_id": "other-A"}])
-    with pytest.raises(ValueError, match="tier A"):
+    with pytest.raises(ValueError, match="tier A has several models"):
         select(pl.concat([RUNS, extra]))
     picked = select(pl.concat([RUNS, extra]), {"A": "model-A", "B": "model-B", "C": "model-C"})
     assert len(picked) == 4
