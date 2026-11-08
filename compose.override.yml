@@ -99,6 +99,15 @@ services:
         limits:
           memory: 300M
 
+  # Postgres idles near its 80M cap. Under productCatalogLockContention the
+  # queued connections pushed it over, the OOM killer hit a backend, and
+  # Postgres crash-looped for over an hour, spoiling five pilot snapshots.
+  astronomy-db:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
   frontend:
     environment:
       - PRODUCT_CATALOG_ADDR=toxiproxy-catalog:${PRODUCT_CATALOG_PORT}
