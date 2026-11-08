@@ -46,3 +46,7 @@ paper/figures/
 
 # Derived from snapshots by rootline_harness.export_packs
 data/packs/
+
+# Built by `python -m analysis site-data`
+web/public/data/
+web/public/duckdb/

@@ -132,6 +132,11 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     rp = sub.add_parser("reproduce")
     rp.add_argument("--out", type=Path, default=None)
+    sd = sub.add_parser("site-data", help="write web/public/data for the static site")
+    sd.add_argument("--out", type=Path, default=None)
+    sd.add_argument(
+        "--include-labels", action="store_true", help="release builds only: reveal the answers"
+    )
     pr = sub.add_parser("plan-remediation")
     pr.add_argument("--model", default=None, help="default: best model on combined p0")
     pr.add_argument("--replica", type=int, default=1)
@@ -141,6 +146,15 @@ def main(argv: list[str] | None = None) -> int:
         res = reproduce(args.root, args.out or args.root / "paper" / "figures")
         for h in res["hypotheses"]:  # type: ignore[union-attr]
             print(f"{h['rq']}: {h['status']} effect={h['effect']} p_holm={h['p_holm']}")
+        return 0
+    if args.cmd == "site-data":
+        from analysis.site_data import write_site_data
+
+        out = args.out or args.root / "web" / "public" / "data"
+        site = write_site_data(args.root, out, args.include_labels)
+        print(
+            f"wrote site data to {out}: {site['label']}, labels included: {site['labels_included']}"
+        )
         return 0
     runs = pl.read_parquet(args.root / "data" / "runs" / "runs.parquet")
     model = args.model or best_model(runs)
