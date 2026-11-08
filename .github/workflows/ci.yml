@@ -43,3 +43,20 @@ jobs:
       - run: uv run ruff format --check ../harness ../cascade ../baselines ../analysis
       - run: uv run pyright
       - run: uv run pytest -q
+
+  rust:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: replay
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: replay
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - run: cargo test --locked
