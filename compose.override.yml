@@ -71,10 +71,33 @@ services:
     network_mode: "service:toxiproxy-catalog"
     depends_on: [toxiproxy-catalog]
 
+  # The demo caps checkout and product-catalog at 20M (sized for its default
+  # 10 users). At 20 users they hit the cap, the kernel keeps evicting their
+  # code pages, and the host stalls on disk reads until both go unhealthy.
   checkout:
     environment:
       - PAYMENT_ADDR=toxiproxy-payment:${PAYMENT_PORT}
+      - GOMEMLIMIT=52MiB
+    deploy:
+      resources:
+        limits:
+          memory: 64M
     depends_on: [toxiproxy-payment]
+
+  product-catalog:
+    environment:
+      - GOMEMLIMIT=52MiB
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+
+  # Same problem at 175M once dashboards are open.
+  grafana:
+    deploy:
+      resources:
+        limits:
+          memory: 300M
 
   frontend:
     environment:
