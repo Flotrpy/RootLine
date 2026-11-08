@@ -92,7 +92,7 @@ services:
         limits:
           memory: 64M
 
-  # Same problem at 175M once dashboards are open.
+  # Grafana also sat at its 175M cap with no dashboard open.
   grafana:
     deploy:
       resources:
