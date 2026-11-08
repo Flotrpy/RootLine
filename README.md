@@ -148,3 +148,41 @@ From the repository root, after the overnight campaign has written
    ```bash
    make reproduce
    ```
+
+## Replay without Python
+
+The Rust CLI renders the exact evidence a model saw and can ask a local
+model. Export the packs once, then:
+
+```bash
+uv run --project harness python -m rootline_harness.export_packs
+```
+
+```bash
+./bin/rootline info data/snapshots/paymentFailure-r1
+```
+
+```bash
+./bin/rootline replay data/snapshots/paymentFailure-r1 --condition combined --perturb p1
+```
+
+```bash
+./bin/rootline replay data/snapshots/paymentFailure-r1 --model ollama/<name>
+```
+
+## Results site
+
+A static site in `web/` (Next.js export, DuckDB-WASM in the browser).
+Build its data, then preview at the root path:
+
+```bash
+uv run --project harness python -m analysis site-data
+```
+
+```bash
+cd web && pnpm install && NEXT_PUBLIC_BASE_PATH="" pnpm build
+```
+
+The site deploys to GitHub Pages only at release, by hand (`pages.yml`),
+built with `--include-labels`: incident IDs name the faults, so an earlier
+deploy would reveal the answers.
