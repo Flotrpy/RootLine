@@ -22,9 +22,10 @@ the emulated runs.
 
 ### When to plug in the boards
 
-- **Any time, even while the overnight campaign runs:** flash Board B's
-  sketch, wire the buttons and LEDs, and install the relay on Board A
-  (`docs/HARDWARE.md` sections 1 and 3). This touches only the boards.
+- **Before the overnight campaign, or Sunday morning during the model runs:**
+  set up both boards, install the relay and the panel (`docs/HARDWARE.md`
+  stages 1–4). This touches only the boards; just avoid compiling on the
+  demo laptop while the overnight campaign is measuring latency.
 - **Only after steps 2 and 4 are finished:** restart the demo with
   `compose.hardware.yml` and run `plans/hardware.yaml`. That reroutes
   checkout → payment through Board A, which would corrupt the emulated

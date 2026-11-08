@@ -6,9 +6,11 @@ ranges. Keep both boards on an isolated home-lab SSID.
 
 ## hwContention
 
-1. Start an iperf3 server on a machine on your network: `iperf3 --server`.
-2. Force Board A onto 2.4 GHz (e.g. connect it to a 2.4 GHz-only SSID).
-3. On Board B, when `rootlinectl` prompts you:
+Both boards stay on the 2.4 GHz-only lab SSID for the whole hardware
+campaign (see `docs/HARDWARE.md`), so nothing is switched mid-incident.
+
+1. Start an iperf3 server on the laptop: `iperf3 --server`.
+2. On Board B, when `rootlinectl` prompts you:
 
 ```bash
 IPERF_SERVER=192.168.1.20 BITRATE=30M DURATION=300 ./iperf_contention.sh
@@ -22,8 +24,8 @@ hwWeakSignal actually degrades. It writes 1 Hz Parquet: RSSI, frequency,
 bitrate and rx/tx throughput.
 
 ```bash
-pip install pyarrow
-python3 wifi_logger.py --iface wlan0 --out wifi-hwWeakSignal-r1.parquet
+python3 -m venv ~/rootline-venv && ~/rootline-venv/bin/pip install pyarrow
+~/rootline-venv/bin/python wifi_logger.py --iface wlan0 --out wifi-hardware.parquet
 ```
 
 Copy the file to `data/hw/<incident>-<board>-wifi.parquet` on the laptop.
