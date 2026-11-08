@@ -6,6 +6,10 @@ data/labels/*
 data/runs/*
 !data/runs/.gitkeep
 data/holdout/
+# Moved-aside runs (labels included), this machine's image digests, the night log
+data/old/
+data/image-digests.json
+data/overnight.log
 
 # Secrets
 .env
