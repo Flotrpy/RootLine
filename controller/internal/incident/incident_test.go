@@ -260,7 +260,8 @@ func TestManualFaultAnchorsT0AtConfirmation(t *testing.T) {
 	base := health.Sample{ErrorRatio: 0.01, P99Ms: 300}
 	r, _, snap, clk := newRunner(t, &scriptedProbe{samples: []health.Sample{base}})
 	r.Injector.Operator = &slowOperator{clock: clk}
-	f, _ := catalog.Lookup("hwPowerCut")
+	f := catalog.Fault{Name: "manualTest", Kind: catalog.KindManual, Service: "payment",
+		Category: catalog.CatNetworkReset, Layer: catalog.LayerNetwork, Steps: "do it", Undo: "undo it"}
 	res, err := r.Run(context.Background(), f, 1, false)
 	if err != nil {
 		t.Fatal(err)
@@ -287,7 +288,7 @@ func TestHardwarePlanFile(t *testing.T) {
 		t.Fatalf("plans/hardware.yaml expands to %d incidents, want 12", len(items))
 	}
 	for _, it := range items {
-		if it.Fault.Kind != catalog.KindManual {
+		if it.Fault.Kind != catalog.KindRemote {
 			t.Errorf("%s is not a hardware fault", it.ID())
 		}
 	}

@@ -86,9 +86,9 @@ func (s *Server) postFault(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusNotFound, map[string]string{"error": "unknown fault"})
 		return
 	}
-	if f.Kind == catalog.KindManual {
-		// Physical steps are never triggered remotely.
-		writeJSON(w, http.StatusForbidden, map[string]string{"error": "manual faults need an operator; use rootlinectl"})
+	if f.Kind == catalog.KindManual || f.Kind == catalog.KindRemote {
+		// Hardware faults belong to the hardware campaign, never the panel.
+		writeJSON(w, http.StatusForbidden, map[string]string{"error": "hardware faults run only in the hardware campaign; use rootlinectl"})
 		return
 	}
 	s.mu.Lock()

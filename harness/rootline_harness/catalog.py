@@ -70,13 +70,13 @@ FAULTS: Final[tuple[str, ...]] = (
 
 FLAGS: Final[tuple[str, ...]] = FAULTS[:10]
 
-HW_FAULTS: Final[tuple[str, ...]] = ("hwWeakSignal", "hwContention", "hwPowerCut")
+HW_FAULTS: Final[tuple[str, ...]] = ("hwWeakSignal", "hwContention", "hwWifiOutage")
 """Phase 3 hardware arm: real Wi-Fi faults, outside the 15-type pilot."""
 
 HW_EMULATES: Final[dict[str, str]] = {
     "hwWeakSignal": "netemLoss",
     "hwContention": "toxiLatency",
-    "hwPowerCut": "toxiReset",
+    "hwWifiOutage": "toxiReset",
 }
 """Each hardware fault's emulated counterpart, for emulation validity."""
 

@@ -124,3 +124,17 @@ func (f *FakeOperator) Do(_ context.Context, fault, phase, _ string) error {
 	f.Steps = append(f.Steps, fault+"/"+phase)
 	return nil
 }
+
+// FakeBoards records remote commands instead of running them.
+type FakeBoards struct {
+	mu    sync.Mutex
+	Calls []string // "board|cmd|attempts"
+	Err   error
+}
+
+func (f *FakeBoards) Exec(_ context.Context, board, cmd string, attempts int) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.Calls = append(f.Calls, fmt.Sprintf("%s|%s|%d", board, cmd, attempts))
+	return f.Err
+}

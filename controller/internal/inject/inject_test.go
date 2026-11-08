@@ -2,6 +2,8 @@ package inject
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/flotrpy/rootline/controller/internal/catalog"
@@ -95,7 +97,7 @@ func TestUnknownEdge(t *testing.T) {
 func TestManualFaultsGoThroughTheOperator(t *testing.T) {
 	ctx := context.Background()
 	in, _, ft, fn := NewFake(flagNames()...)
-	f, _ := catalog.Lookup("hwPowerCut")
+	f := catalog.Fault{Name: "manualTest", Kind: catalog.KindManual, Steps: "do it", Undo: "undo it"}
 	if err := in.Inject(ctx, f); err == nil {
 		t.Fatal("manual fault without an operator must fail")
 	}
@@ -107,10 +109,39 @@ func TestManualFaultsGoThroughTheOperator(t *testing.T) {
 	if err := in.Clear(ctx, f); err != nil {
 		t.Fatal(err)
 	}
-	if len(op.Steps) != 2 || op.Steps[0] != "hwPowerCut/inject" || op.Steps[1] != "hwPowerCut/clear" {
+	if len(op.Steps) != 2 || op.Steps[0] != "manualTest/inject" || op.Steps[1] != "manualTest/clear" {
 		t.Fatalf("steps = %v", op.Steps)
 	}
 	if len(ft.Toxics) != 0 || len(fn.Rules) != 0 {
 		t.Fatal("manual faults must not touch Toxiproxy or netem")
+	}
+}
+
+func TestRemoteFaultsRunOnTheirBoard(t *testing.T) {
+	ctx := context.Background()
+	in, _, ft, fn := NewFake(flagNames()...)
+	f, _ := catalog.Lookup("hwWeakSignal")
+	if err := in.Inject(ctx, f); err == nil {
+		t.Fatal("remote fault without board access must fail")
+	}
+	fb := &FakeBoards{}
+	in.Boards = fb
+	if err := in.Inject(ctx, f); err != nil {
+		t.Fatal(err)
+	}
+	if err := in.Clear(ctx, f); err != nil {
+		t.Fatal(err)
+	}
+	if len(fb.Calls) != 2 ||
+		fb.Calls[0] != "A|"+f.RemoteInject+"|1" ||
+		fb.Calls[1] != fmt.Sprintf("A|%s|%d", f.RemoteClear, ClearAttempts) {
+		t.Fatalf("calls = %v", fb.Calls)
+	}
+	if len(ft.Toxics) != 0 || len(fn.Rules) != 0 {
+		t.Fatal("remote faults must not touch Toxiproxy or netem")
+	}
+	c, _ := catalog.Lookup("hwContention")
+	if err := in.Inject(ctx, c); err != nil || !strings.HasPrefix(fb.Calls[2], "B|") {
+		t.Fatalf("contention must run on Board B: %v %v", err, fb.Calls)
 	}
 }

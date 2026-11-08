@@ -38,7 +38,24 @@ type Injector struct {
 	Toxi     toxi.Proxies
 	Netem    netem.Shaper
 	Edges    map[string]Edge
-	Operator Operator // manual (hardware) faults only
+	Operator Operator     // manual faults only
+	Boards   RemoteRunner // remote (hardware) faults only
+}
+
+// RemoteRunner runs a shell command on one of the Arduino boards.
+type RemoteRunner interface {
+	Exec(ctx context.Context, board, cmd string, attempts int) error
+}
+
+// ClearAttempts is how often a remote clear is tried: the link may still be
+// degraded when the fault ends. (Board-side timers undo faults anyway.)
+const ClearAttempts = 4
+
+func (in *Injector) remote(ctx context.Context, f catalog.Fault, cmd string, attempts int) error {
+	if in.Boards == nil {
+		return fmt.Errorf("fault %s needs board access (ROOTLINE_BOARD_A/B)", f.Name)
+	}
+	return in.Boards.Exec(ctx, f.Board, cmd, attempts)
 }
 
 // Operator carries out the physical steps of a manual fault.
@@ -85,6 +102,9 @@ func (in *Injector) Inject(ctx context.Context, f catalog.Fault) error {
 		return in.Netem.Loss(ctx, e.Container, f.LossPct)
 	case catalog.KindManual:
 		return in.operate(ctx, f, "inject", f.Steps)
+	case catalog.KindRemote:
+		// One attempt: retrying an inject that half-worked could double it.
+		return in.remote(ctx, f, f.RemoteInject, 1)
 	case catalog.KindNone:
 		return nil
 	}
@@ -100,6 +120,8 @@ func (in *Injector) Clear(ctx context.Context, f catalog.Fault) error {
 		return in.ClearEdge(ctx, f.Edge)
 	case catalog.KindManual:
 		return in.operate(ctx, f, "clear", f.Undo)
+	case catalog.KindRemote:
+		return in.remote(ctx, f, f.RemoteClear, ClearAttempts)
 	case catalog.KindNone:
 		return nil
 	}

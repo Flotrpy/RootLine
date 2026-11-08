@@ -30,8 +30,11 @@ const (
 	KindNetem Kind = "netem" // tc netem rule on an edge's proxy container
 	KindNone  Kind = "none"  // healthy control
 	// KindManual faults need a person: the controller prints the steps,
-	// waits for confirmation and timestamps them (hardware arm only).
+	// waits for confirmation and timestamps them.
 	KindManual Kind = "manual"
+	// KindRemote faults run a command on one of the Arduino boards over SSH
+	// (hardware arm), so the hardware campaign can run unattended.
+	KindRemote Kind = "remote"
 )
 
 // Categories used in labels and in the model output contract.
@@ -88,6 +91,12 @@ type Fault struct {
 	LossPct  int    // netem faults only
 	Steps    string // manual faults only: what the operator does to inject
 	Undo     string // manual faults only: what the operator does to clear
+	// Remote faults only: which board ("A" or "B") and the shell commands
+	// that inject and clear the fault there. {placeholders} are filled from
+	// the controller's environment (see internal/board).
+	Board        string
+	RemoteInject string
+	RemoteClear  string
 	// Emulates names the emulated fault a hardware fault is compared with
 	// in the emulation-validity analysis.
 	Emulates string
@@ -138,28 +147,30 @@ var faults = []Fault{
 	{Name: "healthy", Kind: KindNone, Service: "none", Category: CatNone, Layer: LayerNone},
 }
 
-// The hardware arm (Phase 3): real faults on the Wi-Fi link through the
-// Arduino UNO Q relay on the checkout -> payment edge. Not part of the
-// 15-type pilot; collected with plans/hardware.yaml.
+// The hardware arm (Phase 3): real faults on the Wi-Fi link of Board A,
+// the UNO Q relaying checkout -> payment. Not part of the 15-type pilot;
+// collected with plans/hardware.yaml, unattended. Each fault degrades the
+// real radio link (transmit power, channel contention, radio off), triggered
+// over SSH; hw/board/rootline-fault always schedules its own undo on the
+// board, so a lost SSH session cannot leave a fault in place.
 //
 // TODO(flotrpy): confirm each category and its emulated counterpart.
 var hardware = []Fault{
-	// Both boards stay on the 2.4 GHz lab SSID for the whole hardware
-	// campaign, so no fault ever needs a band switch (a reconnect mid-run
-	// would itself look like a reset). Press Enter the moment the fault is
-	// live: T0 is that confirmation.
-	{Name: "hwWeakSignal", Kind: KindManual, Service: "payment", Category: CatNetworkLoss, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
-		Steps:    "Move Board A (on its power bank) to the weak-signal spot. Press Enter once its RSSI stays between -75 and -85 dBm and it is still connected.",
-		Undo:     "Move Board A back to its normal spot and check RSSI is back near its usual value.",
-		Emulates: "netemLoss"},
-	{Name: "hwContention", Kind: KindManual, Service: "payment", Category: CatNetworkLatency, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
-		Steps:    "On Board B run hw/contention/iperf_contention.sh (DURATION=300) against your LOCAL iperf3 server, and press Enter as soon as it prints its first interval.",
-		Undo:     "Check the iperf3 script on Board B has finished (Ctrl-C it if not).",
-		Emulates: "toxiLatency"},
-	{Name: "hwPowerCut", Kind: KindManual, Service: "payment", Category: CatNetworkReset, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
-		Steps:    "Unplug Board A's power and press Enter at the same moment. Plug it back in after 30 seconds (use a timer).",
-		Undo:     "Check the relay is back on Board A (systemctl status edge-relay) and restart its Wi-Fi logger.",
-		Emulates: "toxiReset"},
+	{Name: "hwWeakSignal", Kind: KindRemote, Service: "payment", Category: CatNetworkLoss, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
+		Board:        "A",
+		RemoteInject: "sudo -n /usr/local/bin/rootline-fault weak-on {txpower_mbm}",
+		RemoteClear:  "sudo -n /usr/local/bin/rootline-fault weak-off",
+		Emulates:     "netemLoss"},
+	{Name: "hwContention", Kind: KindRemote, Service: "payment", Category: CatNetworkLatency, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
+		Board:        "B",
+		RemoteInject: "IPERF_SERVER={iperf_server} BITRATE={contention_bitrate} DURATION=300 nohup ~/iperf_contention.sh >/tmp/rootline-iperf.log 2>&1 </dev/null &",
+		RemoteClear:  "pkill -f 'iperf3 --client' || true",
+		Emulates:     "toxiLatency"},
+	{Name: "hwWifiOutage", Kind: KindRemote, Service: "payment", Category: CatNetworkReset, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
+		Board:        "A",
+		RemoteInject: "sudo -n /usr/local/bin/rootline-fault outage 30",
+		RemoteClear:  "sudo -n /usr/local/bin/rootline-fault status >/dev/null",
+		Emulates:     "toxiReset"},
 }
 
 // Hardware returns the hardware-arm faults.

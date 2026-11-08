@@ -84,8 +84,8 @@ class _Handler(BaseHTTPRequestHandler):
         self._reply(200, {"state": "healthy"})
 
     def do_POST(self) -> None:
-        if self.path == "/faults/hwPowerCut":
-            self._reply(403, {"error": "manual faults need an operator"})
+        if self.path == "/faults/hwWifiOutage":
+            self._reply(403, {"error": "hardware faults run only in the hardware campaign"})
         else:
             self._reply(200, {"state": "faulty" if "faults" in self.path else "healthy"})
 
@@ -110,7 +110,7 @@ def test_controller_client_against_http() -> None:
         assert c.inject("paymentFailure")["state"] == "faulty"
         assert c.reset()["state"] == "healthy"
         with pytest.raises(ControllerError, match="HTTP 403"):
-            c.inject("hwPowerCut")
+            c.inject("hwWifiOutage")
     finally:
         srv.shutdown()
     with pytest.raises(ControllerError):

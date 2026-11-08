@@ -175,7 +175,7 @@ def test_emulation_validity() -> None:
 
     labels = {
         **{
-            f"hwPowerCut-r{i}": Label("hwPowerCut", "payment", "network_reset", "network")
+            f"hwWifiOutage-r{i}": Label("hwWifiOutage", "payment", "network_reset", "network")
             for i in (1, 2, 3, 4)
         },
         **{
@@ -185,7 +185,7 @@ def test_emulation_validity() -> None:
     }
     rows = []
     for inc in labels:
-        right = inc.startswith("toxi") or inc == "hwPowerCut-r1"
+        right = inc.startswith("toxi") or inc == "hwWifiOutage-r1"
         r = record(
             "app0-r1",  # any labelled fault id; incident_id is overwritten below
             "big",
@@ -199,7 +199,7 @@ def test_emulation_validity() -> None:
     LABELS_ALL = {**LABELS, **labels}
     table = emulation_validity(pl.DataFrame(rows, infer_schema_length=None), LABELS_ALL)
     row = table.row(0, named=True)
-    assert (row["hardware_fault"], row["emulated_fault"]) == ("hwPowerCut", "toxiReset")
+    assert (row["hardware_fault"], row["emulated_fault"]) == ("hwWifiOutage", "toxiReset")
     assert row["n_hardware"] == 4 and row["n_emulated"] == 2
     assert row["top1_hardware"] == pytest.approx(0.25) and row["top1_emulated"] == 1.0
     assert row["top1_gap"] == pytest.approx(-0.75)

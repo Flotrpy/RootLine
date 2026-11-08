@@ -14,7 +14,7 @@ def test_faults_match_go_catalog() -> None:
 
 def test_hardware_counterparts_match_go_catalog() -> None:
     src = GO_CATALOG.read_text()
-    pairs = dict(re.findall(r'\{Name: "(hw[A-Za-z]+)".*?Emulates: "([A-Za-z]+)"', src, re.S))
+    pairs = dict(re.findall(r'\{Name: "(hw[A-Za-z]+)".*?Emulates:\s+"([A-Za-z]+)"', src, re.S))
     assert pairs == catalog.HW_EMULATES
 
 

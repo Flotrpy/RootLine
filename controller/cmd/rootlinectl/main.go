@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/flotrpy/rootline/controller/internal/api"
+	"github.com/flotrpy/rootline/controller/internal/board"
 	"github.com/flotrpy/rootline/controller/internal/catalog"
 	"github.com/flotrpy/rootline/controller/internal/flagd"
 	"github.com/flotrpy/rootline/controller/internal/health"
@@ -45,6 +46,7 @@ Usage:
   rootlinectl campaign --plan plans/pilot.yaml [--progress <file>]
   rootlinectl remediate --action <type> --target <t> --incident <id> [--jsonl <file>]
   rootlinectl serve [--addr :8088]
+  rootlinectl hw check [--outage]      check the boards before the hardware campaign
 
 Environment (defaults in brackets):
   ROOTLINE_FLAGD_FILE  [opentelemetry-demo/src/flagd/demo.flagd.json]
@@ -52,7 +54,11 @@ Environment (defaults in brackets):
   PROMETHEUS_URL       [http://localhost:9090]
   SNAPSHOTTER_URL      [http://localhost:8089]
   ROOTLINE_LABELS_DIR  [data/labels]
-  ROOTLINE_OPERATOR_LOG [data/hw/operator-log.jsonl]  (hardware faults)
+  ROOTLINE_BOARD_A      e.g. arduino@192.168.1.250 (hardware faults, SSH key login)
+  ROOTLINE_BOARD_B      e.g. arduino@192.168.1.217
+  ROOTLINE_IPERF_SERVER the laptop's LAN IP, for hwContention
+  ROOTLINE_HW_TXPOWER_MBM [100]  Board A transmit power during hwWeakSignal
+  ROOTLINE_CONTENTION_BITRATE [30M]
 `
 
 // config is read from the environment.
@@ -97,6 +103,7 @@ func (d deps) injector() *inject.Injector {
 		Netem:    netem.New(),
 		Edges:    inject.DefaultEdges,
 		Operator: operator.NewConsole(env("ROOTLINE_OPERATOR_LOG", "data/hw/operator-log.jsonl")),
+		Boards:   board.Default(),
 	}
 }
 
@@ -147,6 +154,8 @@ func run(ctx context.Context, args []string, out io.Writer, d deps) error {
 		return remediateCmd(ctx, rest, out, d)
 	case "serve":
 		return serveCmd(ctx, rest, d)
+	case "hw":
+		return hwCmd(ctx, rest, out, board.Default())
 	}
 	return fmt.Errorf("unknown command %q: %w", cmd, errUsage)
 }
@@ -363,6 +372,30 @@ func serveCmd(ctx context.Context, args []string, d deps) error {
 	d.log.Info("serving", "addr", *addr)
 	if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 		return err
+	}
+	return nil
+}
+
+func hwCmd(ctx context.Context, args []string, out io.Writer, b *board.Boards) error {
+	if len(args) == 0 || args[0] != "check" {
+		return fmt.Errorf("hw: bad arguments: %w", errUsage)
+	}
+	fs := flag.NewFlagSet("hw check", flag.ContinueOnError)
+	outage := fs.Bool("outage", false, "also run a 5 s Wi-Fi outage on Board A and wait for it to return")
+	if err := fs.Parse(args[1:]); err != nil {
+		return err
+	}
+	failed := 0
+	for _, r := range board.Check(ctx, b, *outage) {
+		status := "PASS"
+		if !r.OK {
+			status = "FAIL"
+			failed++
+		}
+		_, _ = fmt.Fprintf(out, "%s  %s  %s\n", status, r.Name, r.Detail)
+	}
+	if failed > 0 {
+		return fmt.Errorf("%d hardware checks failed", failed)
 	}
 	return nil
 }

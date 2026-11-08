@@ -120,7 +120,8 @@ func TestHardwareFaults(t *testing.T) {
 		t.Fatalf("want 3 hardware faults, got %d", len(hw))
 	}
 	for _, f := range hw {
-		if f.Kind != KindManual || f.Layer != LayerNetwork || f.Steps == "" || f.Undo == "" {
+		if f.Kind != KindRemote || f.Layer != LayerNetwork || f.RemoteInject == "" || f.RemoteClear == "" ||
+			(f.Board != "A" && f.Board != "B") {
 			t.Errorf("%s: incomplete hardware fault %+v", f.Name, f)
 		}
 		emu, ok := Lookup(f.Emulates)
@@ -132,8 +133,8 @@ func TestHardwareFaults(t *testing.T) {
 		}
 	}
 	for _, f := range All() {
-		if f.Kind == KindManual {
-			t.Errorf("pilot catalog must not contain manual fault %s", f.Name)
+		if f.Kind == KindManual || f.Kind == KindRemote {
+			t.Errorf("pilot catalog must not contain hardware fault %s", f.Name)
 		}
 	}
 }
