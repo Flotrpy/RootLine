@@ -153,6 +153,10 @@ def main(argv: list[str] | None = None) -> int:
     sd.add_argument(
         "--include-labels", action="store_true", help="release builds only: reveal the answers"
     )
+    pk = sub.add_parser("package-dataset", help="build the Hugging Face dataset folder")
+    pk.add_argument("--out", type=Path, default=None)
+    sub.add_parser("fetch-data", help="download the published dataset into data/ (make data)")
+    sub.add_parser("release-check", help="check everything the release needs")
     pr = sub.add_parser("plan-remediation")
     pr.add_argument("--model", default=None, help="default: best model on combined p0")
     pr.add_argument("--replica", type=int, default=1)
@@ -163,6 +167,26 @@ def main(argv: list[str] | None = None) -> int:
         for h in res["hypotheses"]:  # type: ignore[union-attr]
             print(f"{h['rq']}: {h['status']} effect={h['effect']} p_holm={h['p_holm']}")
         return 0
+    if args.cmd == "package-dataset":
+        from analysis.dataset import DATASET_REPO, package
+
+        out = args.out or args.root / "dist" / "rootline-v0.1-data"
+        counts = package(args.root / "data", out)
+        print(f"built {out}: {counts['snapshots']} snapshots, {counts['labels']} labels")
+        print(f"publish (flotrpy): huggingface-cli upload {DATASET_REPO} {out} --repo-type dataset")
+        return 0
+    if args.cmd == "fetch-data":
+        from analysis.dataset import DATASET_REPO, fetch
+
+        fetch(args.root / "data")
+        print(f"fetched {DATASET_REPO} into {args.root / 'data'}")
+        return 0
+    if args.cmd == "release-check":
+        from analysis.release_check import report, run_all
+
+        checks = run_all(args.root)
+        print(report(checks))
+        return 1 if any(c.status == "FAIL" for c in checks) else 0
     if args.cmd == "site-data":
         from analysis.site_data import write_site_data
 

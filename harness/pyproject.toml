@@ -9,6 +9,7 @@ requires-python = ">=3.13"
 dependencies = [
     "altair>=5.4",
     "drain3>=0.9.11",
+    "huggingface-hub>=0.25",
     "inspect-ai>=0.3",
     "lightgbm>=4.5",
     "litellm>=1.50",

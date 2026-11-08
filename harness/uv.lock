@@ -2257,6 +2257,7 @@ source = { editable = "." }
 dependencies = [
     { name = "altair" },
     { name = "drain3" },
+    { name = "huggingface-hub" },
     { name = "inspect-ai" },
     { name = "lightgbm" },
     { name = "litellm" },
@@ -2280,6 +2281,7 @@ dev = [
 requires-dist = [
     { name = "altair", specifier = ">=5.4" },
     { name = "drain3", specifier = ">=0.9.11" },
+    { name = "huggingface-hub", specifier = ">=0.25" },
     { name = "inspect-ai", specifier = ">=0.3" },
     { name = "lightgbm", specifier = ">=4.5" },
     { name = "litellm", specifier = ">=1.50" },

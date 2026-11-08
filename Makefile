@@ -1,4 +1,4 @@
-.PHONY: test lint test-go test-py test-rust lint-go lint-py lint-rust build reproduce paper
+.PHONY: test lint test-go test-py test-rust lint-go lint-py lint-rust build reproduce paper data release-check dataset
 
 GO_MODULES := controller snapshotter hw/edge-relay
 # Python code linted by ruff (config in ruff.toml); harness/ owns the venv.
@@ -41,3 +41,15 @@ reproduce:
 # Compile the technical report from paper/figures/ (run `make reproduce` first).
 paper:
 	cd paper && typst compile main.typ rootline-v0.1.pdf
+
+# Download the published dataset into data/ and verify its checksums.
+data:
+	uv run --project harness python -m analysis fetch-data
+
+# Build dist/rootline-v0.1-data for Hugging Face (publishing is manual).
+dataset:
+	uv run --project harness python -m analysis package-dataset
+
+# Final gate before the release: data complete, results fresh, git clean.
+release-check:
+	uv run --project harness python -m analysis release-check

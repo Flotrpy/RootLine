@@ -52,3 +52,6 @@ web/public/data/
 web/public/duckdb/
 web/out/
 web/.next/
+
+# Release dataset build (published to Hugging Face, not git)
+dist/
