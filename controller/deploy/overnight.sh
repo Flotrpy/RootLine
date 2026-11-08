@@ -40,6 +40,9 @@ say "1/4 demo with the emulated wiring"
 # and building them all from source takes hours); build only Rootline's own.
 compose pull --ignore-pull-failures --quiet
 compose build snapshotter || { say "snapshotter build failed; stopping"; exit 1; }
+# The snapshotter refuses to start without the digests file, so write it first.
+(cd "$DEMO_DIR" && COMPOSE="docker compose ${DEMO_FILES[*]} -f $ROOTLINE_DIR/compose.override.yml" \
+  "$ROOTLINE_DIR/controller/deploy/record-digests.sh") || { say "recording image digests failed; stopping"; exit 1; }
 compose up -d --no-build || { say "compose failed; stopping"; exit 1; }
 
 say "2/4 pilot campaign (30 snapshots, ~6.5 h)"

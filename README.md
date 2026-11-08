@@ -75,13 +75,17 @@ at a pinned release tag. Docs: [architecture](docs/ARCHITECTURE.md),
    export ROOTLINE_DIR=/path/to/RootLine DEMO_GIT_TAG=3.1.0 DEMO_VERSION=3.1.0
    docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" pull --ignore-pull-failures
    docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" build snapshotter
+   COMPOSE="docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f $ROOTLINE_DIR/compose.override.yml" "$ROOTLINE_DIR/controller/deploy/record-digests.sh"
    docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" up -d --no-build
    ```
 
-2. Record image digests for the manifests:
+   The fourth line records image digests for the snapshot manifests. It must
+   run before `up`: the snapshotter exits at start without that file.
+
+2. Check that every container is up and none is unhealthy:
 
    ```bash
-   COMPOSE="docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f $ROOTLINE_DIR/compose.override.yml" "$ROOTLINE_DIR/controller/deploy/record-digests.sh"
+   docker ps --filter health=unhealthy --filter status=exited
    ```
 
 3. From the RootLine checkout, check a flag round trip:
