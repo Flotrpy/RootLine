@@ -109,6 +109,10 @@ services:
       - LOCUST_USERS=20
       - LOCUST_SPAWN_RATE=2
       - LOCUST_AUTOSTART=true
+      # The demo's tasks without the one that calls the absent agent service.
+      - LOCUST_LOCUSTFILE=rootline_locustfile.py
+    volumes:
+      - ${ROOTLINE_DIR:?set ROOTLINE_DIR}/controller/deploy/rootline_locustfile.py:/usr/src/app/rootline_locustfile.py:ro
 
   otel-collector:
     volumes:
