@@ -1,0 +1,124 @@
+ROOTLINE: EVERYTHING INSTALLED FOR THIS PROJECT
+================================================
+Keep this file. It lists what was installed and how to remove it later.
+Items marked (planned) are not installed yet; tick them off as you go.
+
+
+1. WINDOWS LAPTOP (AffanPC)
+---------------------------
+Installed with an installer or by Windows:
+
+  Git for Windows ............ version control (git clone)
+      Remove: Settings > Apps > Installed apps > Git > Uninstall
+  Arduino App Lab ............ sets up and programs the UNO Q boards
+      Remove: Settings > Apps > Installed apps > Arduino App Lab > Uninstall
+  Go (go1.27.3, Windows) ..... built the edge-relay program for Board A
+      Remove: Settings > Apps > Installed apps > Go Programming Language > Uninstall
+      Also delete: C:\Users\affan\go   (Go's download cache)
+  Windows Subsystem for Linux (WSL 3.0.3) + Virtual Machine Platform
+      Remove: PowerShell (admin):  wsl --unregister Ubuntu
+              then Settings > Apps > Installed apps > Windows Subsystem for Linux > Uninstall
+              and Settings > System > Optional features > More Windows features >
+              untick "Virtual Machine Platform"
+  Ubuntu (WSL distribution) .. the Linux system the project runs in
+      Remove: PowerShell:  wsl --unregister Ubuntu   (deletes everything inside it)
+  Docker Desktop (planned) ... runs the OpenTelemetry Demo and Rootline services
+      Remove: Settings > Apps > Installed apps > Docker Desktop > Uninstall
+      Also delete: C:\Users\affan\AppData\Local\Docker (images and data)
+
+Files and folders created:
+
+  C:\Users\affan\RootLine ............ Windows copy of the project
+      Remove: delete the folder
+  C:\Users\affan\.ssh\known_hosts .... entries for 192.168.1.250 and 192.168.1.217
+      Remove: ssh-keygen -R 192.168.1.250   and   ssh-keygen -R 192.168.1.217
+
+
+2. UBUNTU (inside WSL)
+----------------------
+All of this disappears with:  wsl --unregister Ubuntu
+To remove pieces individually instead:
+
+  git, make, iperf3, golang-go (Go 1.26) and their build tools (gcc, cpp, pkgconf)
+      Remove: sudo apt remove --purge git make iperf3 golang-go && sudo apt autoremove --purge
+  uv 0.13.x (Python tool) ............ ~/.local/bin/uv and ~/.local/bin/uvx
+      Remove: rm ~/.local/bin/uv ~/.local/bin/uvx && rm -rf ~/.cache/uv ~/.local/share/uv
+  ~/RootLine ......................... project (Ubuntu copy), including data/ and bin/
+      Remove: rm -rf ~/RootLine
+  ~/opentelemetry-demo ............... OpenTelemetry Demo 3.1.0
+      Remove: rm -rf ~/opentelemetry-demo
+  ~/.ssh/id_ed25519 (planned) ........ SSH key for logging in to the boards
+      Remove: rm ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.pub
+  Go module cache .................... ~/go
+      Remove: rm -rf ~/go
+
+
+3. DOCKER (planned, created when the demo runs)
+-----------------------------------------------
+  OpenTelemetry Demo 3.1.0 images (ghcr.io/open-telemetry/demo:3.1.0-*),
+  Toxiproxy, Alpine (netem sidecars, iperf3 server), the Rootline snapshotter,
+  Prometheus, Jaeger, Grafana, OpenSearch, Kafka, Postgres, Valkey, flagd.
+      Remove all containers, images and volumes of the demo:
+        cd ~/opentelemetry-demo && docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml down --volumes --rmi all
+      Or everything Docker holds:  docker system prune --all --volumes
+
+
+4. BOARD A: affan1 (192.168.1.250, Arduino UNO Q, Debian)
+---------------------------------------------------------
+  Board name "affan1", password changed, home Wi-Fi joined (Arduino App Lab)
+  apt packages: iw, iperf3, python3-venv (+ libiperf0, libsctp1, python3-pip-whl,
+                python3-setuptools-whl, python3.13-venv; python3.13 upgraded)
+      Remove: sudo apt remove --purge iw iperf3 python3-venv && sudo apt autoremove --purge
+  ~/rootline-venv (Python virtual environment with pyarrow 26.0.1)
+      Remove: rm -rf ~/rootline-venv
+  Edge relay:
+    /usr/local/bin/edge-relay
+    /etc/rootline/edge-relay.env
+    /etc/systemd/system/edge-relay.service (enabled, starts at boot)
+      Remove: sudo systemctl disable --now edge-relay
+              sudo rm /usr/local/bin/edge-relay /etc/systemd/system/edge-relay.service
+              sudo rm -rf /etc/rootline && sudo systemctl daemon-reload
+  Files copied to the home folder: ~/edge-relay-arm64, ~/edge-relay.service, ~/wifi_logger.py
+      Remove: rm ~/edge-relay-arm64 ~/edge-relay.service ~/wifi_logger.py
+  (planned) /usr/local/bin/rootline-fault and /etc/sudoers.d/rootline
+      Remove: sudo rm /usr/local/bin/rootline-fault /etc/sudoers.d/rootline
+  (planned) ~/.ssh/authorized_keys entry for the laptop's key
+      Remove: delete the line ending in affan@AffanPC from ~/.ssh/authorized_keys
+  (planned) Wi-Fi connection pinned to 2.4 GHz, power saving off (NetworkManager)
+      Remove: sudo nmcli connection modify "<wifi name>" 802-11-wireless.band "" 802-11-wireless.powersave 0
+  Possible output: ~/wifi-hardware.parquet
+  Full reset instead: reflash the board from Arduino App Lab.
+
+
+5. BOARD B: affan2 (192.168.1.217, Arduino UNO Q, Debian)
+---------------------------------------------------------
+  Board name "affan2", password changed, home Wi-Fi joined (Arduino App Lab)
+  apt packages: same as Board A (iw, iperf3, python3-venv and dependencies)
+      Remove: sudo apt remove --purge iw iperf3 python3-venv && sudo apt autoremove --purge
+  ~/rootline-venv (pyarrow 26.0.1) .... Remove: rm -rf ~/rootline-venv
+  (planned) ~/iperf_contention.sh, ~/wifi_logger.py
+      Remove: rm ~/iperf_contention.sh ~/wifi_logger.py
+  (planned) ~/.ssh/authorized_keys entry, 2.4 GHz pin, power saving off (as Board A)
+  (optional) App Lab app "rootline-panel" (panel sketch + bridge app)
+      Remove: delete the app in Arduino App Lab
+  Full reset instead: reflash the board from Arduino App Lab.
+
+
+6. ONLINE ACCOUNTS AND SERVICES
+-------------------------------
+  GitHub repository Flotrpy/RootLine (branch claude/optimistic-johnson-tp1lxw, PR #1)
+  (planned) Hugging Face dataset, Zenodo record, GitHub Pages site at release
+  (planned) API keys for Cerebras and Groq free tiers, Kaggle notebook
+
+
+TECHNOLOGIES USED (names only, for your notes)
+----------------------------------------------
+  Languages: Go, Python 3.13, Rust, TypeScript, Arduino C++ (Zephyr), Bash, Typst
+  Testbed: OpenTelemetry Demo 3.1.0, OpenTelemetry Collector, flagd, Toxiproxy,
+           tc netem, Docker, Docker Compose, Prometheus, Jaeger, Kafka
+  Data: Apache Parquet, Apache Arrow, DuckDB, Polars, Drain3, tiktoken
+  Evaluation: LiteLLM, Inspect AI, Pydantic, SQLite, scikit-learn, LightGBM, Altair
+  Site: Next.js, React, React Flow, DuckDB-WASM
+  Hardware: Arduino UNO Q (Qualcomm QRB2210 + STM32U585), Arduino App Lab,
+            Arduino Bridge RPC, iperf3, iw, NetworkManager, systemd
+  Hosting: GitHub, GitHub Actions, GitHub Pages, Hugging Face, Zenodo
