@@ -2,7 +2,7 @@
 # Write the digest of every image the stack uses to data/image-digests.json,
 # which the snapshotter copies into each snapshot manifest.
 # Run from the demo checkout with the same -f flags you use for `up`:
-#   COMPOSE="docker compose -f docker-compose.yml -f $ROOTLINE_DIR/compose.override.yml" \
+#   COMPOSE="docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f $ROOTLINE_DIR/compose.override.yml" \
 #     "$ROOTLINE_DIR/controller/deploy/record-digests.sh"
 set -eu
 : "${ROOTLINE_DIR:?set ROOTLINE_DIR}"

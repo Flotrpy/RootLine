@@ -72,14 +72,14 @@ at a pinned release tag. Docs: [architecture](docs/ARCHITECTURE.md),
 1. Start the demo with Rootline's wiring, from the demo checkout:
 
    ```bash
-   export ROOTLINE_DIR=/path/to/RootLine DEMO_GIT_TAG=<tag>
-   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" up -d --build
+   export ROOTLINE_DIR=/path/to/RootLine DEMO_GIT_TAG=3.1.0 DEMO_VERSION=3.1.0
+   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" up -d --build
    ```
 
 2. Record image digests for the manifests:
 
    ```bash
-   COMPOSE="docker compose -f docker-compose.yml -f $ROOTLINE_DIR/compose.override.yml" "$ROOTLINE_DIR/controller/deploy/record-digests.sh"
+   COMPOSE="docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f $ROOTLINE_DIR/compose.override.yml" "$ROOTLINE_DIR/controller/deploy/record-digests.sh"
    ```
 
 3. From the RootLine checkout, check a flag round trip:

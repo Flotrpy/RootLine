@@ -20,12 +20,17 @@ set -uo pipefail
 ROOTLINE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 export ROOTLINE_DIR
 export ROOTLINE_FLAGD_FILE="${ROOTLINE_FLAGD_FILE:-$DEMO_DIR/src/flagd/demo.flagd.json}"
+# The demo's .env says DEMO_VERSION=latest; pin the images to the checked-out tag.
+export DEMO_GIT_TAG="${DEMO_GIT_TAG:-$(git -C "$DEMO_DIR" describe --tags)}"
+export DEMO_VERSION="$DEMO_GIT_TAG"
 LOG="$ROOTLINE_DIR/data/overnight.log"
 mkdir -p "$ROOTLINE_DIR/data"
 exec > >(tee -a "$LOG") 2>&1
 
 say() { echo "[$(date -u +%FT%TZ)] $*"; }
-compose() { (cd "$DEMO_DIR" && docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" "$@"); }
+# Demo 3.x: core + full (Kafka, fraud detection) + observability (Prometheus).
+DEMO_FILES=(-f compose.yaml -f compose.full.yaml -f compose.observability.yaml)
+compose() { (cd "$DEMO_DIR" && docker compose "${DEMO_FILES[@]}" -f "$ROOTLINE_DIR/compose.override.yml" "$@"); }
 ctl() { "$ROOTLINE_DIR/bin/rootlinectl" "$@"; }
 
 cd "$ROOTLINE_DIR" || exit 1

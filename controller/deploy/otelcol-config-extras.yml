@@ -1,20 +1,19 @@
-# Merged into the demo collector's config. It adds one OTLP/HTTP exporter to
-# the Rootline snapshotter on every pipeline.
+# Merged into the demo collector's config (OpenTelemetry Demo 3.1.0, with
+# compose.full.yaml and compose.observability.yaml). It adds one OTLP/HTTP
+# exporter to the Rootline snapshotter on every pipeline.
 #
 # A pipeline's exporter list is replaced, not appended, when merged, so each
-# list repeats the demo's own exporters.
-# TODO(flotrpy): copy the exporter lists from the pinned tag's
-# src/otel-collector/otelcol-config.yml if they differ from these.
+# list repeats the demo's own exporters from otelcol-config-observability.yml.
 exporters:
-  otlphttp/rootline:
+  otlp_http/rootline:
     endpoint: http://snapshotter:4318
     compression: gzip
 
 service:
   pipelines:
     traces:
-      exporters: [otlp, debug, spanmetrics, otlphttp/rootline]
+      exporters: [debug, otlp_grpc/jaeger, span_metrics, otlp_http/rootline]
     metrics:
-      exporters: [otlphttp/prometheus, debug, otlphttp/rootline]
+      exporters: [debug, otlp_http/prometheus, otlp_http/rootline]
     logs:
-      exporters: [opensearch, debug, otlphttp/rootline]
+      exporters: [debug, opensearch, otlp_http/rootline]

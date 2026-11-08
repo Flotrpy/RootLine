@@ -115,8 +115,9 @@ type Label struct {
 	Variant    *string `json:"variant"`
 }
 
-// TODO(flotrpy): verify every flag name and variant against demo.flagd.json
-// at the pinned demo tag. flagd.Store.Set refuses unknown variants, so a
+// Flag names and variants checked against demo.flagd.json at demo 3.1.0
+// (emailMemoryLeak offers 1x..10000x, intlShippingSlowdown 5sec/10sec).
+// TODO(flotrpy): confirm the 100x memory-leak level. flagd.Store.Set refuses unknown variants, so a
 // mismatch fails loudly at the dry run rather than silently.
 //
 // TODO(flotrpy): confirm the scored service for paymentUnreachable and for
@@ -127,10 +128,10 @@ var faults = []Fault{
 	{Name: "paymentUnreachable", Kind: KindFlag, Service: "payment", Category: CatDependency, Layer: LayerApplication, Edge: EdgeCheckoutPayment, Flag: "paymentUnreachable", Variant: "on"},
 	{Name: "productCatalogFailure", Kind: KindFlag, Service: "product-catalog", Category: CatError, Layer: LayerApplication, Flag: "productCatalogFailure", Variant: "on"},
 	{Name: "productCatalogLockContention", Kind: KindFlag, Service: "product-catalog", Category: CatLockContention, Layer: LayerApplication, Flag: "productCatalogLockContention", Variant: "on"},
-	{Name: "emailMemoryLeak", Kind: KindFlag, Service: "email", Category: CatMemoryLeak, Layer: LayerApplication, Flag: "emailMemoryLeak", Variant: "on"},
+	{Name: "emailMemoryLeak", Kind: KindFlag, Service: "email", Category: CatMemoryLeak, Layer: LayerApplication, Flag: "emailMemoryLeak", Variant: "100x"},
 	{Name: "recommendationCacheFailure", Kind: KindFlag, Service: "recommendation", Category: CatMemoryLeak, Layer: LayerApplication, Flag: "recommendationCacheFailure", Variant: "on"},
 	{Name: "kafkaQueueProblems", Kind: KindFlag, Service: "fraud-detection", Category: CatQueueLag, Layer: LayerApplication, Flag: "kafkaQueueProblems", Variant: "on"},
-	{Name: "intlShippingSlowdown", Kind: KindFlag, Service: "shipping", Category: CatLatency, Layer: LayerApplication, Flag: "intlShippingSlowdown", Variant: "on"},
+	{Name: "intlShippingSlowdown", Kind: KindFlag, Service: "shipping", Category: CatLatency, Layer: LayerApplication, Flag: "intlShippingSlowdown", Variant: "5sec"},
 	{Name: "imageSlowLoad", Kind: KindFlag, Service: "frontend-proxy", Category: CatLatency, Layer: LayerApplication, Flag: "imageSlowLoad", Variant: "5sec"},
 	{Name: "adHighCpu", Kind: KindFlag, Service: "ad", Category: CatCPUSaturation, Layer: LayerApplication, Flag: "adHighCpu", Variant: "on"},
 

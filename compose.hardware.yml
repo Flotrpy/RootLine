@@ -2,8 +2,8 @@
 # Layer this on top of compose.override.yml for the hardware campaign only:
 #
 #   export ROOTLINE_DIR=/path/to/RootLine HW_RELAY_ADDR=192.168.1.50:50051
-#   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" \
-#     -f "$ROOTLINE_DIR/compose.hardware.yml" up -d
+#   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml \
+#     -f "$ROOTLINE_DIR/compose.override.yml" -f "$ROOTLINE_DIR/compose.hardware.yml" up -d
 #
 # HW_LAN_BIND defaults to 0.0.0.0 (all interfaces), which is what Docker
 # Desktop on Windows needs to publish on the host; set it to the laptop's LAN

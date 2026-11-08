@@ -1,8 +1,10 @@
 # Rootline wiring for the OpenTelemetry Demo.
 #
-# Run from the demo checkout, pinned to the release tag in DEMO_GIT_TAG:
-#   export ROOTLINE_DIR=/path/to/RootLine
-#   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" up -d
+# Run from the demo checkout (OpenTelemetry Demo 3.1.0), pinning the images
+# to the tag (the demo's .env says DEMO_VERSION=latest):
+#   export ROOTLINE_DIR=/path/to/RootLine DEMO_VERSION=3.1.0 DEMO_GIT_TAG=3.1.0
+#   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml \
+#     -f "$ROOTLINE_DIR/compose.override.yml" up -d
 #
 # What it adds:
 #   - one Toxiproxy per edge (checkout->payment, frontend->product-catalog),
@@ -12,9 +14,10 @@
 #   - the snapshotter, fed by an extra OTLP/HTTP exporter on the collector
 #   - the load generator fixed at 20 users, started automatically
 #
-# TODO(flotrpy): after the first pull, pin every image to its digest
-# (controller/deploy/record-digests.sh prints them) and check the port and
-# address variable names against the pinned tag's docker-compose.yml and .env.
+# Ports and address variables checked against demo 3.1.0's compose.yaml and
+# .env (PAYMENT_PORT=50051, PRODUCT_CATALOG_PORT=3550).
+# TODO(flotrpy): record image digests after the first pull
+# (controller/deploy/record-digests.sh).
 
 x-toxiproxy: &toxiproxy
   image: ghcr.io/shopify/toxiproxy:2.12.0
