@@ -186,3 +186,10 @@ cd web && pnpm install && NEXT_PUBLIC_BASE_PATH="" pnpm build
 The site deploys to GitHub Pages only at release, by hand (`pages.yml`),
 built with `--include-labels`: incident IDs name the faults, so an earlier
 deploy would reveal the answers.
+
+## Release
+
+`docs/RELEASE.md` is the ordered path from the first snapshot to launch,
+including when to set up the Arduino boards. `make release-check` reports
+what is still missing; `make dataset` builds the Hugging Face dataset;
+`make paper` compiles the technical report from `make reproduce` output.
