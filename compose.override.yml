@@ -98,6 +98,9 @@ services:
       args:
         GIT_SHA: ${ROOTLINE_GIT_SHA:-unknown}
     container_name: snapshotter
+    # Write snapshots as the owner of the bind-mounted data/ directory; the
+    # image's default nonroot user (65532) gets "permission denied".
+    user: "${ROOTLINE_UID:-1000}:${ROOTLINE_GID:-1000}"
     environment:
       - DEMO_GIT_TAG=${DEMO_GIT_TAG:-}
       - COLLECTOR_VERSION=${COLLECTOR_VERSION:-}

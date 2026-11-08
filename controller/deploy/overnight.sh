@@ -19,6 +19,8 @@ set -uo pipefail
 
 ROOTLINE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 export ROOTLINE_DIR
+# The snapshotter writes into data/ as this user (compose.override.yml).
+export ROOTLINE_UID="$(id -u)" ROOTLINE_GID="$(id -g)"
 export ROOTLINE_FLAGD_FILE="${ROOTLINE_FLAGD_FILE:-$DEMO_DIR/src/flagd/demo.flagd.json}"
 # The demo's .env says DEMO_VERSION=latest; pin the images to the checked-out tag.
 export DEMO_GIT_TAG="${DEMO_GIT_TAG:-$(git -C "$DEMO_DIR" describe --tags)}"
