@@ -9,14 +9,32 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import threading
 import urllib.error
 import urllib.request
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from pathlib import Path
 
 log = logging.getLogger("rootline.panel")
 
 STATES = ("healthy", "faulty", "diagnosing")
+DEFAULTS = {"PANEL_FAULTS": "paymentFailure,toxiReset", "POLL_SECONDS": "1"}
+
+
+def load_settings(path: Path, env: Mapping[str, str] = os.environ) -> dict[str, str]:
+    """Environment first, then the JSON file, then defaults.
+    CONTROLLER_URL has no default: the panel cannot guess the laptop's IP."""
+    from_file: dict[str, str] = {}
+    if path.exists():
+        from_file = {k: str(v) for k, v in json.loads(path.read_text()).items()}
+    out = {}
+    for key in ("CONTROLLER_URL", *DEFAULTS):
+        value = env.get(key) or from_file.get(key) or DEFAULTS.get(key)
+        if not value:
+            raise SystemExit(f"{key} is not set: put it in {path.name} or the environment")
+        out[key] = value
+    return out
 
 
 class Controller:

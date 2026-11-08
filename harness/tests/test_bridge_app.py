@@ -115,3 +115,18 @@ def test_controller_client_against_http() -> None:
         srv.shutdown()
     with pytest.raises(ControllerError):
         Controller("http://127.0.0.1:1", timeout=0.5).status()
+
+
+def test_load_settings_order(tmp_path) -> None:
+    from panel import load_settings
+
+    cfg = tmp_path / "rootline.json"
+    cfg.write_text(json.dumps({"CONTROLLER_URL": "http://file:8088", "POLL_SECONDS": "2"}))
+    s = load_settings(cfg, env={"POLL_SECONDS": "5"})
+    assert s == {
+        "CONTROLLER_URL": "http://file:8088",
+        "PANEL_FAULTS": "paymentFailure,toxiReset",
+        "POLL_SECONDS": "5",
+    }
+    with pytest.raises(SystemExit, match="CONTROLLER_URL"):
+        load_settings(tmp_path / "missing.json", env={})

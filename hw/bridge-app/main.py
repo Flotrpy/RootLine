@@ -1,7 +1,9 @@
 """Board B Linux-side app (Arduino App Lab): bridges the MCU panel to the
 Rootline controller.
 
-Environment:
+Settings come from environment variables, or from rootline.json next to
+this file when the environment does not set them (App Lab apps may not):
+
   CONTROLLER_URL  e.g. http://192.168.1.20:8088 (required)
   PANEL_FAULTS    comma-separated faults the fault button cycles through
                   (default: paymentFailure,toxiReset)

@@ -5,7 +5,10 @@ Runs on the UNO Q's Linux side under Arduino App Lab, next to the
 become controller API calls; every second it reads `/status` and sets the
 LEDs (`healthy`, `faulty`, `diagnosing`).
 
-| Variable | Default | Meaning |
+Set these as environment variables or in `rootline.json` beside `main.py`
+(copy `rootline.json.example`); the environment wins.
+
+| Setting | Default | Meaning |
 |----------|---------|---------|
 | `CONTROLLER_URL` | (required) | e.g. `http://192.168.1.20:8088` |
 | `PANEL_FAULTS` | `paymentFailure,toxiReset` | faults the fault button cycles through |

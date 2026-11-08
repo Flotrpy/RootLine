@@ -144,17 +144,21 @@ var faults = []Fault{
 //
 // TODO(flotrpy): confirm each category and its emulated counterpart.
 var hardware = []Fault{
+	// Both boards stay on the 2.4 GHz lab SSID for the whole hardware
+	// campaign, so no fault ever needs a band switch (a reconnect mid-run
+	// would itself look like a reset). Press Enter the moment the fault is
+	// live: T0 is that confirmation.
 	{Name: "hwWeakSignal", Kind: KindManual, Service: "payment", Category: CatNetworkLoss, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
-		Steps:    "Move Board A (relay) until its RSSI is below -75 dBm (check the Board B logger or `iw dev wlan0 link`).",
-		Undo:     "Move Board A back to its normal spot and confirm RSSI is back near baseline.",
+		Steps:    "Move Board A (on its power bank) to the weak-signal spot. Press Enter once its RSSI stays between -75 and -85 dBm and it is still connected.",
+		Undo:     "Move Board A back to its normal spot and check RSSI is back near its usual value.",
 		Emulates: "netemLoss"},
 	{Name: "hwContention", Kind: KindManual, Service: "payment", Category: CatNetworkLatency, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
-		Steps:    "Force Board A onto 2.4 GHz, then start hw/contention/iperf_contention.sh on Board B against your LOCAL iperf3 server.",
-		Undo:     "Stop the iperf3 script on Board B and put Board A back on its normal band.",
+		Steps:    "On Board B run hw/contention/iperf_contention.sh (DURATION=300) against your LOCAL iperf3 server, and press Enter as soon as it prints its first interval.",
+		Undo:     "Check the iperf3 script on Board B has finished (Ctrl-C it if not).",
 		Emulates: "toxiLatency"},
 	{Name: "hwPowerCut", Kind: KindManual, Service: "payment", Category: CatNetworkReset, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
-		Steps:    "Cut Board A's power for 30 seconds, then restore it and wait for the relay to come back.",
-		Undo:     "Confirm the relay service on Board A is running (systemctl status edge-relay).",
+		Steps:    "Unplug Board A's power and press Enter at the same moment. Plug it back in after 30 seconds (use a timer).",
+		Undo:     "Check the relay is back on Board A (systemctl status edge-relay) and restart its Wi-Fi logger.",
 		Emulates: "toxiReset"},
 }
 
