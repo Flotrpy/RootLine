@@ -90,8 +90,20 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
         tiers.write_csv(out / "cascade_tiers.csv")
         figures.save_svg(figures.rq4_cascade(cascade_table, tiers), out / "rq4_cascade.svg")
 
+    leaderboard = table.filter(
+        (pl.col("condition") == "combined") & (pl.col("perturbation") == "p0")
+    ).sort(["top1", "model_id"], descending=[True, False])
+    baselines_csv = out / "baselines.csv"
     results = {
         "label": f"pilot (n={runs['incident_id'].n_unique()} snapshots)",
+        "n_snapshots": runs["incident_id"].n_unique(),
+        "leaderboard": [{k: _clean(v) for k, v in r.items()} for r in leaderboard.to_dicts()],
+        "baselines": [
+            {k: _clean(v) for k, v in r.items()} for r in pl.read_csv(baselines_csv).to_dicts()
+        ]
+        if baselines_csv.exists()
+        else [],
+        "figures": sorted(p.name for p in out.glob("*.svg")),
         "best_model": best_model(runs),
         "seeds": {"bootstrap": SEED, "bootstrap_resamples": BOOTSTRAP_RESAMPLES},
         "rq4_theta": RQ4_THETA,

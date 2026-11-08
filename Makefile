@@ -1,4 +1,4 @@
-.PHONY: test lint test-go test-py test-rust lint-go lint-py lint-rust build reproduce
+.PHONY: test lint test-go test-py test-rust lint-go lint-py lint-rust build reproduce paper
 
 GO_MODULES := controller snapshotter hw/edge-relay
 # Python code linted by ruff (config in ruff.toml); harness/ owns the venv.
@@ -37,3 +37,7 @@ build:
 # Regenerate every table and figure in paper/figures/ from data/ (offline).
 reproduce:
 	uv run --project harness python -m analysis reproduce
+
+# Compile the technical report from paper/figures/ (run `make reproduce` first).
+paper:
+	cd paper && typst compile main.typ rootline-v0.1.pdf
