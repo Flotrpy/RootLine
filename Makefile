@@ -2,7 +2,7 @@
 
 GO_MODULES := controller snapshotter hw/edge-relay
 # Python code linted by ruff (config in ruff.toml); harness/ owns the venv.
-PY_DIRS := harness cascade baselines analysis
+PY_DIRS := harness cascade baselines analysis hw/bridge-app hw/contention
 
 test: test-go test-py test-rust
 

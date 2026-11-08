@@ -41,8 +41,8 @@ jobs:
         with:
           python-version: "3.13"
       - run: uv sync --frozen
-      - run: uv run ruff check ../harness ../cascade ../baselines ../analysis
-      - run: uv run ruff format --check ../harness ../cascade ../baselines ../analysis
+      - run: uv run ruff check ../harness ../cascade ../baselines ../analysis ../hw/bridge-app ../hw/contention
+      - run: uv run ruff format --check ../harness ../cascade ../baselines ../analysis ../hw/bridge-app ../hw/contention
       - run: uv run pyright
       - run: uv run pytest -q
 

@@ -22,6 +22,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pyarrow>=18",
     "pyright>=1.1.380",
     "pytest>=8.0",
     "ruff>=0.6",
@@ -35,8 +36,8 @@ build-backend = "hatchling.build"
 packages = ["rootline_harness"]
 
 [tool.pyright]
-include = ["rootline_harness", "tests", "../cascade", "../baselines", "../analysis"]
-extraPaths = [".."]
+include = ["rootline_harness", "tests", "../cascade", "../baselines", "../analysis", "../hw/bridge-app/panel.py", "../hw/contention"]
+extraPaths = ["..", "../hw/bridge-app", "../hw/contention"]
 pythonVersion = "3.13"
 typeCheckingMode = "standard"
 venvPath = "."
@@ -45,4 +46,4 @@ venv = ".venv"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # cascade/, baselines/ and analysis/ live at the repository root.
-pythonpath = [".", ".."]
+pythonpath = [".", "..", "../hw/bridge-app", "../hw/contention"]
