@@ -1,0 +1,8 @@
+# Phase 3 hardware arm: 3 real Wi-Fi faults x 4 replicas = 12 snapshots
+# (about 2.6 h). Needs compose.hardware.yml (checkout -> payment through
+# Board A) and an operator at the keyboard for every inject and clear step.
+# Run with: rootlinectl campaign --plan plans/hardware.yaml
+name: hardware
+replicas: 4
+faults: [hwWeakSignal, hwContention, hwPowerCut]
+seed: 20261108

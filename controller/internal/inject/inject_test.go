@@ -91,3 +91,26 @@ func TestUnknownEdge(t *testing.T) {
 		t.Fatal("want error for unwired edge")
 	}
 }
+
+func TestManualFaultsGoThroughTheOperator(t *testing.T) {
+	ctx := context.Background()
+	in, _, ft, fn := NewFake(flagNames()...)
+	f, _ := catalog.Lookup("hwPowerCut")
+	if err := in.Inject(ctx, f); err == nil {
+		t.Fatal("manual fault without an operator must fail")
+	}
+	op := &FakeOperator{}
+	in.Operator = op
+	if err := in.Inject(ctx, f); err != nil {
+		t.Fatal(err)
+	}
+	if err := in.Clear(ctx, f); err != nil {
+		t.Fatal(err)
+	}
+	if len(op.Steps) != 2 || op.Steps[0] != "hwPowerCut/inject" || op.Steps[1] != "hwPowerCut/clear" {
+		t.Fatalf("steps = %v", op.Steps)
+	}
+	if len(ft.Toxics) != 0 || len(fn.Rules) != 0 {
+		t.Fatal("manual faults must not touch Toxiproxy or netem")
+	}
+}

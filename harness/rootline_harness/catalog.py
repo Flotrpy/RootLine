@@ -70,6 +70,16 @@ FAULTS: Final[tuple[str, ...]] = (
 
 FLAGS: Final[tuple[str, ...]] = FAULTS[:10]
 
+HW_FAULTS: Final[tuple[str, ...]] = ("hwWeakSignal", "hwContention", "hwPowerCut")
+"""Phase 3 hardware arm: real Wi-Fi faults, outside the 15-type pilot."""
+
+HW_EMULATES: Final[dict[str, str]] = {
+    "hwWeakSignal": "netemLoss",
+    "hwContention": "toxiLatency",
+    "hwPowerCut": "toxiReset",
+}
+"""Each hardware fault's emulated counterpart, for emulation validity."""
+
 EDGES: Final[tuple[str, ...]] = ("checkout->payment", "frontend->product-catalog")
 
 
@@ -79,4 +89,4 @@ def forbidden_strings() -> tuple[str, ...]:
     Every fault and flag name is redacted from every pack, not only the
     current incident's, so redaction itself reveals nothing.
     """
-    return tuple(sorted((set(FAULTS) | set(FLAGS)) - {"healthy"}))
+    return tuple(sorted((set(FAULTS) | set(FLAGS) | set(HW_FAULTS)) - {"healthy"}))

@@ -28,6 +28,7 @@ import (
 	"github.com/flotrpy/rootline/controller/internal/incident"
 	"github.com/flotrpy/rootline/controller/internal/inject"
 	"github.com/flotrpy/rootline/controller/internal/netem"
+	"github.com/flotrpy/rootline/controller/internal/operator"
 	"github.com/flotrpy/rootline/controller/internal/remediate"
 	"github.com/flotrpy/rootline/controller/internal/toxi"
 )
@@ -51,6 +52,7 @@ Environment (defaults in brackets):
   PROMETHEUS_URL       [http://localhost:9090]
   SNAPSHOTTER_URL      [http://localhost:8089]
   ROOTLINE_LABELS_DIR  [data/labels]
+  ROOTLINE_OPERATOR_LOG [data/hw/operator-log.jsonl]  (hardware faults)
 `
 
 // config is read from the environment.
@@ -90,10 +92,11 @@ func (d deps) injector() *inject.Injector {
 		d.log.Warn("TOXIPROXY_URLS", "err", err)
 	}
 	return &inject.Injector{
-		Flags: flagd.NewStore(d.cfg.FlagdFile),
-		Toxi:  router,
-		Netem: netem.New(),
-		Edges: inject.DefaultEdges,
+		Flags:    flagd.NewStore(d.cfg.FlagdFile),
+		Toxi:     router,
+		Netem:    netem.New(),
+		Edges:    inject.DefaultEdges,
+		Operator: operator.NewConsole(env("ROOTLINE_OPERATOR_LOG", "data/hw/operator-log.jsonl")),
 	}
 }
 
@@ -151,7 +154,7 @@ func run(ctx context.Context, args []string, out io.Writer, d deps) error {
 func listFaults(out io.Writer) error {
 	tw := tabwriter.NewWriter(out, 0, 4, 2, ' ', 0)
 	_, _ = fmt.Fprintln(tw, "FAULT\tKIND\tLAYER\tSERVICE\tCATEGORY\tEDGE")
-	for _, f := range catalog.All() {
+	for _, f := range append(catalog.All(), catalog.Hardware()...) {
 		_, _ = fmt.Fprintf(tw, "%s\t%s\t%s\t%s\t%s\t%s\n", f.Name, f.Kind, f.Layer, f.Service, f.Category, f.Edge)
 	}
 	return tw.Flush()

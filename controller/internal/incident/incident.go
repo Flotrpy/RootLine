@@ -182,6 +182,12 @@ func (r *Runner) Run(ctx context.Context, f catalog.Fault, replica int, warmup b
 	if err := r.Injector.Inject(ctx, f); err != nil {
 		return res, fmt.Errorf("inject: %w", err)
 	}
+	if f.Kind == catalog.KindManual {
+		// A physical fault starts when the operator confirms it, not when
+		// the prompt appears; anchor the window there.
+		t0 = r.Clock.Now()
+		res.T0UnixMs = t0.UnixMilli()
+	}
 	defer func() {
 		// Clear with a fresh context so a cancelled run still cleans up.
 		cctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)

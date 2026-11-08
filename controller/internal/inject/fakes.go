@@ -111,3 +111,16 @@ func NewFake(flagNames ...string) (*Injector, *FakeFlags, *FakeToxi, *FakeNetem)
 	ft, fn := &FakeToxi{}, &FakeNetem{}
 	return &Injector{Flags: ff, Toxi: ft, Netem: fn, Edges: DefaultEdges}, ff, ft, fn
 }
+
+// FakeOperator records operator steps instead of asking a person.
+type FakeOperator struct {
+	mu    sync.Mutex
+	Steps []string // "fault/phase"
+}
+
+func (f *FakeOperator) Do(_ context.Context, fault, phase, _ string) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.Steps = append(f.Steps, fault+"/"+phase)
+	return nil
+}

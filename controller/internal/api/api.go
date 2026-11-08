@@ -86,6 +86,11 @@ func (s *Server) postFault(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusNotFound, map[string]string{"error": "unknown fault"})
 		return
 	}
+	if f.Kind == catalog.KindManual {
+		// Physical steps are never triggered remotely.
+		writeJSON(w, http.StatusForbidden, map[string]string{"error": "manual faults need an operator; use rootlinectl"})
+		return
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.active != nil {

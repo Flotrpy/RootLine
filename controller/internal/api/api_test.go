@@ -53,6 +53,7 @@ func TestPanelFlow(t *testing.T) {
 		{"POST", "/reset", "", 200, StateHealthy},
 		{"POST", "/faults/healthy", "", 404, ""},
 		{"POST", "/faults/nope", "", 404, ""},
+		{"POST", "/faults/hwPowerCut", "", 403, ""},
 		{"POST", "/diagnosis", `not json`, 400, ""},
 	}
 	for _, s := range steps {

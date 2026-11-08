@@ -113,3 +113,27 @@ func TestByFlagService(t *testing.T) {
 		t.Fatal("checkout has no flag fault")
 	}
 }
+
+func TestHardwareFaults(t *testing.T) {
+	hw := Hardware()
+	if len(hw) != 3 {
+		t.Fatalf("want 3 hardware faults, got %d", len(hw))
+	}
+	for _, f := range hw {
+		if f.Kind != KindManual || f.Layer != LayerNetwork || f.Steps == "" || f.Undo == "" {
+			t.Errorf("%s: incomplete hardware fault %+v", f.Name, f)
+		}
+		emu, ok := Lookup(f.Emulates)
+		if !ok || emu.Layer != LayerNetwork || emu.Category != f.Category {
+			t.Errorf("%s: emulated counterpart %q must be a network fault with the same category", f.Name, f.Emulates)
+		}
+		if got, ok := Lookup(f.Name); !ok || got.Name != f.Name {
+			t.Errorf("Lookup(%s) failed", f.Name)
+		}
+	}
+	for _, f := range All() {
+		if f.Kind == KindManual {
+			t.Errorf("pilot catalog must not contain manual fault %s", f.Name)
+		}
+	}
+}

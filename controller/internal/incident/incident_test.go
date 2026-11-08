@@ -248,3 +248,47 @@ func TestLoadPlanFile(t *testing.T) {
 		t.Fatalf("plans/pilot.yaml expands to %d incidents, want 30", len(items))
 	}
 }
+
+// slowOperator takes a minute to confirm each step.
+type slowOperator struct{ clock *fakeClock }
+
+func (o *slowOperator) Do(ctx context.Context, _, _, _ string) error {
+	return o.clock.Sleep(ctx, time.Minute)
+}
+
+func TestManualFaultAnchorsT0AtConfirmation(t *testing.T) {
+	base := health.Sample{ErrorRatio: 0.01, P99Ms: 300}
+	r, _, snap, clk := newRunner(t, &scriptedProbe{samples: []health.Sample{base}})
+	r.Injector.Operator = &slowOperator{clock: clk}
+	f, _ := catalog.Lookup("hwPowerCut")
+	res, err := r.Run(context.Background(), f, 1, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := t0.Add(Pilot.Baseline + time.Minute)
+	if res.T0UnixMs != want.UnixMilli() {
+		t.Fatalf("T0 = %d, want confirmation time %d", res.T0UnixMs, want.UnixMilli())
+	}
+	if snap.reqs[0].T0UnixMs != want.UnixMilli() {
+		t.Fatal("snapshot window not anchored at confirmation")
+	}
+}
+
+func TestHardwarePlanFile(t *testing.T) {
+	p, err := LoadPlan("../../../plans/hardware.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	items, err := p.Expand()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(items) != 12 {
+		t.Fatalf("plans/hardware.yaml expands to %d incidents, want 12", len(items))
+	}
+	for _, it := range items {
+		if it.Fault.Kind != catalog.KindManual {
+			t.Errorf("%s is not a hardware fault", it.ID())
+		}
+	}
+}

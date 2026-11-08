@@ -29,6 +29,9 @@ const (
 	KindToxic Kind = "toxic" // Toxiproxy toxic on an edge
 	KindNetem Kind = "netem" // tc netem rule on an edge's proxy container
 	KindNone  Kind = "none"  // healthy control
+	// KindManual faults need a person: the controller prints the steps,
+	// waits for confirmation and timestamps them (hardware arm only).
+	KindManual Kind = "manual"
 )
 
 // Categories used in labels and in the model output contract.
@@ -83,6 +86,11 @@ type Fault struct {
 	Variant  string // flag variant to enable
 	Toxic    *Toxic // toxic faults only
 	LossPct  int    // netem faults only
+	Steps    string // manual faults only: what the operator does to inject
+	Undo     string // manual faults only: what the operator does to clear
+	// Emulates names the emulated fault a hardware fault is compared with
+	// in the emulation-validity analysis.
+	Emulates string
 }
 
 // Label is the ground truth written to data/labels/<incident_id>.json.
@@ -130,16 +138,43 @@ var faults = []Fault{
 	{Name: "healthy", Kind: KindNone, Service: "none", Category: CatNone, Layer: LayerNone},
 }
 
-// All returns every fault in catalog order.
+// The hardware arm (Phase 3): real faults on the Wi-Fi link through the
+// Arduino UNO Q relay on the checkout -> payment edge. Not part of the
+// 15-type pilot; collected with plans/hardware.yaml.
+//
+// TODO(flotrpy): confirm each category and its emulated counterpart.
+var hardware = []Fault{
+	{Name: "hwWeakSignal", Kind: KindManual, Service: "payment", Category: CatNetworkLoss, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
+		Steps:    "Move Board A (relay) until its RSSI is below -75 dBm (check the Board B logger or `iw dev wlan0 link`).",
+		Undo:     "Move Board A back to its normal spot and confirm RSSI is back near baseline.",
+		Emulates: "netemLoss"},
+	{Name: "hwContention", Kind: KindManual, Service: "payment", Category: CatNetworkLatency, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
+		Steps:    "Force Board A onto 2.4 GHz, then start hw/contention/iperf_contention.sh on Board B against your LOCAL iperf3 server.",
+		Undo:     "Stop the iperf3 script on Board B and put Board A back on its normal band.",
+		Emulates: "toxiLatency"},
+	{Name: "hwPowerCut", Kind: KindManual, Service: "payment", Category: CatNetworkReset, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
+		Steps:    "Cut Board A's power for 30 seconds, then restore it and wait for the relay to come back.",
+		Undo:     "Confirm the relay service on Board A is running (systemctl status edge-relay).",
+		Emulates: "toxiReset"},
+}
+
+// Hardware returns the hardware-arm faults.
+func Hardware() []Fault {
+	out := make([]Fault, len(hardware))
+	copy(out, hardware)
+	return out
+}
+
+// All returns the 15 pilot faults in catalog order.
 func All() []Fault {
 	out := make([]Fault, len(faults))
 	copy(out, faults)
 	return out
 }
 
-// Lookup finds a fault by name.
+// Lookup finds a pilot or hardware fault by name.
 func Lookup(name string) (Fault, bool) {
-	for _, f := range faults {
+	for _, f := range append(All(), hardware...) {
 		if f.Name == name {
 			return f, true
 		}

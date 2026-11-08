@@ -34,10 +34,23 @@ func ToxicName(fault string) string { return "rootline-" + fault }
 
 // Injector applies and clears faults.
 type Injector struct {
-	Flags flagd.Flags
-	Toxi  toxi.Proxies
-	Netem netem.Shaper
-	Edges map[string]Edge
+	Flags    flagd.Flags
+	Toxi     toxi.Proxies
+	Netem    netem.Shaper
+	Edges    map[string]Edge
+	Operator Operator // manual (hardware) faults only
+}
+
+// Operator carries out the physical steps of a manual fault.
+type Operator interface {
+	Do(ctx context.Context, fault, phase, instruction string) error
+}
+
+func (in *Injector) operate(ctx context.Context, f catalog.Fault, phase, instruction string) error {
+	if in.Operator == nil {
+		return fmt.Errorf("fault %s needs an operator", f.Name)
+	}
+	return in.Operator.Do(ctx, f.Name, phase, instruction)
 }
 
 func (in *Injector) edge(name string) (Edge, error) {
@@ -70,6 +83,8 @@ func (in *Injector) Inject(ctx context.Context, f catalog.Fault) error {
 			return err
 		}
 		return in.Netem.Loss(ctx, e.Container, f.LossPct)
+	case catalog.KindManual:
+		return in.operate(ctx, f, "inject", f.Steps)
 	case catalog.KindNone:
 		return nil
 	}
@@ -83,6 +98,8 @@ func (in *Injector) Clear(ctx context.Context, f catalog.Fault) error {
 		return in.Flags.Set(f.Flag, flagd.OffVariant)
 	case catalog.KindToxic, catalog.KindNetem:
 		return in.ClearEdge(ctx, f.Edge)
+	case catalog.KindManual:
+		return in.operate(ctx, f, "clear", f.Undo)
 	case catalog.KindNone:
 		return nil
 	}

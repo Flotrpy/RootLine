@@ -9,7 +9,13 @@ GO_CATALOG = Path(__file__).parents[2] / "controller" / "internal" / "catalog" /
 def test_faults_match_go_catalog() -> None:
     src = GO_CATALOG.read_text()
     go_faults = re.findall(r'\{Name: "([A-Za-z]+)"', src)
-    assert tuple(go_faults) == catalog.FAULTS
+    assert tuple(go_faults) == catalog.FAULTS + catalog.HW_FAULTS
+
+
+def test_hardware_counterparts_match_go_catalog() -> None:
+    src = GO_CATALOG.read_text()
+    pairs = dict(re.findall(r'\{Name: "(hw[A-Za-z]+)".*?Emulates: "([A-Za-z]+)"', src, re.S))
+    assert pairs == catalog.HW_EMULATES
 
 
 def test_flags_match_go_catalog() -> None:
