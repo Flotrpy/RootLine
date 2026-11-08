@@ -48,7 +48,7 @@ ctl campaign --plan plans/pilot.yaml || say "pilot campaign ended with an error 
 say "3/4 hardware wiring and iperf3 server"
 compose -f "$ROOTLINE_DIR/compose.hardware.yml" up -d --no-build || { say "hardware compose failed; stopping"; exit 1; }
 docker rm -f rootline-iperf >/dev/null 2>&1
-docker run -d --rm --name rootline-iperf -p 5201:5201 alpine:3.22 \
+docker run -d --rm --name rootline-iperf -p 5201:5201/tcp -p 5201:5201/udp alpine:3.22 \
   sh -c "apk add --no-cache iperf3 >/dev/null && exec iperf3 --server" || { say "iperf3 server failed; stopping"; exit 1; }
 sleep 30
 
