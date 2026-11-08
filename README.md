@@ -73,7 +73,9 @@ at a pinned release tag. Docs: [architecture](docs/ARCHITECTURE.md),
 
    ```bash
    export ROOTLINE_DIR=/path/to/RootLine DEMO_GIT_TAG=3.1.0 DEMO_VERSION=3.1.0
-   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" up -d --build
+   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" pull --ignore-pull-failures
+   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" build snapshotter
+   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" up -d --no-build
    ```
 
 2. Record image digests for the manifests:

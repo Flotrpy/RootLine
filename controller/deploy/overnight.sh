@@ -36,13 +36,17 @@ ctl() { "$ROOTLINE_DIR/bin/rootlinectl" "$@"; }
 cd "$ROOTLINE_DIR" || exit 1
 
 say "1/4 demo with the emulated wiring"
-compose up -d --build || { say "compose failed; stopping"; exit 1; }
+# Pull the released 3.1.0 images (every demo service also has build steps,
+# and building them all from source takes hours); build only Rootline's own.
+compose pull --ignore-pull-failures --quiet
+compose build snapshotter || { say "snapshotter build failed; stopping"; exit 1; }
+compose up -d --no-build || { say "compose failed; stopping"; exit 1; }
 
 say "2/4 pilot campaign (30 snapshots, ~6.5 h)"
 ctl campaign --plan plans/pilot.yaml || say "pilot campaign ended with an error (see above); continuing"
 
 say "3/4 hardware wiring and iperf3 server"
-compose -f "$ROOTLINE_DIR/compose.hardware.yml" up -d || { say "hardware compose failed; stopping"; exit 1; }
+compose -f "$ROOTLINE_DIR/compose.hardware.yml" up -d --no-build || { say "hardware compose failed; stopping"; exit 1; }
 docker rm -f rootline-iperf >/dev/null 2>&1
 docker run -d --rm --name rootline-iperf -p 5201:5201 alpine:3.22 \
   sh -c "apk add --no-cache iperf3 >/dev/null && exec iperf3 --server" || { say "iperf3 server failed; stopping"; exit 1; }
