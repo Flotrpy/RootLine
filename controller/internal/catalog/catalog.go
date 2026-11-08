@@ -164,7 +164,7 @@ var hardware = []Fault{
 		Emulates:     "netemLoss"},
 	{Name: "hwContention", Kind: KindRemote, Service: "payment", Category: CatNetworkLatency, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
 		Board:        "B",
-		RemoteInject: "IPERF_SERVER={iperf_server} BITRATE={contention_bitrate} DURATION=300 nohup ~/iperf_contention.sh >/tmp/rootline-iperf.log 2>&1 </dev/null &",
+		RemoteInject: "IPERF_SERVER={iperf_server} BITRATE={contention_bitrate} DURATION=300 nohup bash ~/iperf_contention.sh >/tmp/rootline-iperf.log 2>&1 </dev/null &",
 		RemoteClear:  "pkill -f 'iperf3 --client' || true",
 		Emulates:     "toxiLatency"},
 	{Name: "hwWifiOutage", Kind: KindRemote, Service: "payment", Category: CatNetworkReset, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
