@@ -43,3 +43,6 @@ out/
 # Typst and generated figures (rebuilt by `make reproduce` from data/)
 paper/*.pdf
 paper/figures/
+
+# Derived from snapshots by rootline_harness.export_packs
+data/packs/

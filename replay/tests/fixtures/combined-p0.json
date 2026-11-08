@@ -1,0 +1,486 @@
+{
+  "condition": "combined",
+  "format": 1,
+  "incident_id": "paymentFailure-r1",
+  "pack": {
+    "condition": "combined",
+    "incident_id": "paymentFailure-r1",
+    "perturbation": "p0",
+    "sections": [
+      {
+        "header": "per-service metrics, 30 s buckets from fault onset, % change vs pre-onset mean",
+        "lines": [
+          {
+            "id": "M-0001",
+            "services": [
+              "checkout"
+            ],
+            "text": "svc=checkout metric=error_ratio base=0 delta/30s=[new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5]"
+          },
+          {
+            "id": "M-0002",
+            "services": [
+              "payment"
+            ],
+            "text": "svc=payment metric=error_ratio base=0 delta/30s=[new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5]"
+          },
+          {
+            "id": "M-0003",
+            "services": [
+              "payment"
+            ],
+            "text": "svc=payment metric=traces.span.metrics.duration.p99 base=53.1 delta/30s=[+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%]"
+          },
+          {
+            "id": "M-0004",
+            "services": [
+              "product-catalog"
+            ],
+            "text": "svc=product-catalog metric=request_rate base=0.503 delta/30s=[+3%,+9%,+2%,+9%,+6%,+10%,+7%,+5%,+1%,+7%]"
+          },
+          {
+            "id": "M-0005",
+            "services": [
+              "payment"
+            ],
+            "text": "svc=payment metric=request_rate base=0.506 delta/30s=[+7%,+7%,+4%,+4%,+9%,+5%,+3%,+8%,+8%,+6%]"
+          },
+          {
+            "id": "M-0006",
+            "services": [
+              "checkout"
+            ],
+            "text": "svc=checkout metric=request_rate base=0.507 delta/30s=[+6%,+5%,+3%,+9%,+5%,+3%,+7%,+5%,+7%,+4%]"
+          },
+          {
+            "id": "M-0007",
+            "services": [
+              "frontend"
+            ],
+            "text": "svc=frontend metric=request_rate base=0.512 delta/30s=[+7%,+6%,+8%,+6%,+3%,+5%,+4%,+1%,+5%,+6%]"
+          },
+          {
+            "id": "M-0008",
+            "services": [
+              "frontend-proxy"
+            ],
+            "text": "svc=frontend-proxy metric=request_rate base=0.51 delta/30s=[+0%,+7%,+8%,+5%,+5%,+1%,+3%,+4%,+8%,-0%]"
+          },
+          {
+            "id": "M-0009",
+            "services": [
+              "frontend"
+            ],
+            "text": "svc=frontend metric=traces.span.metrics.duration.p99 base=54.0 delta/30s=[-5%,-1%,+1%,-2%,-1%,-3%,-2%,+1%,-5%,-3%]"
+          },
+          {
+            "id": "M-0010",
+            "services": [
+              "frontend-proxy"
+            ],
+            "text": "svc=frontend-proxy metric=traces.span.metrics.duration.p99 base=52.3 delta/30s=[+5%,+4%,+3%,+2%,+4%,-3%,+5%,+3%,+4%,+3%]"
+          },
+          {
+            "id": "M-0011",
+            "services": [
+              "checkout"
+            ],
+            "text": "svc=checkout metric=traces.span.metrics.duration.p99 base=53.8 delta/30s=[+2%,+2%,+2%,-1%,+0%,+2%,+1%,-4%,-1%,-0%]"
+          },
+          {
+            "id": "M-0012",
+            "services": [
+              "product-catalog"
+            ],
+            "text": "svc=product-catalog metric=traces.span.metrics.duration.p99 base=53.0 delta/30s=[+2%,+1%,+2%,+1%,+3%,+3%,-2%,-1%,-4%,+2%]"
+          },
+          {
+            "id": "M-0013",
+            "services": [
+              "frontend"
+            ],
+            "text": "svc=frontend metric=process.memory.usage base=1.01e+08 delta/30s=[-0%,-0%,-0%,+0%,-0%,-0%,-1%,-0%,+0%,-0%]"
+          },
+          {
+            "id": "M-0014",
+            "services": [
+              "product-catalog"
+            ],
+            "text": "svc=product-catalog metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,-0%,-0%,-0%,-0%,-0%,+0%,-1%,+0%,+0%]"
+          },
+          {
+            "id": "M-0015",
+            "services": [
+              "payment"
+            ],
+            "text": "svc=payment metric=process.memory.usage base=1.01e+08 delta/30s=[-0%,+0%,+0%,-0%,-0%,-0%,+0%,-0%,-0%,-0%]"
+          },
+          {
+            "id": "M-0016",
+            "services": [
+              "checkout"
+            ],
+            "text": "svc=checkout metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,-0%,+0%,+0%,-0%,+0%,-0%,-0%,+0%,-0%]"
+          },
+          {
+            "id": "M-0017",
+            "services": [
+              "frontend-proxy"
+            ],
+            "text": "svc=frontend-proxy metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,+0%,+0%,-0%,-0%,+0%,-0%,+0%,+0%,+0%]"
+          },
+          {
+            "id": "M-0018",
+            "services": [
+              "frontend"
+            ],
+            "text": "svc=frontend metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]"
+          },
+          {
+            "id": "M-0019",
+            "services": [
+              "frontend-proxy"
+            ],
+            "text": "svc=frontend-proxy metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]"
+          },
+          {
+            "id": "M-0020",
+            "services": [
+              "product-catalog"
+            ],
+            "text": "svc=product-catalog metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]"
+          }
+        ],
+        "omitted": 0,
+        "signal": "metrics"
+      },
+      {
+        "header": "slowest and errored traces after fault onset, critical path (! = error span)",
+        "lines": [
+          {
+            "id": "T-0001",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=49df9b07 dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!"
+          },
+          {
+            "id": "T-0002",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=93ef0704 dur=975ms ERROR path: frontend-proxy:ingress 975ms > frontend:POST /api/checkout 965ms > checkout:oteldemo.CheckoutService/PlaceOrder 945ms! > payment:oteldemo.PaymentService/Charge 915ms!"
+          },
+          {
+            "id": "T-0003",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=75391799 dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!"
+          },
+          {
+            "id": "T-0004",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=01b0fb6a dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!"
+          },
+          {
+            "id": "T-0005",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=7d0411cb dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!"
+          },
+          {
+            "id": "T-0006",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=456746fe dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!"
+          },
+          {
+            "id": "T-0007",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=b247801d dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!"
+          },
+          {
+            "id": "T-0008",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=74429bc9 dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!"
+          },
+          {
+            "id": "T-0009",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=efdaf3ff dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!"
+          },
+          {
+            "id": "T-0010",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=7c7f2cba dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!"
+          },
+          {
+            "id": "T-0011",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=05011ece dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!"
+          },
+          {
+            "id": "T-0012",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=1b4d294b dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!"
+          },
+          {
+            "id": "T-0013",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=1e110eb0 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!"
+          },
+          {
+            "id": "T-0014",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=39da457a dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!"
+          },
+          {
+            "id": "T-0015",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=2bd76124 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!"
+          },
+          {
+            "id": "T-0016",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=8a8dd460 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!"
+          },
+          {
+            "id": "T-0017",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=4419ca8e dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!"
+          },
+          {
+            "id": "T-0018",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=a0d4f2e3 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!"
+          },
+          {
+            "id": "T-0019",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=45a087c2 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!"
+          },
+          {
+            "id": "T-0020",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=c27b5104 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!"
+          },
+          {
+            "id": "T-0021",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=964573f5 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!"
+          },
+          {
+            "id": "T-0022",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=12e1988d dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!"
+          },
+          {
+            "id": "T-0023",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=edac6e6c dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!"
+          },
+          {
+            "id": "T-0024",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=38f2a031 dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!"
+          },
+          {
+            "id": "T-0025",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=77f06139 dur=978ms ERROR path: frontend-proxy:ingress 978ms > frontend:POST /api/checkout 968ms > checkout:oteldemo.CheckoutService/PlaceOrder 948ms! > payment:oteldemo.PaymentService/Charge 918ms!"
+          },
+          {
+            "id": "T-0026",
+            "services": [
+              "checkout",
+              "frontend",
+              "frontend-proxy",
+              "payment"
+            ],
+            "text": "trace=4f7d39da dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!"
+          }
+        ],
+        "omitted": 14,
+        "signal": "traces"
+      },
+      {
+        "header": "log templates per service, rate before vs after fault onset, with examples",
+        "lines": [
+          {
+            "id": "L-0001",
+            "services": [
+              "payment"
+            ],
+            "text": "svc=payment sev=ERROR base=0.0/min fault=29.8/min tpl=\"Payment request failed. Invalid token. app.loyalty.level=gold txn=<NUM>\" ex=['Payment request failed. Invalid token. app.loyalty.level=gold txn=89145', 'Payment request failed. Invalid token. app.loyalty.level=gold txn=89266']"
+          },
+          {
+            "id": "L-0002",
+            "services": [
+              "flagd"
+            ],
+            "text": "svc=flagd sev=INFO base=0.0/min fault=2.0/min tpl=\"flag <redacted> evaluated to variant <NUM>%\" ex=['flag <redacted> evaluated to variant 50%', 'flag <redacted> evaluated to variant 50%']"
+          },
+          {
+            "id": "L-0003",
+            "services": [
+              "checkout"
+            ],
+            "text": "svc=checkout sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 5 ms', 'handled request in 30 ms']"
+          },
+          {
+            "id": "L-0004",
+            "services": [
+              "frontend"
+            ],
+            "text": "svc=frontend sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 32 ms', 'handled request in 39 ms']"
+          },
+          {
+            "id": "L-0005",
+            "services": [
+              "frontend-proxy"
+            ],
+            "text": "svc=frontend-proxy sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 26 ms', 'handled request in 24 ms']"
+          },
+          {
+            "id": "L-0006",
+            "services": [
+              "payment"
+            ],
+            "text": "svc=payment sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 6 ms', 'handled request in 44 ms']"
+          },
+          {
+            "id": "L-0007",
+            "services": [
+              "product-catalog"
+            ],
+            "text": "svc=product-catalog sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 35 ms', 'handled request in 10 ms']"
+          }
+        ],
+        "omitted": 0,
+        "signal": "logs"
+      }
+    ]
+  },
+  "perturbation": "p0",
+  "prompt": "You are the on-call engineer for a microservice web shop. Below is telemetry from a 10-minute window; \"fault onset\" is the midpoint. The window may contain a fault, or the system may be healthy.\n\nFind the root cause using only the evidence below.\n\nServices: accounting, ad, cart, checkout, currency, email, flagd, fraud-detection, frontend, frontend-proxy, image-provider, kafka, load-generator, payment, product-catalog, quote, recommendation, shipping, valkey-cart\nNetwork edges you can act on: checkout->payment, frontend->product-catalog\nCategories: cpu_saturation, dependency_unavailable, error, latency, lock_contention, memory_leak, network_latency, network_loss, network_reset, network_throughput, queue_lag\nLayers: application (the service itself is broken), network (the link between services is degraded), none (healthy).\n\nAnswer with ONE JSON object and nothing else:\n{\"abstain\": bool, \"layer\": \"application\"|\"network\"|\"none\",\n \"hypotheses\": [{\"rank\": 1, \"service\": str, \"category\": str, \"confidence\": 0.0-1.0,\n                 \"evidence\": [\"evidence IDs such as M-0001, T-0001, L-0001\"]}],\n \"action\": {\"type\": \"restart\"|\"disable_feature\"|\"clear_network_fault\"|\"no_action\",\n            \"target\": service, edge, or null for no_action}}\n\nRules: give up to 3 hypotheses ranked best first; cite only IDs that appear below; confidence is your probability that the hypothesis is right; if healthy use layer \"none\", no hypotheses and no_action; set abstain true only if the evidence is unusable.\n\nEVIDENCE\n## METRICS: per-service metrics, 30 s buckets from fault onset, % change vs pre-onset mean\nM-0001 svc=checkout metric=error_ratio base=0 delta/30s=[new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5]\nM-0002 svc=payment metric=error_ratio base=0 delta/30s=[new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5]\nM-0003 svc=payment metric=traces.span.metrics.duration.p99 base=53.1 delta/30s=[+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%]\nM-0004 svc=product-catalog metric=request_rate base=0.503 delta/30s=[+3%,+9%,+2%,+9%,+6%,+10%,+7%,+5%,+1%,+7%]\nM-0005 svc=payment metric=request_rate base=0.506 delta/30s=[+7%,+7%,+4%,+4%,+9%,+5%,+3%,+8%,+8%,+6%]\nM-0006 svc=checkout metric=request_rate base=0.507 delta/30s=[+6%,+5%,+3%,+9%,+5%,+3%,+7%,+5%,+7%,+4%]\nM-0007 svc=frontend metric=request_rate base=0.512 delta/30s=[+7%,+6%,+8%,+6%,+3%,+5%,+4%,+1%,+5%,+6%]\nM-0008 svc=frontend-proxy metric=request_rate base=0.51 delta/30s=[+0%,+7%,+8%,+5%,+5%,+1%,+3%,+4%,+8%,-0%]\nM-0009 svc=frontend metric=traces.span.metrics.duration.p99 base=54.0 delta/30s=[-5%,-1%,+1%,-2%,-1%,-3%,-2%,+1%,-5%,-3%]\nM-0010 svc=frontend-proxy metric=traces.span.metrics.duration.p99 base=52.3 delta/30s=[+5%,+4%,+3%,+2%,+4%,-3%,+5%,+3%,+4%,+3%]\nM-0011 svc=checkout metric=traces.span.metrics.duration.p99 base=53.8 delta/30s=[+2%,+2%,+2%,-1%,+0%,+2%,+1%,-4%,-1%,-0%]\nM-0012 svc=product-catalog metric=traces.span.metrics.duration.p99 base=53.0 delta/30s=[+2%,+1%,+2%,+1%,+3%,+3%,-2%,-1%,-4%,+2%]\nM-0013 svc=frontend metric=process.memory.usage base=1.01e+08 delta/30s=[-0%,-0%,-0%,+0%,-0%,-0%,-1%,-0%,+0%,-0%]\nM-0014 svc=product-catalog metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,-0%,-0%,-0%,-0%,-0%,+0%,-1%,+0%,+0%]\nM-0015 svc=payment metric=process.memory.usage base=1.01e+08 delta/30s=[-0%,+0%,+0%,-0%,-0%,-0%,+0%,-0%,-0%,-0%]\nM-0016 svc=checkout metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,-0%,+0%,+0%,-0%,+0%,-0%,-0%,+0%,-0%]\nM-0017 svc=frontend-proxy metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,+0%,+0%,-0%,-0%,+0%,-0%,+0%,+0%,+0%]\nM-0018 svc=frontend metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]\nM-0019 svc=frontend-proxy metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]\nM-0020 svc=product-catalog metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]\n\n## TRACES: slowest and errored traces after fault onset, critical path (! = error span)\nT-0001 trace=49df9b07 dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0002 trace=93ef0704 dur=975ms ERROR path: frontend-proxy:ingress 975ms > frontend:POST /api/checkout 965ms > checkout:oteldemo.CheckoutService/PlaceOrder 945ms! > payment:oteldemo.PaymentService/Charge 915ms!\nT-0003 trace=75391799 dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0004 trace=01b0fb6a dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0005 trace=7d0411cb dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0006 trace=456746fe dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0007 trace=b247801d dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0008 trace=74429bc9 dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0009 trace=efdaf3ff dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0010 trace=7c7f2cba dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0011 trace=05011ece dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0012 trace=1b4d294b dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0013 trace=1e110eb0 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0014 trace=39da457a dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0015 trace=2bd76124 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0016 trace=8a8dd460 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0017 trace=4419ca8e dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0018 trace=a0d4f2e3 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0019 trace=45a087c2 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0020 trace=c27b5104 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0021 trace=964573f5 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0022 trace=12e1988d dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!\nT-0023 trace=edac6e6c dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0024 trace=38f2a031 dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!\nT-0025 trace=77f06139 dur=978ms ERROR path: frontend-proxy:ingress 978ms > frontend:POST /api/checkout 968ms > checkout:oteldemo.CheckoutService/PlaceOrder 948ms! > payment:oteldemo.PaymentService/Charge 918ms!\nT-0026 trace=4f7d39da dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!\n(14 lower-ranked lines omitted for length)\n\n## LOGS: log templates per service, rate before vs after fault onset, with examples\nL-0001 svc=payment sev=ERROR base=0.0/min fault=29.8/min tpl=\"Payment request failed. Invalid token. app.loyalty.level=gold txn=<NUM>\" ex=['Payment request failed. Invalid token. app.loyalty.level=gold txn=89145', 'Payment request failed. Invalid token. app.loyalty.level=gold txn=89266']\nL-0002 svc=flagd sev=INFO base=0.0/min fault=2.0/min tpl=\"flag <redacted> evaluated to variant <NUM>%\" ex=['flag <redacted> evaluated to variant 50%', 'flag <redacted> evaluated to variant 50%']\nL-0003 svc=checkout sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 5 ms', 'handled request in 30 ms']\nL-0004 svc=frontend sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 32 ms', 'handled request in 39 ms']\nL-0005 svc=frontend-proxy sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 26 ms', 'handled request in 24 ms']\nL-0006 svc=payment sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 6 ms', 'handled request in 44 ms']\nL-0007 svc=product-catalog sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 35 ms', 'handled request in 10 ms']\n",
+  "prompt_tokens": 3705,
+  "rendered": "## METRICS: per-service metrics, 30 s buckets from fault onset, % change vs pre-onset mean\nM-0001 svc=checkout metric=error_ratio base=0 delta/30s=[new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5]\nM-0002 svc=payment metric=error_ratio base=0 delta/30s=[new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5,new:0.5]\nM-0003 svc=payment metric=traces.span.metrics.duration.p99 base=53.1 delta/30s=[+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%,+1594%]\nM-0004 svc=product-catalog metric=request_rate base=0.503 delta/30s=[+3%,+9%,+2%,+9%,+6%,+10%,+7%,+5%,+1%,+7%]\nM-0005 svc=payment metric=request_rate base=0.506 delta/30s=[+7%,+7%,+4%,+4%,+9%,+5%,+3%,+8%,+8%,+6%]\nM-0006 svc=checkout metric=request_rate base=0.507 delta/30s=[+6%,+5%,+3%,+9%,+5%,+3%,+7%,+5%,+7%,+4%]\nM-0007 svc=frontend metric=request_rate base=0.512 delta/30s=[+7%,+6%,+8%,+6%,+3%,+5%,+4%,+1%,+5%,+6%]\nM-0008 svc=frontend-proxy metric=request_rate base=0.51 delta/30s=[+0%,+7%,+8%,+5%,+5%,+1%,+3%,+4%,+8%,-0%]\nM-0009 svc=frontend metric=traces.span.metrics.duration.p99 base=54.0 delta/30s=[-5%,-1%,+1%,-2%,-1%,-3%,-2%,+1%,-5%,-3%]\nM-0010 svc=frontend-proxy metric=traces.span.metrics.duration.p99 base=52.3 delta/30s=[+5%,+4%,+3%,+2%,+4%,-3%,+5%,+3%,+4%,+3%]\nM-0011 svc=checkout metric=traces.span.metrics.duration.p99 base=53.8 delta/30s=[+2%,+2%,+2%,-1%,+0%,+2%,+1%,-4%,-1%,-0%]\nM-0012 svc=product-catalog metric=traces.span.metrics.duration.p99 base=53.0 delta/30s=[+2%,+1%,+2%,+1%,+3%,+3%,-2%,-1%,-4%,+2%]\nM-0013 svc=frontend metric=process.memory.usage base=1.01e+08 delta/30s=[-0%,-0%,-0%,+0%,-0%,-0%,-1%,-0%,+0%,-0%]\nM-0014 svc=product-catalog metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,-0%,-0%,-0%,-0%,-0%,+0%,-1%,+0%,+0%]\nM-0015 svc=payment metric=process.memory.usage base=1.01e+08 delta/30s=[-0%,+0%,+0%,-0%,-0%,-0%,+0%,-0%,-0%,-0%]\nM-0016 svc=checkout metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,-0%,+0%,+0%,-0%,+0%,-0%,-0%,+0%,-0%]\nM-0017 svc=frontend-proxy metric=process.memory.usage base=1.01e+08 delta/30s=[+0%,+0%,+0%,-0%,-0%,+0%,-0%,+0%,+0%,+0%]\nM-0018 svc=frontend metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]\nM-0019 svc=frontend-proxy metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]\nM-0020 svc=product-catalog metric=error_ratio base=0 delta/30s=[+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%,+0%]\n\n## TRACES: slowest and errored traces after fault onset, critical path (! = error span)\nT-0001 trace=49df9b07 dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0002 trace=93ef0704 dur=975ms ERROR path: frontend-proxy:ingress 975ms > frontend:POST /api/checkout 965ms > checkout:oteldemo.CheckoutService/PlaceOrder 945ms! > payment:oteldemo.PaymentService/Charge 915ms!\nT-0003 trace=75391799 dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0004 trace=01b0fb6a dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0005 trace=7d0411cb dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0006 trace=456746fe dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0007 trace=b247801d dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0008 trace=74429bc9 dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0009 trace=efdaf3ff dur=980ms ERROR path: frontend-proxy:ingress 980ms > frontend:POST /api/checkout 970ms > checkout:oteldemo.CheckoutService/PlaceOrder 950ms! > payment:oteldemo.PaymentService/Charge 920ms!\nT-0010 trace=7c7f2cba dur=974ms ERROR path: frontend-proxy:ingress 974ms > frontend:POST /api/checkout 964ms > checkout:oteldemo.CheckoutService/PlaceOrder 944ms! > payment:oteldemo.PaymentService/Charge 914ms!\nT-0011 trace=05011ece dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0012 trace=1b4d294b dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0013 trace=1e110eb0 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0014 trace=39da457a dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0015 trace=2bd76124 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0016 trace=8a8dd460 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0017 trace=4419ca8e dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0018 trace=a0d4f2e3 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0019 trace=45a087c2 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0020 trace=c27b5104 dur=973ms ERROR path: frontend-proxy:ingress 973ms > frontend:POST /api/checkout 963ms > checkout:oteldemo.CheckoutService/PlaceOrder 943ms! > payment:oteldemo.PaymentService/Charge 913ms!\nT-0021 trace=964573f5 dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0022 trace=12e1988d dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!\nT-0023 trace=edac6e6c dur=979ms ERROR path: frontend-proxy:ingress 979ms > frontend:POST /api/checkout 969ms > checkout:oteldemo.CheckoutService/PlaceOrder 949ms! > payment:oteldemo.PaymentService/Charge 919ms!\nT-0024 trace=38f2a031 dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!\nT-0025 trace=77f06139 dur=978ms ERROR path: frontend-proxy:ingress 978ms > frontend:POST /api/checkout 968ms > checkout:oteldemo.CheckoutService/PlaceOrder 948ms! > payment:oteldemo.PaymentService/Charge 918ms!\nT-0026 trace=4f7d39da dur=972ms ERROR path: frontend-proxy:ingress 972ms > frontend:POST /api/checkout 962ms > checkout:oteldemo.CheckoutService/PlaceOrder 942ms! > payment:oteldemo.PaymentService/Charge 912ms!\n(14 lower-ranked lines omitted for length)\n\n## LOGS: log templates per service, rate before vs after fault onset, with examples\nL-0001 svc=payment sev=ERROR base=0.0/min fault=29.8/min tpl=\"Payment request failed. Invalid token. app.loyalty.level=gold txn=<NUM>\" ex=['Payment request failed. Invalid token. app.loyalty.level=gold txn=89145', 'Payment request failed. Invalid token. app.loyalty.level=gold txn=89266']\nL-0002 svc=flagd sev=INFO base=0.0/min fault=2.0/min tpl=\"flag <redacted> evaluated to variant <NUM>%\" ex=['flag <redacted> evaluated to variant 50%', 'flag <redacted> evaluated to variant 50%']\nL-0003 svc=checkout sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 5 ms', 'handled request in 30 ms']\nL-0004 svc=frontend sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 32 ms', 'handled request in 39 ms']\nL-0005 svc=frontend-proxy sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 26 ms', 'handled request in 24 ms']\nL-0006 svc=payment sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 6 ms', 'handled request in 44 ms']\nL-0007 svc=product-catalog sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 35 ms', 'handled request in 10 ms']"
+}

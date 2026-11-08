@@ -1,0 +1,72 @@
+{
+  "condition": "logs",
+  "format": 1,
+  "incident_id": "paymentFailure-r1",
+  "pack": {
+    "condition": "logs",
+    "incident_id": "paymentFailure-r1",
+    "perturbation": "p1",
+    "sections": [
+      {
+        "header": "log templates per service, rate before vs after fault onset, with examples",
+        "lines": [
+          {
+            "id": "L-0001",
+            "services": [
+              "svc-12"
+            ],
+            "text": "svc=svc-12 sev=ERROR base=0.0/min fault=29.8/min tpl=\"svc-12 request failed. Invalid token. app.loyalty.level=gold txn=<NUM>\" ex=['svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89145', 'svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89266']"
+          },
+          {
+            "id": "L-0002",
+            "services": [
+              "svc-05"
+            ],
+            "text": "svc=svc-05 sev=INFO base=0.0/min fault=2.0/min tpl=\"flag <redacted> evaluated to variant <NUM>%\" ex=['flag <redacted> evaluated to variant 50%', 'flag <redacted> evaluated to variant 50%']"
+          },
+          {
+            "id": "L-0003",
+            "services": [
+              "svc-09"
+            ],
+            "text": "svc=svc-09 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 5 ms', 'handled request in 30 ms']"
+          },
+          {
+            "id": "L-0004",
+            "services": [
+              "svc-18"
+            ],
+            "text": "svc=svc-18 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 32 ms', 'handled request in 39 ms']"
+          },
+          {
+            "id": "L-0005",
+            "services": [
+              "svc-17"
+            ],
+            "text": "svc=svc-17 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 26 ms', 'handled request in 24 ms']"
+          },
+          {
+            "id": "L-0006",
+            "services": [
+              "svc-12"
+            ],
+            "text": "svc=svc-12 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 6 ms', 'handled request in 44 ms']"
+          },
+          {
+            "id": "L-0007",
+            "services": [
+              "svc-14"
+            ],
+            "text": "svc=svc-14 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 35 ms', 'handled request in 10 ms']"
+          }
+        ],
+        "omitted": 0,
+        "signal": "logs"
+      }
+    ]
+  },
+  "perturbation": "p1",
+  "prompt": "You are the on-call engineer for a microservice web shop. Below is telemetry from a 10-minute window; \"fault onset\" is the midpoint. The window may contain a fault, or the system may be healthy.\n\nFind the root cause using only the evidence below.\n\nServices: svc-01, svc-02, svc-03, svc-04, svc-05, svc-06, svc-07, svc-08, svc-09, svc-10, svc-11, svc-12, svc-13, svc-14, svc-15, svc-16, svc-17, svc-18, svc-19\nNetwork edges you can act on: svc-09->svc-12, svc-18->svc-14\nCategories: cpu_saturation, dependency_unavailable, error, latency, lock_contention, memory_leak, network_latency, network_loss, network_reset, network_throughput, queue_lag\nLayers: application (the service itself is broken), network (the link between services is degraded), none (healthy).\n\nAnswer with ONE JSON object and nothing else:\n{\"abstain\": bool, \"layer\": \"application\"|\"network\"|\"none\",\n \"hypotheses\": [{\"rank\": 1, \"service\": str, \"category\": str, \"confidence\": 0.0-1.0,\n                 \"evidence\": [\"evidence IDs such as M-0001, T-0001, L-0001\"]}],\n \"action\": {\"type\": \"restart\"|\"disable_feature\"|\"clear_network_fault\"|\"no_action\",\n            \"target\": service, edge, or null for no_action}}\n\nRules: give up to 3 hypotheses ranked best first; cite only IDs that appear below; confidence is your probability that the hypothesis is right; if healthy use layer \"none\", no hypotheses and no_action; set abstain true only if the evidence is unusable.\n\nEVIDENCE\n## LOGS: log templates per service, rate before vs after fault onset, with examples\nL-0001 svc=svc-12 sev=ERROR base=0.0/min fault=29.8/min tpl=\"svc-12 request failed. Invalid token. app.loyalty.level=gold txn=<NUM>\" ex=['svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89145', 'svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89266']\nL-0002 svc=svc-05 sev=INFO base=0.0/min fault=2.0/min tpl=\"flag <redacted> evaluated to variant <NUM>%\" ex=['flag <redacted> evaluated to variant 50%', 'flag <redacted> evaluated to variant 50%']\nL-0003 svc=svc-09 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 5 ms', 'handled request in 30 ms']\nL-0004 svc=svc-18 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 32 ms', 'handled request in 39 ms']\nL-0005 svc=svc-17 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 26 ms', 'handled request in 24 ms']\nL-0006 svc=svc-12 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 6 ms', 'handled request in 44 ms']\nL-0007 svc=svc-14 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 35 ms', 'handled request in 10 ms']\n",
+  "prompt_tokens": 836,
+  "rendered": "## LOGS: log templates per service, rate before vs after fault onset, with examples\nL-0001 svc=svc-12 sev=ERROR base=0.0/min fault=29.8/min tpl=\"svc-12 request failed. Invalid token. app.loyalty.level=gold txn=<NUM>\" ex=['svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89145', 'svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89266']\nL-0002 svc=svc-05 sev=INFO base=0.0/min fault=2.0/min tpl=\"flag <redacted> evaluated to variant <NUM>%\" ex=['flag <redacted> evaluated to variant 50%', 'flag <redacted> evaluated to variant 50%']\nL-0003 svc=svc-09 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 5 ms', 'handled request in 30 ms']\nL-0004 svc=svc-18 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 32 ms', 'handled request in 39 ms']\nL-0005 svc=svc-17 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 26 ms', 'handled request in 24 ms']\nL-0006 svc=svc-12 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 6 ms', 'handled request in 44 ms']\nL-0007 svc=svc-14 sev=INFO base=12.0/min fault=12.0/min tpl=\"handled request in <NUM> ms\" ex=['handled request in 35 ms', 'handled request in 10 ms']"
+}
