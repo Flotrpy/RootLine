@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: [controller, snapshotter]
+        module: [controller, snapshotter, hw/edge-relay]
     defaults:
       run:
         working-directory: ${{ matrix.module }}
@@ -27,6 +27,8 @@ jobs:
         with:
           working-directory: ${{ matrix.module }}
       - run: go test -race ./...
+      - if: matrix.module == 'hw/edge-relay'
+        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -o /dev/null .
 
   python:
     runs-on: ubuntu-latest

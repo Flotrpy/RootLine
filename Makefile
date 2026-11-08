@@ -1,6 +1,6 @@
 .PHONY: test lint test-go test-py test-rust lint-go lint-py lint-rust build reproduce
 
-GO_MODULES := controller snapshotter
+GO_MODULES := controller snapshotter hw/edge-relay
 # Python code linted by ruff (config in ruff.toml); harness/ owns the venv.
 PY_DIRS := harness cascade baselines analysis
 
@@ -32,6 +32,7 @@ build:
 	cd controller && go build -o ../bin/rootlinectl ./cmd/rootlinectl
 	cd snapshotter && go build -o ../bin/snapshotter ./cmd/snapshotter
 	cd replay && cargo build --release -q && cp target/release/rootline ../bin/rootline
+	cd hw/edge-relay && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -o ../../bin/edge-relay-arm64 .
 
 # Regenerate every table and figure in paper/figures/ from data/ (offline).
 reproduce:
