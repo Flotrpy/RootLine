@@ -42,19 +42,20 @@ type Probe interface {
 }
 
 // Queries are the PromQL expressions the Prometheus probe runs. They default
-// to the span metrics the demo's collector exports.
-//
-// TODO(flotrpy): confirm metric names against the pinned demo version.
+// to the span metrics the demo's collector exports (names checked against
+// demo 3.1.0).
 type Queries struct {
 	ErrorRatio string
 	P99Ms      string
 }
 
-// DefaultQueries measure the frontend-proxy's server spans over the last
-// minute, which is what a shopper sees.
+// DefaultQueries measure the frontend-proxy's server spans, which is what a
+// shopper sees. Demo 3.1.0's Prometheus receives a sample only every 60 s, so
+// a 1m window holds at most one point, rate() returns nothing, and every
+// reading came out as 0. A 3m window always holds at least two.
 var DefaultQueries = Queries{
-	ErrorRatio: `sum(rate(traces_span_metrics_calls_total{service_name="frontend-proxy",span_kind="SPAN_KIND_SERVER",status_code="STATUS_CODE_ERROR"}[1m])) / sum(rate(traces_span_metrics_calls_total{service_name="frontend-proxy",span_kind="SPAN_KIND_SERVER"}[1m]))`,
-	P99Ms:      `histogram_quantile(0.99, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name="frontend-proxy",span_kind="SPAN_KIND_SERVER"}[1m])))`,
+	ErrorRatio: `sum(rate(traces_span_metrics_calls_total{service_name="frontend-proxy",span_kind="SPAN_KIND_SERVER",status_code="STATUS_CODE_ERROR"}[3m])) / sum(rate(traces_span_metrics_calls_total{service_name="frontend-proxy",span_kind="SPAN_KIND_SERVER"}[3m]))`,
+	P99Ms:      `histogram_quantile(0.99, sum by (le) (rate(traces_span_metrics_duration_milliseconds_bucket{service_name="frontend-proxy",span_kind="SPAN_KIND_SERVER"}[3m])))`,
 }
 
 // Prometheus is a Probe backed by the Prometheus HTTP API.
