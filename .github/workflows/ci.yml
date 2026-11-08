@@ -83,3 +83,20 @@ jobs:
       - run: pnpm typecheck
       # No data in git: this builds the empty-state site.
       - run: pnpm build
+
+  arduino:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Panel logic unit tests (desktop)
+        working-directory: hw/mcu-panel/test
+        run: g++ -std=c++17 -Wall -Wextra -Werror -I.. debounce_test.cpp -o t && ./t
+      - uses: arduino/setup-arduino-cli@v2
+      - uses: actions/cache@v4
+        with:
+          path: ~/.arduino15
+          key: arduino-zephyr-1.1.0-routerbridge-0.4.4
+      - run: arduino-cli core update-index
+      - run: arduino-cli core install arduino:zephyr@1.1.0
+      - run: arduino-cli lib install Arduino_RouterBridge@0.4.4
+      - run: arduino-cli compile --fqbn arduino:zephyr:unoq --warnings all hw/mcu-panel
