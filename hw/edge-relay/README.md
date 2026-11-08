@@ -29,7 +29,7 @@ sudo systemctl enable --now edge-relay
 ```
 
 Check it with `systemctl status edge-relay` and `journalctl -u edge-relay -f`.
-`Restart=always` brings it back by itself after the hwPowerCut fault.
+`Restart=always` keeps it running across reboots and crashes.
 
 ## Known asymmetry
 

@@ -160,8 +160,9 @@ the six research questions. The cascade test uses θ = #r.rq4_theta.
 = Hardware arm: real Wi-Fi faults
 
 Two Arduino UNO Q boards route the checkout → payment edge over a real Wi-Fi
-link, with three operator-led faults: weak signal, 2.4 GHz contention and a
-30-second power cut. Each is compared with its emulated counterpart.
+link, with three faults triggered on the boards: reduced transmit power,
+2.4 GHz channel contention and a 30-second Wi-Fi outage. Each is compared
+with its emulated counterpart.
 
 #if r.emulation_validity.len() > 0 {
   figure(

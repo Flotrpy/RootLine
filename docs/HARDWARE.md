@@ -1,286 +1,147 @@
 # Hardware guide: the two Arduino UNO Q boards
 
-This is the complete, in-order guide for Phase 3. Read "The plan" once,
-then follow the stages. Commands assume the laptop is the machine running
-the OpenTelemetry Demo and that you are in the RootLine checkout.
+The hardware arm runs **unattended**: every fault is triggered on the boards
+over SSH, so the 12 hardware snapshots run straight after the 30 pilot
+snapshots in one night (`controller/deploy/overnight.sh`).
 
-## The plan (decisions already made)
+| Board | Role | Name used here |
+|-------|------|----------------|
+| Board A | Wi-Fi relay for checkout → payment; the radio under test | `affan1` |
+| Board B | contention generator (iperf3); optional demo panel | `affan2` |
 
-| Question | Decision | Why |
-|----------|----------|-----|
-| Set up both boards at once? | **No: first-time setup one board at a time**, then both run together | Out of the box both boards look identical over USB and on the network; one at a time means you never configure the wrong one |
-| Same computer or two? | **One computer is enough.** A second computer only helps if you set the boards up during the overnight campaign (see "When") | Board setup is light work, but compiling on the demo laptop during a campaign adds latency noise to the snapshots |
-| Connected to a computer during the campaign? | **No.** After setup both boards run on their own power over Wi-Fi | Board A must be unplugged (power cut) and carried around (weak signal) |
-| How is Board A powered? | **A USB-C power bank** (or a long cable to a wall charger) | You carry it to the weak-signal spot and unplug it for the power cut |
-| How is Board B powered? | Any USB-C charger, near the laptop | It stays put; its panel is for the demo video |
-| Which Wi-Fi? | **Both boards on a 2.4 GHz-only lab SSID for the whole hardware campaign.** The laptop on Ethernet, or on 5 GHz | Contention only works on a shared channel. Switching bands mid-incident would make Board A reconnect, which looks like an extra fault |
-| IP addresses | **Reserve fixed IPs (DHCP reservation) for the laptop and Board A** | After the power cut Board A reboots; if its IP changed, checkout could no longer reach it |
-| iperf3 server | **The laptop** (`iperf3 --server`) | Saves a device; the contention happens on the air between Board B and the router |
-| Wi-Fi logger | **On Board A** (the radio under test), plus Board B during contention if you like | Board A's link is what the faults degrade |
+## The three faults
 
-## When to do each stage
+All three degrade Board A's real Wi-Fi link. `hw/board/rootline-fault`
+always schedules its own undo on the board, so a lost SSH connection can
+never leave a fault in place.
 
-The stages overlap with the rest of the project like this:
+| Fault | What happens | Undo | Compared with |
+|-------|--------------|------|---------------|
+| `hwWeakSignal` | Board A's transmit power drops to 1 dBm (`ROOTLINE_HW_TXPOWER_MBM`, default 100 mBm) | power back to auto; the board also reverts by itself after 8 min | `netemLoss` |
+| `hwContention` | Board B floods the 2.4 GHz channel with 30 Mbit/s UDP to the laptop for 5 min | iperf3 stopped | `toxiLatency` |
+| `hwWifiOutage` | Board A's Wi-Fi radio turns off for 30 s, then back on | board checked reachable | `toxiReset` |
 
-1. **Saturday, before the overnight campaign, or Sunday morning:** Stages
-   1–4 (prepare the network, set up both boards, install the relay and the
-   panel). These touch only the boards. Avoid compiling on the demo laptop
-   *while the overnight campaign runs*; Sunday morning is ideal because the
-   model runs (Kaggle, Cerebras, Groq) do not need the demo running.
-2. **Only after the overnight campaign and the 15 remediation trials are
-   finished:** Stage 5 (switch the demo to the hardware wiring) and Stage 6
-   (the 12 hardware snapshots, about 2.6 hours with you at the keyboard).
-   The hardware wiring replaces the emulated checkout → payment route, so it
-   must never overlap those runs.
-3. **After the hardware campaign:** Stage 7 (score the new snapshots) and
-   Stage 8 (the demo video, optional).
+`hwWifiOutage` replaces the charter's manual "power cut": the relay loses its
+link for 30 s without a person unplugging it. The report calls it a Wi-Fi
+outage.
 
-## What you need
+## Decisions
 
-- Both UNO Q boards, each with a USB-C cable
-- A USB-C power bank for Board A, and a USB-C charger for Board B
-- A Wi-Fi router where you can create a **2.4 GHz-only SSID** (a guest
-  network or a travel router works) and reserve DHCP addresses
-- For the panel: a breadboard, 2 push buttons, 3 LEDs (green, red, yellow),
-  3 × 220 Ω resistors, about 8 jumper wires
-- On the laptop: Arduino App Lab, Go (for `make build`), `iperf3`
-- Tape and a pen to label the boards **A** and **B**
+| Question | Decision |
+|----------|----------|
+| Connected to a computer during the campaign? | No. Both boards on USB-C chargers in fixed spots, on Wi-Fi |
+| Which Wi-Fi? | Your home Wi-Fi. Both boards pinned to **2.4 GHz** on the board itself (Stage 2), so contention and the weak link share a band |
+| Router settings? | None needed. Boards keep their address in practice; check with `ping` before each session |
+| Where does the controller run? | On the laptop, inside WSL (Ubuntu), with Docker Desktop |
+| iperf3 server | A small container on the laptop, started by the overnight script |
 
-## Stage 1: prepare the network (15 min)
+## Stage 1: SSH keys from WSL (5 min, once)
 
-1. On the router, create an SSID for the lab, for example `rootline-lab-24`,
-   on **2.4 GHz only**. Use a fixed channel (1, 6 or 11) so contention is
-   reproducible, and keep other devices off it.
-2. Connect the laptop by Ethernet if you can; otherwise to the router's
-   5 GHz network. Note its IP: this is `HW_LAN_BIND` (for example
-   `192.168.1.20`).
-3. Reserve that IP for the laptop in the router's DHCP settings.
-4. Allow incoming connections on the laptop from the LAN on these ports:
-   `50051` (payment, or the demo's `PAYMENT_PORT`), `4318` (snapshotter),
-   `8088` (controller, for the panel) and `5201` (iperf3).
-5. Turn off sleep on the laptop for the campaign days.
-
-## Stage 2: first-time setup, one board at a time (20–40 min per board)
-
-Do Board A completely, then Board B.
-
-1. Label the board (A or B). Connect **only this board** to the laptop with
-   USB-C.
-2. Open Arduino App Lab and follow its first-run setup for the board:
-   - give it a name: `rootline-a` for Board A, `rootline-b` for Board B;
-   - set a password for the Linux user (App Lab shows the user name,
-     usually `arduino`);
-   - join the `rootline-lab-24` Wi-Fi;
-   - install any updates it offers. This can take a while; let it finish.
-3. In the router, find the board (by its name or MAC address) and **reserve
-   its IP**. Note Board A's IP: this is `HW_RELAY_ADDR`'s host (for example
-   `192.168.1.50`).
-4. Check you can reach the board's Linux side from the laptop:
-
-   ```bash
-   ssh arduino@192.168.1.50
-   ```
-
-   If SSH is not available, App Lab's terminal or `adb shell` over USB also
-   work; use whichever App Lab offers for copying files in the next stages.
-5. On the board, install the tools the scripts need:
-
-   ```bash
-   sudo apt update && sudo apt install -y iw iperf3 python3-venv
-   ```
-
-   ```bash
-   python3 -m venv ~/rootline-venv && ~/rootline-venv/bin/pip install pyarrow
-   ```
-
-6. Unplug the board from the laptop. Repeat for the other board.
-
-## Stage 3: Board A, the relay (15 min)
-
-1. On the laptop, build the arm64 binary:
-
-   ```bash
-   make build
-   ```
-
-   This writes `bin/edge-relay-arm64`.
-2. Copy the relay files and the logger to Board A:
-
-   ```bash
-   scp bin/edge-relay-arm64 hw/edge-relay/edge-relay.service hw/edge-relay/edge-relay.env.example hw/contention/wifi_logger.py arduino@192.168.1.50:~
-   ```
-
-3. On Board A:
-
-   ```bash
-   sudo install -m 0755 ~/edge-relay-arm64 /usr/local/bin/edge-relay
-   ```
-
-   ```bash
-   sudo mkdir -p /etc/rootline && sudo cp ~/edge-relay.env.example /etc/rootline/edge-relay.env
-   ```
-
-   Edit `/etc/rootline/edge-relay.env` and put the **laptop's** IP in both
-   `UPSTREAM_ADDR` and `OTLP_ENDPOINT` (keep the ports; use the demo's
-   `PAYMENT_PORT` if it is not 50051). Then:
-
-   ```bash
-   sudo cp ~/edge-relay.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now edge-relay
-   ```
-
-   ```bash
-   systemctl status edge-relay
-   ```
-
-   It should say `active (running)`. It stays enabled, so it starts by
-   itself after every reboot, including the power cut.
-4. Move Board A to its **normal spot**: on the power bank, 2–3 m from the
-   router with a clear line of sight. Find a **weak-signal spot** too:
-   another room, behind a wall, or inside a metal biscuit tin with the lid
-   resting on the cable. Check RSSI there:
-
-   ```bash
-   iw dev wlan0 link
-   ```
-
-   You want `signal:` between -75 and -85 dBm while still connected. Mark
-   both spots so every replica uses the same ones.
-
-## Stage 4: Board B, the panel (30 min)
-
-1. **With Board B unpowered**, wire the breadboard (see
-   `hw/mcu-panel/README.md`):
-   - fault button between **D2** and **GND**; reset button between **D3**
-     and **GND** (on 4-leg buttons, use two diagonal legs);
-   - each LED: **D5** (green), **D6** (red), **D7** (yellow) → 220 Ω
-     resistor → LED long leg; LED short leg (flat side) → **GND**.
-   The pins are 3.3 V logic: never connect a signal pin to 5 V.
-2. Power Board B from its charger, and open it in App Lab over the network
-   (or USB). Create a new app, for example `rootline-panel`:
-   - **sketch part:** copy in `hw/mcu-panel/mcu-panel.ino`, `debounce.h`
-     and `status.h` (if App Lab asks for a library, add
-     `Arduino_RouterBridge`);
-   - **Python part:** copy in `hw/bridge-app/main.py` and `panel.py`, plus a
-     `rootline.json` made from `rootline.json.example` with the laptop's IP.
-3. Run the app. All three LEDs light first (lamp test) and stay on until
-   the controller answers. That is expected: the controller is started only
-   for the panel check and the demo, never during a campaign.
-4. Copy the contention script to Board B:
-
-   ```bash
-   scp hw/contention/iperf_contention.sh hw/contention/wifi_logger.py arduino@192.168.1.51:~
-   ```
-
-5. Panel check, any time the demo is up with its normal wiring:
-
-   ```bash
-   ./bin/rootlinectl serve --addr 0.0.0.0:8088
-   ```
-
-   Green lights. Press the fault button: red lights and the shop starts
-   failing. Press reset: green again. Stop `serve` (Ctrl-C) afterwards.
-
-## Stage 5: switch the demo to the hardware wiring (10 min)
-
-Only after the overnight campaign and the remediation trials are done.
-
-1. Stop any `rootlinectl serve`, and do not run it during the campaign
-   (a panel press would inject a fault mid-incident).
-2. From the demo checkout:
-
-   ```bash
-   export ROOTLINE_DIR=/path/to/RootLine HW_LAN_BIND=192.168.1.20 HW_RELAY_ADDR=192.168.1.50:50051
-   ```
-
-   ```bash
-   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" -f "$ROOTLINE_DIR/compose.hardware.yml" up -d
-   ```
-
-3. Check traffic flows through the board: on Board A,
-   `journalctl -u edge-relay -f` shows connections, and the shop works.
-4. Start the iperf3 server on the laptop, and leave it running:
-
-   ```bash
-   iperf3 --server
-   ```
-
-## Stage 6: the 12 hardware snapshots (about 2.6 hours, stay at the keyboard)
-
-1. Put Board A at its normal spot on the power bank, Board B on its charger,
-   both on `rootline-lab-24`.
-2. On Board A, start the Wi-Fi logger in its own terminal:
-
-   ```bash
-   ~/rootline-venv/bin/python ~/wifi_logger.py --iface wlan0 --out ~/wifi-hardware.parquet
-   ```
-
-3. On the laptop:
-
-   ```bash
-   ./bin/rootlinectl campaign --plan plans/hardware.yaml
-   ```
-
-4. The order of the 12 incidents is shuffled. For each one the controller
-   prints exactly what to do, waits for Enter, and logs the time to
-   `data/hw/operator-log.jsonl`. **Press Enter the moment the fault is
-   live**, because that moment becomes the incident's T0:
-
-   | Fault | When the prompt appears | When the clear prompt appears |
-   |-------|------------------------|-------------------------------|
-   | hwWeakSignal | carry Board A to the weak spot; press Enter once RSSI holds at -75 to -85 dBm | bring it back to the normal spot |
-   | hwContention | on Board B run `IPERF_SERVER=192.168.1.20 DURATION=300 ./iperf_contention.sh`; press Enter at its first output line | check it finished |
-   | hwPowerCut | unplug Board A **and press Enter at the same moment**; plug it back in after 30 s (phone timer) | check `systemctl status edge-relay`, then restart the logger |
-
-5. Ctrl-C is safe: the fault is cleared and a rerun resumes where it
-   stopped. A step you could not do properly is better redone: stop, and
-   ask before deleting any snapshot.
-6. Afterwards, copy the logger output to the laptop as
-   `data/hw/hardware-boardA-wifi.parquet`.
-
-## Stage 7: score and compare
-
-Run the models on the 12 new snapshots as for the others (`run enqueue`,
-`run work`, `run export`), then:
+The controller logs in to the boards without a password. In WSL:
 
 ```bash
-make reproduce
+ssh-keygen -t ed25519 -N "" -f ~/.ssh/id_ed25519
 ```
-
-`paper/figures/emulation_validity.csv` compares each real fault with its
-emulated counterpart (weak signal ↔ packet loss, contention ↔ latency,
-power cut ↔ connection resets).
-
-## Stage 8: the demo video (optional)
-
-With the demo on its normal wiring and `rootlinectl serve` running: press
-the fault button (red LED, the shop breaks), then mark the diagnosis:
 
 ```bash
-curl -X POST http://localhost:8088/diagnosis -d '{"diagnosing": true}'
+ssh-copy-id arduino@192.168.1.250
 ```
-
-(yellow LED), run a model on a snapshot of the same fault
-(`./bin/rootline replay ... --model ollama/<name>`), and post its top
-hypothesis:
 
 ```bash
-curl -X POST http://localhost:8088/diagnosis -d '{"hypothesis": "payment / error"}'
+ssh-copy-id arduino@192.168.1.217
 ```
 
-The bridge app logs the hypothesis; the small display is not wired in v0.1.
+Each `ssh-copy-id` asks for that board's password once. Afterwards
+`ssh arduino@192.168.1.250 true` must return without asking anything.
+
+## Stage 2: board settings (10 min, once)
+
+From the RootLine checkout in WSL, set the two addresses:
+
+```bash
+export A=arduino@192.168.1.250 B=arduino@192.168.1.217
+```
+
+Install the fault script and its one sudo rule on Board A:
+
+```bash
+scp hw/board/rootline-fault hw/board/rootline.sudoers $A:~
+```
+
+```bash
+ssh -t $A 'sudo install -m 0755 ~/rootline-fault /usr/local/bin/rootline-fault && sudo install -m 0440 ~/rootline.sudoers /etc/sudoers.d/rootline && sudo visudo -c'
+```
+
+`visudo -c` must end with `parsed OK`.
+
+Pin both boards to 2.4 GHz and turn off Wi-Fi power saving (slow, jittery
+pings otherwise). This needs NetworkManager, which App Lab's Wi-Fi setup
+normally uses; run it for `$A` and then `$B`:
+
+```bash
+ssh -t $A 'c=$(nmcli -t -f NAME,TYPE connection show --active | grep 802-11-wireless | cut -d: -f1); sudo nmcli connection modify "$c" 802-11-wireless.band bg 802-11-wireless.powersave 2 && sudo nmcli connection up "$c"; iw dev wlan0 link | grep freq'
+```
+
+The connection drops for a few seconds and comes back. The last line must
+show a frequency starting with `24` (for example `freq: 2437`). If `nmcli`
+is not found, tell us; the faults still work, but contention is weaker if
+the boards sit on 5 GHz.
+
+## Stage 3: check (2 min, before every night)
+
+With the demo running in the hardware wiring (the overnight script does this
+itself), or any time to check the boards alone:
+
+```bash
+export ROOTLINE_BOARD_A=$A ROOTLINE_BOARD_B=$B ROOTLINE_IPERF_SERVER=192.168.1.178
+```
+
+```bash
+./bin/rootlinectl hw check
+```
+
+Every line must say `PASS`. `--outage` also tests a 5 s Wi-Fi outage and
+waits for Board A to come back. The iperf3 line only passes while the iperf3
+server runs (the overnight script starts it; to test it alone, start it with
+the `docker run ... rootline-iperf` line from `controller/deploy/overnight.sh`).
+
+## Stage 4: the night
+
+See `docs/RELEASE.md` and the header of `controller/deploy/overnight.sh`.
+The script runs the pilot campaign, switches the demo to the hardware wiring
+(`compose.hardware.yml`), starts the iperf3 server, runs `hw check`, and only
+then the 12 hardware snapshots. If the check fails it stops and keeps the
+pilot data.
+
+Optional: log Board A's radio during the hardware campaign (pyarrow is
+already installed in `~/rootline-venv`):
+
+```bash
+ssh $A 'nohup ~/rootline-venv/bin/python ~/wifi_logger.py --iface wlan0 --out ~/wifi-hardware.parquet >/dev/null 2>&1 &'
+```
+
+## The demo panel (optional, for the launch video)
+
+Wiring and App Lab steps are in `hw/mcu-panel/README.md` and
+`hw/bridge-app/README.md`. Never run `rootlinectl serve` during a campaign:
+a button press would inject a fault mid-incident.
 
 ## Safety
 
-- Contention only on your own network: `iperf_contention.sh` refuses any
-  server outside private address ranges.
-- The panel can only inject emulated faults; the controller refuses
-  hardware faults over the API.
-- Never switch on an appliance you use as a shield; a closed metal tin is
-  enough.
+- Contention stays on your own network: `iperf_contention.sh` refuses any
+  server outside private address ranges, and the overnight script points it
+  at the laptop.
+- For 5 minutes in each of the 4 contention incidents, other 2.4 GHz devices
+  at home will be slow. Run the night when nobody minds.
+- The panel cannot trigger hardware faults; the controller refuses them over
+  its API.
 
 ## Known limits
 
 - Hardware snapshots contain the `edge-relay` service, which emulated
   snapshots do not: extra evidence for models on hardware faults.
-- The categories of the three real faults, and their emulated counterparts,
-  are still marked `TODO(flotrpy)` in the controller's catalog.
+- Lower transmit power degrades the uplink from Board A; the downlink is
+  unchanged. It is a real radio impairment, but not the same as moving the
+  board away.
+- The fault categories and emulated counterparts are `TODO(flotrpy)` in the
+  controller's catalog.

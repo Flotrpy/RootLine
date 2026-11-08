@@ -16,8 +16,8 @@ Set these as environment variables or in `rootline.json` beside `main.py`
 
 The controller must listen on the LAN for the board to reach it:
 `./bin/rootlinectl serve --addr 0.0.0.0:8088`. Only emulated faults can be
-triggered from the panel: the controller refuses hardware faults, which
-need an operator.
+triggered from the panel: the controller refuses hardware faults, which run
+only in the hardware campaign.
 
 `panel.py` has no board-only imports; its tests live in
 `harness/tests/test_bridge_app.py`. Only `main.py` imports `arduino.app_utils`.

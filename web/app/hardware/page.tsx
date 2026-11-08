@@ -15,7 +15,7 @@ export default function Hardware() {
           <p>
             A small Go TCP relay on the board&apos;s Linux side carries the checkout → payment
             traffic over Wi-Fi instead of through Toxiproxy, and exports OpenTelemetry data to the
-            snapshotter. Faults: weak signal, a congested 2.4 GHz band, and a 30-second power cut.
+            snapshotter. Faults: reduced transmit power, a congested 2.4 GHz band, and a 30-second Wi-Fi outage.
           </p>
         </div>
         <div className="card">

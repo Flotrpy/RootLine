@@ -5,9 +5,10 @@
 #   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" \
 #     -f "$ROOTLINE_DIR/compose.hardware.yml" up -d
 #
-# HW_LAN_BIND is the laptop's LAN address the boards can reach. Binding to
-# one address (not 0.0.0.0) keeps these ports off other interfaces; keep the
-# boards on an isolated lab SSID.
+# HW_LAN_BIND defaults to 0.0.0.0 (all interfaces), which is what Docker
+# Desktop on Windows needs to publish on the host; set it to the laptop's LAN
+# IP on Linux to keep these ports off other interfaces. Windows Firewall
+# asks once to allow Docker on private networks: allow it.
 
 services:
   checkout:
@@ -18,9 +19,9 @@ services:
 
   payment:
     ports:
-      - "${HW_LAN_BIND:?set HW_LAN_BIND to the laptop's LAN IP}:${PAYMENT_PORT}:${PAYMENT_PORT}"
+      - "${HW_LAN_BIND:-0.0.0.0}:${PAYMENT_PORT}:${PAYMENT_PORT}"
 
   snapshotter:
     ports:
       # Board A's edge-relay exports OTLP/HTTP here.
-      - "${HW_LAN_BIND:?set HW_LAN_BIND to the laptop's LAN IP}:4318:4318"
+      - "${HW_LAN_BIND:-0.0.0.0}:4318:4318"

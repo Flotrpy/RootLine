@@ -15,23 +15,18 @@ the emulated runs.
 | 2 | Overnight campaign, 30 snapshots | `./bin/rootlinectl campaign --plan plans/pilot.yaml` | ~6.5 h, unattended |
 | 3 | Gate 2 and model runs (Tier C on APIs, Tier A/B on Kaggle) | README "Running the models" | snapshots from step 2 |
 | 4 | 15 live remediation trials | `python -m analysis plan-remediation`, then the printed commands | demo with the normal (Toxiproxy) wiring |
-| 5 | **Boards: set up, then the hardware campaign** | `docs/HARDWARE.md` | steps 2 and 4 finished |
+| 5 | **Hardware campaign, unattended** (runs right after step 2 in `controller/deploy/overnight.sh`) | `docs/HARDWARE.md` | boards set up |
 | 6 | Score the 12 hardware snapshots | `run enqueue` + `run work` + `run export` again | step 5 |
 | 7 | Regenerate everything | `make reproduce && make paper` | all runs |
 | 8 | Final gate | `make release-check` (no FAIL) | everything above |
 
-### When to plug in the boards
+### The boards
 
-- **Before the overnight campaign, or Sunday morning during the model runs:**
-  set up both boards, install the relay and the panel (`docs/HARDWARE.md`
-  stages 1–4). This touches only the boards; just avoid compiling on the
-  demo laptop while the overnight campaign is measuring latency.
-- **Only after steps 2 and 4 are finished:** restart the demo with
-  `compose.hardware.yml` and run `plans/hardware.yaml`. That reroutes
-  checkout → payment through Board A, which would corrupt the emulated
-  snapshots and the remediation trials if they were still running.
-- In the charter's schedule that is Sunday 18:00 (setup) and 20:30–23:00
-  (the 12 hardware snapshots, about 2.6 hours, with you at the keyboard).
+The boards are set up once (`docs/HARDWARE.md` stages 1–3) and then stay on
+their chargers. `controller/deploy/overnight.sh` runs the pilot campaign and
+then the hardware campaign in the same night, unattended (about 9–10 hours).
+The remediation trials (step 4) need the model runs first, so they run the
+next day with the emulated wiring: the script's first step puts it back.
 
 If time runs short, cut in the charter's order: site polish, then Rust CLI
 extras, then the optional panel display. Never cut Gate 1, Gate 2, the

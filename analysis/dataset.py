@@ -42,7 +42,7 @@ Code: https://github.com/Flotrpy/RootLine (Apache-2.0). Data: CC BY 4.0.
 | `labels/<incident>.json` | ground truth: fault, service, category, layer, edge |
 | `runs/runs.parquet` | one row per model run (prompt, raw output, scores) |
 | `runs/remediation.jsonl` | live remediation trials |
-| `hw/` | hardware arm: operator log and Wi-Fi logs |
+| `hw/` | hardware arm: Wi-Fi logs |
 
 Schemas are in `docs/DATA.md` in the code repository. Results are a pilot:
 two replicas per incident type give wide confidence intervals.
