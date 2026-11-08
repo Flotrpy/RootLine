@@ -50,3 +50,5 @@ data/packs/
 # Built by `python -m analysis site-data`
 web/public/data/
 web/public/duckdb/
+web/out/
+web/.next/
