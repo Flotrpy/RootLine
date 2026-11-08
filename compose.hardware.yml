@@ -1,0 +1,26 @@
+# Phase 3: route checkout -> payment through Board A (edge-relay) over Wi-Fi.
+# Layer this on top of compose.override.yml for the hardware campaign only:
+#
+#   export ROOTLINE_DIR=/path/to/RootLine HW_RELAY_ADDR=192.168.1.50:50051
+#   docker compose -f docker-compose.yml -f "$ROOTLINE_DIR/compose.override.yml" \
+#     -f "$ROOTLINE_DIR/compose.hardware.yml" up -d
+#
+# HW_LAN_BIND is the laptop's LAN address the boards can reach. Binding to
+# one address (not 0.0.0.0) keeps these ports off other interfaces; keep the
+# boards on an isolated lab SSID.
+
+services:
+  checkout:
+    environment:
+      # Board A relays to payment, published below. This replaces the
+      # Toxiproxy route from compose.override.yml for these runs.
+      - PAYMENT_ADDR=${HW_RELAY_ADDR:?set HW_RELAY_ADDR to Board A's ip:port}
+
+  payment:
+    ports:
+      - "${HW_LAN_BIND:?set HW_LAN_BIND to the laptop's LAN IP}:${PAYMENT_PORT}:${PAYMENT_PORT}"
+
+  snapshotter:
+    ports:
+      # Board A's edge-relay exports OTLP/HTTP here.
+      - "${HW_LAN_BIND:?set HW_LAN_BIND to the laptop's LAN IP}:4318:4318"

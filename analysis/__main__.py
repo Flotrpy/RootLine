@@ -25,7 +25,7 @@ import polars as pl
 
 from analysis import figures
 from analysis.stats import BOOTSTRAP_RESAMPLES, SEED
-from analysis.tables import RQ4_THETA, best_model, hypotheses, summary
+from analysis.tables import RQ4_THETA, best_model, emulation_validity, hypotheses, summary
 from cascade.sweep import single_tiers
 from rootline_harness.scorers import Label
 
@@ -76,6 +76,9 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
     table.write_csv(out / "summary.csv")
     hyp, cascade_table = hypotheses(runs, labels, trials, baseline_preds)
     hyp.write_csv(out / "hypotheses.csv")
+    emu = emulation_validity(runs, labels)
+    if not emu.is_empty():
+        emu.write_csv(out / "emulation_validity.csv")
 
     figures.save_svg(figures.rq1_conditions(table), out / "rq1_conditions.svg")
     figures.save_svg(figures.rq2_layers(runs, labels), out / "rq2_layers.svg")
@@ -99,6 +102,7 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
             "remediation_trials": len(trials),
         },
         "hypotheses": [{k: _clean(v) for k, v in r.items()} for r in hyp.to_dicts()],
+        "emulation_validity": [{k: _clean(v) for k, v in r.items()} for r in emu.to_dicts()],
     }
     (out / "results.json").write_text(json.dumps(results, indent=2, sort_keys=True) + "\n")
     return results

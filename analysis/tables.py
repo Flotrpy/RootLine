@@ -15,6 +15,7 @@ import polars as pl
 
 from analysis.stats import bootstrap_diff, bootstrap_mean, fisher_exact, holm, mcnemar
 from cascade.sweep import decisions, rq4, select, single_tiers, sweep
+from rootline_harness.catalog import HW_EMULATES
 from rootline_harness.schema import parse_output
 from rootline_harness.scorers import Label, brier, ece
 from rootline_harness.scorers.accuracy import claims_fault
@@ -310,3 +311,50 @@ def hypotheses(
         h.p_holm = p
         h.significant = p < ALPHA
     return pl.DataFrame([asdict(h) for h in rows]), cascade_table
+
+
+def emulation_validity(runs: pl.DataFrame, labels: dict[str, Label]) -> pl.DataFrame:
+    """Accuracy on each real Wi-Fi fault next to its emulated counterpart,
+    per model, on the combined unperturbed condition.
+
+    A large gap means emulated network faults are not a fair stand-in for
+    real ones, which is a finding in itself. Not one of the six RQs, so it
+    is outside the Holm family.
+    """
+    df = runs.filter((pl.col("condition") == "combined") & (pl.col("perturbation") == "p0"))
+    df = df.with_columns(
+        fault=pl.col("incident_id").replace_strict(
+            {i: lbl.fault for i, lbl in labels.items()}, default=None
+        )
+    )
+    rows = []
+    for model in sorted(df["model_id"].unique().to_list()):
+        m = df.filter(pl.col("model_id") == model)
+        for hw, emu in HW_EMULATES.items():
+            real = m.filter(pl.col("fault") == hw)
+            sim = m.filter(pl.col("fault") == emu)
+            if real.is_empty() or sim.is_empty():
+                continue
+            r_top1 = [bool(x) for x in real["top1"]]
+            s_top1 = [bool(x) for x in sim["top1"]]
+            r_layer = [bool(x) for x in real["layer_ok"]]
+            s_layer = [bool(x) for x in sim["layer_ok"]]
+            rows.append(
+                {
+                    "model_id": model,
+                    "hardware_fault": hw,
+                    "emulated_fault": emu,
+                    "n_hardware": len(r_top1),
+                    "n_emulated": len(s_top1),
+                    "top1_hardware": _mean([float(x) for x in r_top1]),
+                    "top1_emulated": _mean([float(x) for x in s_top1]),
+                    "top1_gap": _mean([float(x) for x in r_top1])
+                    - _mean([float(x) for x in s_top1]),
+                    "top1_p_fisher": fisher_exact(
+                        sum(r_top1), len(r_top1), sum(s_top1), len(s_top1)
+                    ),
+                    "layer_hardware": _mean([float(x) for x in r_layer]),
+                    "layer_emulated": _mean([float(x) for x in s_layer]),
+                }
+            )
+    return pl.DataFrame(rows)
