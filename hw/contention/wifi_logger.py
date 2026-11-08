@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import shutil
 import signal
 import subprocess
 import time
@@ -51,8 +52,14 @@ def parse_iw_link(text: str) -> tuple[bool, float | None, float | None, float | 
     return True, grab(_SIGNAL), grab(_FREQ), grab(_TX)
 
 
+def _iw() -> str:
+    # Debian installs iw in /usr/sbin, which a normal user's PATH (and a
+    # plain SSH session) does not include.
+    return shutil.which("iw") or "/usr/sbin/iw"
+
+
 def read_iw(iface: str) -> str:
-    out = subprocess.run(["iw", "dev", iface, "link"], capture_output=True, text=True, timeout=5)
+    out = subprocess.run([_iw(), "dev", iface, "link"], capture_output=True, text=True, timeout=5)
     return out.stdout
 
 
