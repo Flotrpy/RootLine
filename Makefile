@@ -29,8 +29,8 @@ lint-py:
 
 build:
 	@mkdir -p bin
-	cd controller && go build -o ../bin/rootlinectl ./cmd/rootlinectl
-	cd snapshotter && go build -o ../bin/snapshotter ./cmd/snapshotter
+	cd controller && CGO_ENABLED=0 go build -o ../bin/rootlinectl ./cmd/rootlinectl
+	cd snapshotter && CGO_ENABLED=0 go build -o ../bin/snapshotter ./cmd/snapshotter
 	cd replay && cargo build --release -q && cp target/release/rootline ../bin/rootline
 	cd hw/edge-relay && GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -o ../../bin/edge-relay-arm64 .
 
