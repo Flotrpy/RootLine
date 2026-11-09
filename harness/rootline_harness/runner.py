@@ -95,7 +95,7 @@ class LiteLLMClient:
                 messages=[{"role": "user", "content": prompt}],
                 temperature=TEMPERATURE,
                 seed=SEED,
-                max_tokens=self.max_tokens,
+                max_tokens=min(self.max_tokens, model.max_tokens),
                 num_retries=0,  # the scheduler owns retries and backoff
                 **kwargs,
             )
@@ -137,7 +137,7 @@ def run_one(
     condition: str,
     perturbation: str,
     before_call: Callable[[int], None] = lambda _tokens: None,
-    max_tokens: int = MAX_TOKENS,
+    max_tokens: int | None = None,
 ) -> dict[str, object]:
     """Call the model (twice at most) and return a run record.
 
@@ -145,6 +145,7 @@ def run_one(
     it to wait for rate limits and record usage.
     """
     started_at = datetime.now(UTC).isoformat(timespec="seconds")
+    max_tokens = min(max_tokens or MAX_TOKENS, model.max_tokens)
     before_call(prompt.tokens + max_tokens)
     first = client.complete(model, prompt.text)
     out, err = parse_output(first.text)

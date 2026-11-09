@@ -171,7 +171,7 @@ v0.1 scores three open-weight models, one per size:
 
 | Model ID | Size | Runs on |
 |----------|------|---------|
-| `gpt-oss-120b@cerebras` | 120B (Tier C) | Cerebras free tier (`CEREBRAS_API_KEY`) |
+| `gpt-oss-120b@groq` | 120B (Tier C), low reasoning effort | Groq free tier, no card (`GROQ_API_KEY`) |
 | `qwen3-8b-q4@ollama` | 8B, Q4_K_M (Tier B) | Ollama on the laptop |
 | `gemma3-4b-q4@ollama` | 4B, Q4_K_M (Tier A) | Ollama on the laptop |
 
@@ -189,13 +189,13 @@ ollama pull qwen3:8b && ollama pull gemma3:4b
 1. Gate 2, the same snapshot scored twice must match:
 
    ```bash
-   uv run --project harness python -m rootline_harness.run gate2 --incident paymentFailure-r1 --model gpt-oss-120b@cerebras
+   uv run --project harness python -m rootline_harness.run gate2 --incident paymentFailure-r1 --model gpt-oss-120b@groq
    ```
 
 2. Queue and run (resumable; waits out rate limits instead of hitting them):
 
    ```bash
-   uv run --project harness python -m rootline_harness.run enqueue --models gpt-oss-120b@cerebras qwen3-8b-q4@ollama gemma3-4b-q4@ollama
+   uv run --project harness python -m rootline_harness.run enqueue --models gpt-oss-120b@groq qwen3-8b-q4@ollama gemma3-4b-q4@ollama
    uv run --project harness python -m rootline_harness.run work
    uv run --project harness python -m rootline_harness.run status
    uv run --project harness python -m rootline_harness.run export

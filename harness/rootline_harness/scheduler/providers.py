@@ -24,6 +24,9 @@ class Model:
     provider: str
     # Extra LiteLLM arguments, as (name, value) pairs so the model stays hashable.
     options: tuple[tuple[str, object], ...] = ()
+    # Answer budget. A prompt is at most 6,000 tokens; prompt + answer must
+    # fit the provider's per-minute token cap.
+    max_tokens: int = 2048
 
 
 # The v0.1 models: one per size, all open-weight and free to run.
@@ -37,7 +40,17 @@ MODELS: dict[str, Model] = {
     m.id: m
     for m in (
         Model("gpt-oss-120b@cerebras", "cerebras/gpt-oss-120b", "C", "cerebras"),
-        Model("gpt-oss-120b@groq", "groq/openai/gpt-oss-120b", "C", "groq"),
+        # Groq's free tier allows 8,000 tokens a minute, so a full 6,000-token
+        # pack leaves about 1,500 for the answer; low reasoning effort keeps
+        # gpt-oss's reasoning inside that budget.
+        Model(
+            "gpt-oss-120b@groq",
+            "groq/openai/gpt-oss-120b",
+            "C",
+            "groq",
+            (("reasoning_effort", "low"),),
+            max_tokens=1536,
+        ),
         Model(
             "qwen3-8b-q4@ollama",
             "ollama_chat/qwen3:8b",

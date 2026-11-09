@@ -269,3 +269,11 @@ def test_litellm_client_reads_usage(monkeypatch) -> None:
     LiteLLMClient(lim).complete(MODELS["qwen3-8b-q4@ollama"], "prompt")
     assert seen["model"] == "ollama_chat/qwen3:8b"
     assert seen["num_ctx"] == 12288 and seen["reasoning_effort"] == "none"
+    assert seen["max_tokens"] == 2048
+
+    # Groq: prompt + answer budget fits its 8,000 tokens-a-minute cap.
+    seen.clear()
+    groq = MODELS["gpt-oss-120b@groq"]
+    LiteLLMClient(lim).complete(groq, "prompt")
+    assert seen["max_tokens"] == 1536 and seen["reasoning_effort"] == "low"
+    assert 6000 + groq.max_tokens <= 8000

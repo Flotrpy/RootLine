@@ -18,11 +18,13 @@ providers:
     tpm: 25000
     tpd: 900000
   groq:
+    # Free tier for openai/gpt-oss-120b as reported in Nov 2026: 30 rpm,
+    # 1,000 rpd, 8,000 tokens/min, 200,000 tokens/day. No card needed.
     api_base: null
     rpm: 30
-    rpd: 1000
+    rpd: 950
     tpm: 8000
-    tpd: 200000
+    tpd: 195000
   gemini:
     api_base: null
     rpm: 10

@@ -116,8 +116,8 @@ To remove pieces individually instead:
 -------------------------------
   GitHub repository Flotrpy/RootLine (branch claude/optimistic-johnson-tp1lxw, PR #1)
   (planned) Hugging Face dataset, Zenodo record, GitHub Pages site at release
-  (planned) Cerebras account and API key (free trial; may ask for a card)
-      Remove: delete the key and the account at cloud.cerebras.ai
+  (planned) Groq account and API key (free tier, no card)
+      Remove: delete the key and the account at console.groq.com
 
 
 TECHNOLOGIES USED (names only, for your notes)
