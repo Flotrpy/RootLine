@@ -37,7 +37,8 @@ say "rerun: $pending"
 # Toxiproxy, so nothing depends on the boards.
 docker rm -f rootline-iperf >/dev/null 2>&1
 compose up -d --no-build --remove-orphans || { say "compose failed; stopping"; exit 1; }
-addr="$(compose exec -T checkout printenv PAYMENT_ADDR 2>/dev/null | tr -d '\r')"
+# checkout is a minimal image with no printenv, so read its env from Docker.
+addr="$(docker inspect "$(compose ps -q checkout)" --format '{{range .Config.Env}}{{println .}}{{end}}' 2>/dev/null | sed -n 's/^PAYMENT_ADDR=//p')"
 case "$addr" in
   toxiproxy-payment*) say "checkout -> payment goes through Toxiproxy ($addr)" ;;
   *) say "checkout PAYMENT_ADDR is '$addr', not Toxiproxy; stopping"; exit 1 ;;
