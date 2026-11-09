@@ -69,6 +69,9 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
     trials_path = root / "data" / "runs" / "remediation.jsonl"
     trials = load_trials(trials_path)
     out.mkdir(parents=True, exist_ok=True)
+    from analysis.visibility import write as write_visibility
+
+    write_visibility(root / "data", out)
 
     baseline_preds = None
     snaps = root / "data" / "snapshots"
@@ -165,6 +168,8 @@ def main(argv: list[str] | None = None) -> int:
     pk.add_argument("--out", type=Path, default=None)
     sub.add_parser("fetch-data", help="download the published dataset into data/ (make data)")
     sub.add_parser("release-check", help="check everything the release needs")
+    fv = sub.add_parser("fault-visibility", help="does each fault show in its snapshot?")
+    fv.add_argument("--out", type=Path, default=None)
     pr = sub.add_parser("plan-remediation")
     pr.add_argument("--model", default=None, help="default: best model on combined p0")
     pr.add_argument("--replica", type=int, default=1)
@@ -188,6 +193,12 @@ def main(argv: list[str] | None = None) -> int:
 
         fetch(args.root / "data")
         print(f"fetched {DATASET_REPO} into {args.root / 'data'}")
+        return 0
+    if args.cmd == "fault-visibility":
+        from analysis.visibility import write
+
+        path = write(args.root / "data", args.out or args.root / "paper" / "figures")
+        print(f"wrote {path}")
         return 0
     if args.cmd == "release-check":
         from analysis.release_check import report, run_all
