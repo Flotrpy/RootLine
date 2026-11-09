@@ -47,8 +47,21 @@ def snapshot_ids(snapshots: Path) -> list[str]:
     )
 
 
+class RateWait(Exception):
+    """A rate-limit wait longer than the worker's max_wait."""
+
+    def __init__(self, seconds: float) -> None:
+        super().__init__(f"rate limit wait {seconds:.0f}s")
+        self.seconds = seconds
+
+
 class Worker:
-    """Drains the queue, waiting for rate limits instead of hitting them."""
+    """Drains the queue, waiting for rate limits instead of hitting them.
+
+    With max_wait set, a wait longer than that (a daily cap) puts the job
+    back and stops the worker instead, so a scheduled run can end for the
+    day and pick up again later from the same queue file.
+    """
 
     def __init__(
         self,
@@ -58,7 +71,10 @@ class Worker:
         labels: Path,
         sleep: Callable[[float], None] = time.sleep,
         log: Callable[[str], None] = lambda m: print(m, file=sys.stderr),
+        max_wait: float | None = None,
     ) -> None:
+        self.max_wait = max_wait
+        self.stopped = False
         self.queue = queue
         self.client = client
         self.snapshots = snapshots
@@ -74,6 +90,8 @@ class Worker:
     def _gate(self, provider: str) -> Callable[[int], None]:
         def before_call(tokens: int) -> None:
             while (wait := self.queue.wait_for(provider, tokens)) > 0:
+                if self.max_wait is not None and wait > self.max_wait:
+                    raise RateWait(wait)
                 self.log(f"rate limit: {provider} waits {wait:.0f}s")
                 self.sleep(wait)
             # Record the estimate up front: it over-counts slightly, which
@@ -101,6 +119,11 @@ class Worker:
                 perturbation=job.perturbation,
                 before_call=self._gate(model.provider),
             )
+        except RateWait as w:
+            self.queue.defer(job, w.seconds)
+            self.stopped = True
+            self.log(f"{job.key}: {w}; stopping for now")
+            return False
         except ModelError as e:
             self.queue.fail(job, str(e), e.retryable)
             self.log(f"{job.key}: {'retry later' if e.retryable else 'failed'}: {e}")
@@ -117,8 +140,12 @@ class Worker:
         while True:
             if self.run_job_once():
                 continue
+            if self.stopped:
+                return self.queue.counts()
             wait = self.queue.next_eligible_in()
             if wait is None:
+                return self.queue.counts()
+            if self.max_wait is not None and wait > self.max_wait:
                 return self.queue.counts()
             self.sleep(max(wait, 0.5))
 
@@ -150,6 +177,21 @@ def export(queue: Queue, out: Path) -> int:
     }
     assert tuple(schema) == RUN_COLUMNS
     df = pl.DataFrame(records, schema=schema).sort("run_id")
+    df.write_parquet(out, compression="zstd")
+    return df.height
+
+
+def merge(out: Path) -> int:
+    """Combine the per-location exports (runs-<name>.parquet next to out)
+    into one runs file. A run_id appearing twice must be identical."""
+    parts = sorted(out.parent.glob("runs-*.parquet"))
+    if not parts:
+        raise SystemExit(f"no runs-*.parquet in {out.parent}")
+    df = pl.concat([pl.read_parquet(p) for p in parts])
+    dupes = df.filter(pl.col("run_id").is_duplicated())
+    if dupes.unique().height != dupes["run_id"].n_unique():
+        raise SystemExit("the same run_id differs between exports")
+    df = df.unique(subset="run_id", keep="first").sort("run_id")
     df.write_parquet(out, compression="zstd")
     return df.height
 
@@ -192,10 +234,18 @@ def main(argv: list[str] | None = None, client: ModelClient | None = None) -> in
     enq.add_argument("--perturb", choices=["p0", "p1"], default="p0")
     enq.add_argument("--incidents", nargs="*", help="default: every snapshot")
 
-    sub.add_parser("work", help="run queued jobs until none are left")
+    wk = sub.add_parser("work", help="run queued jobs until none are left")
+    wk.add_argument(
+        "--max-wait",
+        type=float,
+        default=None,
+        help="stop instead of waiting longer than this many seconds (for daily runs)",
+    )
     sub.add_parser("status", help="job counts and failures")
     exp = sub.add_parser("export", help="write done runs to Parquet")
     exp.add_argument("--out", type=Path, default=DEFAULT_RUNS)
+    mg = sub.add_parser("merge", help="combine runs-*.parquet into runs.parquet")
+    mg.add_argument("--out", type=Path, default=DEFAULT_RUNS)
 
     g2 = sub.add_parser("gate2", help="same snapshot, same score, twice")
     g2.add_argument("--incident", required=True)
@@ -228,7 +278,18 @@ def main(argv: list[str] | None = None, client: ModelClient | None = None) -> in
         print(f"wrote {n} runs to {args.out}")
         return 0
 
-    worker = Worker(queue, client or LiteLLMClient(limits), args.snapshots, args.labels)
+    if args.cmd == "merge":
+        n = merge(args.out)
+        print(f"wrote {n} runs to {args.out}")
+        return 0
+
+    worker = Worker(
+        queue,
+        client or LiteLLMClient(limits),
+        args.snapshots,
+        args.labels,
+        max_wait=getattr(args, "max_wait", None),
+    )
     if args.cmd == "work":
         print(worker.drain())
         return 0

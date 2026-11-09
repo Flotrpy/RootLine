@@ -215,6 +215,14 @@ ollama pull qwen3:8b && ollama pull gemma3:4b
    v0.1 needs only the default (P0) runs. `--perturb p1` adds the
    anonymised-names runs for RQ3 (v0.2).
 
+   Rate-limited providers can run one day at a time from any machine:
+   `scripts/score_daily.py --model gpt-oss-120b@groq` keeps its queue in a
+   private Hugging Face dataset, stops at the daily cap and resumes the
+   next day. Local models run with their own queue
+   (`--db data/queue-ollama.sqlite`). Each location exports to
+   `data/runs/runs-<name>.parquet`, and `run merge` combines them into
+   `runs.parquet`.
+
 3. (v0.2, RQ5) Live remediation trials with the best model's own actions:
 
    ```bash

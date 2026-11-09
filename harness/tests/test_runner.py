@@ -134,6 +134,41 @@ def test_worker_waits_for_rate_limit(workspace) -> None:
     assert slept and sum(slept) >= 60 - 1e-6  # second request waited a minute
 
 
+def test_worker_stops_at_a_daily_cap_and_resumes(workspace) -> None:
+    root, snaps, labels = workspace
+    now = [1_000_000.0]
+    q = Queue(
+        root / "q.sqlite",
+        {"groq": Limits(rpm=None, rpd=1, tpm=None, tpd=None)},
+        clock=lambda: now[0],
+    )
+    q.enqueue("paymentFailure-r1", "logs", "p0", MODEL.id, "groq")
+    q.enqueue("paymentFailure-r1", "metrics", "p0", MODEL.id, "groq")
+    w = Worker(
+        q, Scripted(GOOD), snaps, labels, sleep=lambda s: None, log=lambda m: None, max_wait=600
+    )
+    assert w.drain() == {"done": 1, "pending": 1}  # stopped instead of waiting a day
+    now[0] += 86_400
+    w2 = Worker(
+        q, Scripted(GOOD), snaps, labels, sleep=lambda s: None, log=lambda m: None, max_wait=600
+    )
+    assert w2.drain() == {"done": 2}
+
+
+def test_merge_combines_exports(workspace) -> None:
+    from rootline_harness.run import merge
+
+    root, snaps, labels = workspace
+    out = root / "runs" / "runs.parquet"
+    for name, cond in (("groq", "logs"), ("ollama", "metrics")):
+        q = Queue(root / f"q-{name}.sqlite", {"groq": Limits(None, None, None, None)})
+        q.enqueue("paymentFailure-r1", cond, "p0", MODEL.id, "groq")
+        Worker(q, Scripted(GOOD), snaps, labels, sleep=lambda s: None, log=lambda m: None).drain()
+        export(q, out.parent / f"runs-{name}.parquet")
+    assert merge(out) == 2
+    assert pl.read_parquet(out)["condition"].sort().to_list() == ["logs", "metrics"]
+
+
 def test_worker_retries_rate_limit_errors(workspace) -> None:
     root, snaps, labels = workspace
     q = Queue(root / "q.sqlite", {"groq": Limits(None, None, None, None)})
