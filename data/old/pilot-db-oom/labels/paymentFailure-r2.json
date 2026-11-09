@@ -1,9 +1,0 @@
-{
-  "fault": "paymentFailure",
-  "service": "payment",
-  "category": "error",
-  "layer": "application",
-  "edge": null,
-  "flag": "paymentFailure",
-  "variant": "50%"
-}

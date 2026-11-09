@@ -1,9 +1,0 @@
-{
-  "fault": "toxiReset",
-  "service": "payment",
-  "category": "network_reset",
-  "layer": "network",
-  "edge": "checkout->payment",
-  "flag": null,
-  "variant": null
-}

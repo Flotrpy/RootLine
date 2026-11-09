@@ -1,9 +1,0 @@
-{
-  "fault": "kafkaQueueProblems",
-  "service": "fraud-detection",
-  "category": "queue_lag",
-  "layer": "application",
-  "edge": null,
-  "flag": "kafkaQueueProblems",
-  "variant": "on"
-}

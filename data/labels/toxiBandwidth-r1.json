@@ -1,9 +1,0 @@
-{
-  "fault": "toxiBandwidth",
-  "service": "product-catalog",
-  "category": "network_throughput",
-  "layer": "network",
-  "edge": "frontend->product-catalog",
-  "flag": null,
-  "variant": null
-}

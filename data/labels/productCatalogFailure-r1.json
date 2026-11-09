@@ -1,9 +1,0 @@
-{
-  "fault": "productCatalogFailure",
-  "service": "product-catalog",
-  "category": "error",
-  "layer": "application",
-  "edge": null,
-  "flag": "productCatalogFailure",
-  "variant": "on"
-}

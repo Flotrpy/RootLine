@@ -1,9 +1,0 @@
-{
-  "fault": "emailMemoryLeak",
-  "service": "email",
-  "category": "memory_leak",
-  "layer": "application",
-  "edge": null,
-  "flag": "emailMemoryLeak",
-  "variant": "100x"
-}

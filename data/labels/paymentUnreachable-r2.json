@@ -1,9 +1,0 @@
-{
-  "fault": "paymentUnreachable",
-  "service": "payment",
-  "category": "dependency_unavailable",
-  "layer": "application",
-  "edge": "checkout->payment",
-  "flag": "paymentUnreachable",
-  "variant": "on"
-}

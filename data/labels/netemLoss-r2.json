@@ -1,9 +1,0 @@
-{
-  "fault": "netemLoss",
-  "service": "product-catalog",
-  "category": "network_loss",
-  "layer": "network",
-  "edge": "frontend->product-catalog",
-  "flag": null,
-  "variant": null
-}

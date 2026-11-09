@@ -1,9 +1,0 @@
-{
-  "fault": "hwContention",
-  "service": "payment",
-  "category": "network_latency",
-  "layer": "network",
-  "edge": "checkout->payment",
-  "flag": null,
-  "variant": null
-}

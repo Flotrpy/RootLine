@@ -1,9 +1,0 @@
-{
-  "fault": "productCatalogLockContention",
-  "service": "product-catalog",
-  "category": "lock_contention",
-  "layer": "application",
-  "edge": null,
-  "flag": "productCatalogLockContention",
-  "variant": "on"
-}

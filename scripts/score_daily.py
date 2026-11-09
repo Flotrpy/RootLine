@@ -44,6 +44,7 @@ def main() -> int:
     token = os.environ.get("HF_TOKEN", "proxy-injected")
     # LiteLLM refuses to start without a key variable; a proxy replaces it.
     os.environ.setdefault("GROQ_API_KEY", "proxy-injected")
+    os.environ.setdefault("HF_TOKEN", token)
     api = HfApi(token=token)
     api.create_repo(WORK_REPO, repo_type="dataset", private=True, exist_ok=True)
     if not api.repo_info(WORK_REPO, repo_type="dataset").private:
@@ -56,6 +57,18 @@ def main() -> int:
             print(f"resumed {db.name} from {WORK_REPO}")
         except EntryNotFoundError:
             print(f"no {db.name} in {WORK_REPO} yet: starting a new queue")
+
+    # Snapshots and labels live on Hugging Face, not in git.
+    labels = ROOT / "data" / "labels"
+    if not any(labels.glob("*.json")):
+        out = subprocess.run(
+            [sys.executable, "-m", "analysis", "fetch-data"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        print(out.stdout.strip())
 
     print(run("--db", str(db), "enqueue", "--models", args.model))
     print(run("--db", str(db), "work", "--max-wait", args.max_wait))
