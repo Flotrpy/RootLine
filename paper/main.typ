@@ -32,18 +32,17 @@
   evidence-grounded AI diagnosis of microservice failures. It injects
   controlled faults into the OpenTelemetry Demo, freezes each incident's
   telemetry into Parquet snapshots, and replays them to free and open models
-  under controlled evidence conditions. It measures which telemetry signals
-  models need, whether they can tell network faults from application faults,
-  how much they lean on service names, how much a cheap-first cascade saves,
-  whether their chosen fixes restore service, and whether they beat a
-  classical baseline.
+  under controlled evidence conditions. This first release asks two
+  questions: which telemetry signals models need, and whether they can tell
+  network faults from application faults.
   #if r.leaderboard.len() > 0 [
     On #r.n_snapshots snapshots, the best model (#raw(r.best_model)) reached
     #pct(r.leaderboard.at(0).top1) top-1 accuracy with combined evidence
     (95% CI #pct(r.leaderboard.at(0).top1_ci_low)–#pct(r.leaderboard.at(0).top1_ci_high)).
   ]
   #let tested = r.hypotheses.filter(h => h.status == "tested")
-  Of six pre-stated hypotheses, #tested.len() could be tested;
+  This first release tests two of six pre-stated hypotheses (RQ1, RQ2); the
+  other four are held for v0.2. #tested.len() could be tested;
   #tested.filter(h => h.threshold_met == true).len() met their threshold and
   #tested.filter(h => h.significant == true).len() remained significant after
   Holm correction. All results are reported, including failed hypotheses.
@@ -55,7 +54,8 @@ Large language models are increasingly proposed for incident diagnosis, but
 most evaluations score free-text answers with another model and say little
 about _which evidence_ the model used. Rootline grades by evidence and by
 execution: every evidence line has a stable ID that answers must cite, and the
-chosen fix is applied to the live system. We evaluate only freely available
+chosen fix can be applied to the live system (remediation is scored from
+v0.2). We evaluate only freely available
 open-weight models and free-tier APIs; results characterise what
 budget-constrained teams can achieve today, not the frontier.
 
@@ -99,7 +99,9 @@ Brier score and 10-bin expected calibration error.
 McNemar's exact test for paired comparisons on the same snapshots, Fisher's
 exact test for unpaired ones, #r.seeds.bootstrap_resamples\-resample bootstrap
 confidence intervals (seed #r.seeds.bootstrap), and Holm correction across
-the six research questions. The cascade test uses θ = #r.rq4_theta.
+the hypotheses tested in this release (RQ1 and RQ2). RQ3 (name reliance),
+RQ4 (cascade), RQ5 (remediation) and RQ6 (classical baseline) are deferred
+to v0.2 and not tested here.
 
 = Results
 
@@ -119,7 +121,7 @@ the six research questions. The cascade test uses θ = #r.rq4_theta.
       } else { "not supported" },
     )).flatten()
   ),
-  caption: [The six pre-stated hypotheses. Effects and tests are defined in the method; details per row are in results.json.],
+  caption: [The six pre-stated hypotheses. v0.1 tests RQ1 and RQ2; the rest are deferred to v0.2. Effects and tests are defined in the method; details per row are in results.json.],
 )
 
 #if r.leaderboard.len() > 0 {

@@ -5,6 +5,10 @@ for you: marking PR #1 ready, merging, tagging and publishing.
 
 ## Order of work
 
+v0.1 is narrowed to RQ1 and RQ2: it needs only the default (P0) model
+runs, with no anonymised-names runs, remediation trials or cascade. The rest
+is held for v0.2.
+
 The steps run in this order because they share one demo stack: the hardware
 campaign reroutes checkout → payment through Board A, so it must not overlap
 the emulated runs.
@@ -14,7 +18,7 @@ the emulated runs.
 | 1 | Gate 1: one dry-run incident | README "Running the pilot", steps 1–4 | demo on the laptop |
 | 2 | Overnight campaign, 30 snapshots | `./bin/rootlinectl campaign --plan plans/pilot.yaml` | ~6.5 h, unattended |
 | 3 | Gate 2 and model runs (Tier C on APIs, Tier A/B on Kaggle) | README "Running the models" | snapshots from step 2 |
-| 4 | 15 live remediation trials | `python -m analysis plan-remediation`, then the printed commands | demo with the normal (Toxiproxy) wiring |
+| 4 | (v0.2 only, RQ5) live remediation trials; skipped for v0.1 | `python -m analysis plan-remediation`, then the printed commands | demo with the normal (Toxiproxy) wiring |
 | 5 | **Hardware campaign, unattended** (runs right after step 2 in `controller/deploy/overnight.sh`) | `docs/HARDWARE.md` | boards set up |
 | 6 | Score the 12 hardware snapshots | `run enqueue` + `run work` + `run export` again | step 5 |
 | 7 | Regenerate everything | `make reproduce && make paper` | all runs |

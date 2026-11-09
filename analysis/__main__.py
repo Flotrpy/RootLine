@@ -25,7 +25,14 @@ import polars as pl
 
 from analysis import figures
 from analysis.stats import BOOTSTRAP_RESAMPLES, SEED
-from analysis.tables import RQ4_THETA, best_model, emulation_validity, hypotheses, summary
+from analysis.tables import (
+    RQ4_THETA,
+    V01_SCOPE,
+    best_model,
+    emulation_validity,
+    hypotheses,
+    summary,
+)
 from cascade.sweep import single_tiers
 from rootline_harness.scorers import Label
 
@@ -107,6 +114,7 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
         "best_model": best_model(runs),
         "seeds": {"bootstrap": SEED, "bootstrap_resamples": BOOTSTRAP_RESAMPLES},
         "rq4_theta": RQ4_THETA,
+        "scope": list(V01_SCOPE),
         "inputs": {
             "runs_sha256": _sha256(runs_path),
             "remediation_sha256": _sha256(trials_path),

@@ -6,11 +6,13 @@ exist only to check the arithmetic and are never reported anywhere.
 
 import json
 import math
+from dataclasses import asdict
 from pathlib import Path
 
 import polars as pl
 import pytest
 
+from analysis import tables
 from analysis.__main__ import main, plan_remediation, reproduce
 from analysis.tables import best_model, hypotheses, summary
 from rootline_harness.runner import RUN_COLUMNS
@@ -103,11 +105,11 @@ def test_hypotheses() -> None:
     assert by["RQ1"]["threshold_met"] and "best single=metrics" in by["RQ1"]["detail"]
     # RQ2: app layer 8/8, network 0/4 -> 1.0 gap.
     assert by["RQ2"]["effect"] == pytest.approx(1.0) and by["RQ2"]["threshold_met"]
-    # RQ3: 14/14 -> 10/14, relative drop 4/14.
-    assert by["RQ3"]["effect"] == pytest.approx(4 / 14)
-    assert by["RQ4"]["status"] == "tested" and cascade is not None
-    assert by["RQ5"]["status"].startswith("not run")
-    assert by["RQ6"]["status"].startswith("not run")
+    # v0.1 scope: RQ3-RQ6 are deferred, untested and outside Holm.
+    for rq in ("RQ3", "RQ4", "RQ5", "RQ6"):
+        assert by[rq]["status"] == "deferred to v0.2"
+        assert math.isnan(by[rq]["p_holm"])
+    assert cascade is None
     tested = [r for r in by.values() if r["status"] == "tested"]
     assert all(r["p_holm"] >= r["p_value"] for r in tested)
 
@@ -116,8 +118,7 @@ def test_rq5_with_trials() -> None:
     trials = [
         {"incident_id": i, "recovered": i in APP[:3], "harmful": i in HEALTHY} for i in INCIDENTS
     ]
-    hyp, _ = hypotheses(RUNS, LABELS, trials, None)
-    rq5 = hyp.filter(pl.col("rq") == "RQ5").row(0, named=True)
+    rq5 = asdict(tables.rq5(RUNS, "big", trials))  # deferred in v0.1, still computable
     assert rq5["effect"] == pytest.approx(1 - 3 / 14)
     assert "harmful-action rate=0.143" in rq5["detail"]
 
@@ -146,8 +147,9 @@ def test_reproduce_writes_everything_deterministically(repo) -> None:
     out = repo / "paper" / "figures"
     res = reproduce(repo, out)
     for f in ("summary.csv", "hypotheses.csv", "results.json", "rq1_conditions.svg",
-              "rq2_layers.svg", "rq4_cascade.svg", "cascade_sweep.csv"):  # fmt: skip
+              "rq2_layers.svg"):  # fmt: skip
         assert (out / f).exists(), f
+    assert not (out / "rq4_cascade.svg").exists()  # RQ4 deferred to v0.2
     assert (out / "rq1_conditions.svg").read_text().startswith("<svg")
     assert res["label"] == "pilot (n=14 snapshots)"
     first = {f.name: f.read_bytes() for f in out.iterdir()}

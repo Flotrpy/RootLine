@@ -166,10 +166,14 @@ def check_results(root: Path) -> list[Check]:
         )
     ]
     data = json.loads(res.read_text())
-    not_run = [h["rq"] for h in data.get("hypotheses", []) if h["status"] != "tested"]
+    not_run = [
+        h["rq"]
+        for h in data.get("hypotheses", [])
+        if h["status"] not in ("tested", "deferred to v0.2")
+    ]
     out.append(
         Check(
-            "all six hypotheses tested",
+            "in-scope hypotheses (RQ1, RQ2) tested",
             "WARN" if not_run else "PASS",
             f"not run: {not_run}" if not_run else "",
         )

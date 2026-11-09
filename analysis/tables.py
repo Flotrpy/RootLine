@@ -1,4 +1,4 @@
-"""Summary tables and the six hypothesis tests.
+"""Summary tables and the hypothesis tests.
 
 Every number here is computed from run records, labels, remediation trials
 and baseline predictions on disk; nothing is entered by hand. Hypotheses
@@ -25,6 +25,9 @@ SINGLE_CONDITIONS = ("metrics", "traces", "logs")
 # before the runs; the full sweep is reported either way.
 RQ4_THETA = 0.7
 ALPHA = 0.05
+# v0.1 tests RQ1 and RQ2 only; the other four are held for v0.2 and
+# reported as deferred, outside the Holm family.
+V01_SCOPE = ("RQ1", "RQ2")
 
 
 def _claims_fault(record: dict[str, object]) -> bool:
@@ -109,7 +112,7 @@ def _paired(a: dict[str, bool], b: dict[str, bool]) -> tuple[list[bool], list[bo
 class Hypothesis:
     rq: str
     statement: str
-    status: str  # "tested" or "not run: <reason>"
+    status: str  # "tested", "not run: <reason>" or DEFERRED
     n: int = 0
     effect: float = math.nan
     effect_ci_low: float = math.nan
@@ -130,6 +133,9 @@ STATEMENTS = {
     "RQ5": "Remediation success is >= 20 pts below diagnosis accuracy",
     "RQ6": "The best LLM beats LightGBM on unseen fault types but not on seen ones",
 }
+
+
+DEFERRED = "deferred to v0.2"
 
 
 def _not_run(rq: str, why: str) -> Hypothesis:
@@ -291,21 +297,31 @@ def hypotheses(
     trials: list[dict[str, object]],
     baseline_preds: pl.DataFrame | None,
 ) -> tuple[pl.DataFrame, pl.DataFrame | None]:
-    """All six hypotheses with Holm-adjusted p-values across those tested."""
+    """All six hypotheses, with Holm-adjusted p-values across those tested.
+
+    Only V01_SCOPE is tested; the rest are reported as deferred to v0.2.
+    """
     model = best_model(runs)
+    cascade_table = None
     if model is None:
-        rows = [_not_run(rq, "no combined p0 runs") for rq in STATEMENTS]
-        cascade_table = None
+        rows = [_not_run(rq, "no combined p0 runs") for rq in V01_SCOPE]
     else:
-        h4, cascade_table = rq4_hypothesis(runs)
-        rows = [
-            rq1(runs, model),
-            rq2(runs, labels, model),
-            rq3(runs, model),
-            h4,
-            rq5(runs, model, trials),
-            rq6(runs, model, baseline_preds),
-        ]
+        tests = {
+            "RQ1": lambda: rq1(runs, model),
+            "RQ2": lambda: rq2(runs, labels, model),
+            "RQ3": lambda: rq3(runs, model),
+            "RQ5": lambda: rq5(runs, model, trials),
+            "RQ6": lambda: rq6(runs, model, baseline_preds),
+        }
+        rows = []
+        for rq in V01_SCOPE:
+            if rq == "RQ4":
+                h4, cascade_table = rq4_hypothesis(runs)
+                rows.append(h4)
+            else:
+                rows.append(tests[rq]())
+    rows += [Hypothesis(rq, STATEMENTS[rq], DEFERRED) for rq in STATEMENTS if rq not in V01_SCOPE]
+    rows.sort(key=lambda h: h.rq)
     tested = [h for h in rows if h.status == "tested" and not math.isnan(h.p_value)]
     for h, p in zip(tested, holm([h.p_value for h in tested]), strict=True):
         h.p_holm = p
