@@ -56,7 +56,7 @@ Environment (defaults in brackets):
   ROOTLINE_LABELS_DIR  [data/labels]
   ROOTLINE_BOARD_A      e.g. arduino@192.168.1.250 (hardware faults, SSH key login)
   ROOTLINE_BOARD_B      e.g. arduino@192.168.1.217
-  ROOTLINE_IPERF_SERVER the laptop's LAN IP, for hwContention
+  ROOTLINE_IPERF_SERVER the PC's LAN IP, for hwContention
   ROOTLINE_HW_TXPOWER_MBM [100]  Board A transmit power during hwWeakSignal
   ROOTLINE_CONTENTION_BITRATE [30M]
 `

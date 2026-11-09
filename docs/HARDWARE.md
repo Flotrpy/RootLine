@@ -18,7 +18,7 @@ never leave a fault in place.
 | Fault | What happens | Undo | Compared with |
 |-------|--------------|------|---------------|
 | `hwWeakSignal` | Board A's transmit power drops to 1 dBm (`ROOTLINE_HW_TXPOWER_MBM`, default 100 mBm) | power back to auto; the board also reverts by itself after 8 min | `netemLoss` |
-| `hwContention` | Board B floods the 2.4 GHz channel with 30 Mbit/s UDP to the laptop for 5 min | iperf3 stopped | `toxiLatency` |
+| `hwContention` | Board B floods the 2.4 GHz channel with 30 Mbit/s UDP to the PC for 5 min | iperf3 stopped | `toxiLatency` |
 | `hwWifiOutage` | Board A's Wi-Fi radio turns off for 30 s, then back on | board checked reachable | `toxiReset` |
 
 `hwWifiOutage` replaces the charter's manual "power cut": the relay loses its
@@ -32,8 +32,8 @@ outage.
 | Connected to a computer during the campaign? | No. Both boards on USB-C chargers in fixed spots, on Wi-Fi |
 | Which Wi-Fi? | Your home Wi-Fi. Both boards pinned to **2.4 GHz** on the board itself (Stage 2), so contention and the weak link share a band |
 | Router settings? | None needed. Boards keep their address in practice; check with `ping` before each session |
-| Where does the controller run? | On the laptop, inside WSL (Ubuntu), with Docker Desktop |
-| iperf3 server | A small container on the laptop, started by the overnight script |
+| Where does the controller run? | On the PC, inside WSL (Ubuntu), with Docker Desktop |
+| iperf3 server | A small container on the PC, started by the overnight script |
 
 ## Stage 1: SSH keys from WSL (5 min, once)
 
@@ -130,7 +130,7 @@ a button press would inject a fault mid-incident.
 
 - Contention stays on your own network: `iperf_contention.sh` refuses any
   server outside private address ranges, and the overnight script points it
-  at the laptop.
+  at the PC.
 - For 5 minutes in each of the 4 contention incidents, other 2.4 GHz devices
   at home will be slow. Run the night when nobody minds.
 - The panel cannot trigger hardware faults; the controller refuses them over

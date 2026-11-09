@@ -114,7 +114,7 @@ func TestCheck(t *testing.T) {
 	if byName["Board A relay running"].OK {
 		t.Fatal("relay check should fail")
 	}
-	if !byName["Board B reaches the laptop's iperf3 server"].OK {
+	if !byName["Board B reaches the PC's iperf3 server"].OK {
 		t.Fatal("iperf check should pass")
 	}
 	if byName["Board A reachable by SSH key"].Detail != "ok" {

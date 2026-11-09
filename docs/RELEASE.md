@@ -15,7 +15,7 @@ the emulated runs.
 
 | # | Step | Command | Needs |
 |---|------|---------|-------|
-| 1 | Gate 1: one dry-run incident | README "Running the pilot", steps 1–4 | demo on the laptop |
+| 1 | Gate 1: one dry-run incident | README "Running the pilot", steps 1–4 | demo on the PC |
 | 2 | Overnight campaign, 30 snapshots | `./bin/rootlinectl campaign --plan plans/pilot.yaml` | ~6.5 h, unattended |
 | 3 | Gate 2 and model runs (Tier C on APIs, Tier A/B on Kaggle) | README "Running the models" | snapshots from step 2 |
 | 4 | (v0.2 only, RQ5) live remediation trials; skipped for v0.1 | `python -m analysis plan-remediation`, then the printed commands | demo with the normal (Toxiproxy) wiring |

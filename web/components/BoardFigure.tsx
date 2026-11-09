@@ -19,7 +19,7 @@ const COMMON: Part[] = [
 
 const ROLE: Record<"A" | "B", Part> = {
   A: { id: "role", name: "In Rootline", x: 470, y: 250, text: "edge-relay, a small Go program run by systemd, carries every checkout → payment request over the board's real Wi-Fi. Faults: transmit power dropped to 1 dBm, or the radio switched off for 30 s." },
-  B: { id: "role", name: "In Rootline", x: 470, y: 250, text: "Sends 30 Mbit/s of UDP with iperf3 to the laptop for 5 minutes, crowding the 2.4 GHz channel Board A depends on. Only ever to a private address on the home network." },
+  B: { id: "role", name: "In Rootline", x: 470, y: 250, text: "Sends 30 Mbit/s of UDP with iperf3 to the PC for 5 minutes, crowding the 2.4 GHz channel Board A depends on. Only ever to a private address on the home network." },
 };
 
 export function BoardFigure({ board, photo }: { board: "A" | "B"; photo?: string }) {

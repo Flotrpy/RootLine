@@ -47,7 +47,7 @@ func Check(ctx context.Context, b *Boards, outage bool) []Result {
 		out, err = b.Output(ctx, "B", "command -v iperf3 && test -f ~/iperf_contention.sh", 1)
 		add("Board B has iperf3 and the contention script", out, err)
 		out, err = b.Output(ctx, "B", "IPERF_SERVER={iperf_server} BITRATE=1M DURATION=2 bash ~/iperf_contention.sh", 1)
-		add("Board B reaches the laptop's iperf3 server", out, err)
+		add("Board B reaches the PC's iperf3 server", out, err)
 	}
 
 	if outage {

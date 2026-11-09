@@ -4,7 +4,7 @@ Keep this file. It lists what was installed and how to remove it later.
 Items marked (planned) are not installed yet; tick them off as you go.
 
 
-1. WINDOWS LAPTOP (AffanPC)
+1. WINDOWS DESKTOP PC (AffanPC)
 ---------------------------
 Installed with an installer or by Windows:
 
@@ -90,7 +90,7 @@ To remove pieces individually instead:
       Remove: rm ~/edge-relay-arm64 ~/edge-relay.service ~/wifi_logger.py
   (planned) /usr/local/bin/rootline-fault and /etc/sudoers.d/rootline
       Remove: sudo rm /usr/local/bin/rootline-fault /etc/sudoers.d/rootline
-  (planned) ~/.ssh/authorized_keys entry for the laptop's key
+  (planned) ~/.ssh/authorized_keys entry for the PC's key
       Remove: delete the line ending in affan@AffanPC from ~/.ssh/authorized_keys
   (planned) Wi-Fi connection pinned to 2.4 GHz, power saving off (NetworkManager)
       Remove: sudo nmcli connection modify "<wifi name>" 802-11-wireless.band "" 802-11-wireless.powersave 0

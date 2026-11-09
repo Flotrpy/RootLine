@@ -9,7 +9,7 @@ ranges. Keep both boards on an isolated home-lab SSID.
 Both boards stay on the 2.4 GHz-only lab SSID for the whole hardware
 campaign (see `docs/HARDWARE.md`), so nothing is switched mid-incident.
 
-1. Start an iperf3 server on the laptop: `iperf3 --server`.
+1. Start an iperf3 server on the PC: `iperf3 --server`.
 2. On Board B, when `rootlinectl` prompts you:
 
 ```bash
@@ -28,6 +28,6 @@ python3 -m venv ~/rootline-venv && ~/rootline-venv/bin/pip install pyarrow
 ~/rootline-venv/bin/python wifi_logger.py --iface wlan0 --out wifi-hardware.parquet
 ```
 
-Copy the file to `data/hw/<incident>-<board>-wifi.parquet` on the laptop.
+Copy the file to `data/hw/<incident>-<board>-wifi.parquet` on the PC.
 Snapshot folders stay exactly as the snapshotter wrote them, and the
 logger's data is never shown to models: it documents the fault.

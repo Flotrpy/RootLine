@@ -10,7 +10,7 @@ type HwFault = "none" | "weak" | "contention" | "outage";
 const FAULTS: { id: HwFault; label: string; text: string }[] = [
   { id: "none", label: "No fault", text: "checkout calls payment through Board A over the home Wi-Fi. Board B is idle." },
   { id: "weak", label: "Weak signal", text: "Board A's transmit power drops from about 20 dBm to 1 dBm. Its uplink gets lossy; the board puts power back by itself after 8 minutes at the latest." },
-  { id: "contention", label: "Contention", text: "Board B sends 30 Mbit/s of UDP to the laptop for 5 minutes on the same 2.4 GHz channel, so Board A's requests wait for airtime." },
+  { id: "contention", label: "Contention", text: "Board B sends 30 Mbit/s of UDP to the PC for 5 minutes on the same 2.4 GHz channel, so Board A's requests wait for airtime." },
   { id: "outage", label: "Wi-Fi outage", text: "Board A's radio switches off for 30 seconds. Every request through it fails until the link comes back." },
 ];
 
@@ -38,9 +38,9 @@ export function WiringDiagram() {
             </marker>
           </defs>
 
-          {/* Laptop */}
+          {/* PC */}
           <rect x="20" y="40" width="300" height="280" fill="none" stroke="var(--node)" strokeWidth="1.5" />
-          <text x="36" y="66" fontSize="13" fill="var(--ink)">Laptop · WSL · Docker</text>
+          <text x="36" y="66" fontSize="13" fill="var(--ink)">PC · WSL · Docker</text>
           {[
             ["checkout", 92],
             ["payment", 162],

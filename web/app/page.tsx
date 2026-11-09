@@ -14,8 +14,8 @@ const REPO = "https://github.com/Flotrpy/RootLine";
 // The v0.1 run design. These are the plan's counts, not results.
 const MODELS = [
   { id: "gpt-oss-120b@groq", size: "120B", where: "Groq free tier", tier: "C" },
-  { id: "qwen3-8b-q4@ollama", size: "8B, 4-bit", where: "Ollama, on the laptop", tier: "B" },
-  { id: "gemma3-4b-q4@ollama", size: "4B, 4-bit", where: "Ollama, on the laptop", tier: "A" },
+  { id: "qwen3-8b-q4@ollama", size: "8B, 4-bit", where: "Ollama, on the PC", tier: "B" },
+  { id: "gemma3-4b-q4@ollama", size: "4B, 4-bit", where: "Ollama, on the PC", tier: "A" },
 ];
 const SNAPSHOTS = 42; // 30 pilot (15 types × 2) + 12 hardware (3 × 4)
 const CONDITIONS = 4;
@@ -38,7 +38,7 @@ const RQ = {
 const LIMITS = [
   ["A small pilot", "Two replicas of each incident type: 30 snapshots. Confidence intervals are wide, and a result that misses significance may only mean the sample is too small."],
   ["Two questions, not six", "Name reliance, cascades, whether fixes work and classical baselines are held for v0.2."],
-  ["One testbed, one laptop", "The OpenTelemetry Demo 3.1.0 on Docker Compose under 20 simulated users. Production systems are larger and less tidy."],
+  ["One testbed, one PC", "The OpenTelemetry Demo 3.1.0 on Docker Compose under 20 simulated users. Production systems are larger and less tidy."],
   ["Changed resource limits", "A few services, the database among them, got more memory so the testbed itself stayed up. Snapshots hit by a testbed crash were moved aside and run again."],
   ["Faults a model may have seen", "The application faults are the demo's public feature flags. Fault names never reach a model, service names do."],
   ["Free models only", "Open-weight models and free tiers, one run per snapshot and condition at temperature 0. Hosted models can change without notice."],

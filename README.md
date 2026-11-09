@@ -131,7 +131,7 @@ v0.1 is a pilot. Read every result with these limits in mind.
   vs application). It says nothing about name reliance, cascades, whether
   fixes work, or classical baselines; those are v0.2.
 - **One testbed, one machine.** Every snapshot comes from the
-  OpenTelemetry Demo 3.1.0 on Docker Compose, on one Windows laptop (WSL2),
+  OpenTelemetry Demo 3.1.0 on Docker Compose, on one Windows desktop PC (WSL2),
   under a fixed load of 20 simulated users. Real production systems are
   larger, noisier and less tidy. Findings may not carry over.
 - **Changed resource limits.** To keep the demo stable at this load,
@@ -183,8 +183,8 @@ v0.1 scores three open-weight models, one per size:
 | Model ID | Size | Runs on |
 |----------|------|---------|
 | `gpt-oss-120b@groq` | 120B (Tier C), low reasoning effort | Groq free tier, no card (`GROQ_API_KEY`) |
-| `qwen3-8b-q4@ollama` | 8B, Q4_K_M (Tier B) | Ollama on the laptop |
-| `gemma3-4b-q4@ollama` | 4B, Q4_K_M (Tier A) | Ollama on the laptop |
+| `qwen3-8b-q4@ollama` | 8B, Q4_K_M (Tier B) | Ollama on the PC |
+| `gemma3-4b-q4@ollama` | 4B, Q4_K_M (Tier A) | Ollama on the PC |
 
 For the local models, install [Ollama](https://ollama.com) and pull the
 exact tags (about 8.6 GB). Run them only when no campaign is running:

@@ -6,7 +6,7 @@ export const metadata = { title: "Hardware · Rootline" };
 
 const FAULTS = [
   ["hwWeakSignal", "Board A", "Transmit power to 1 dBm (from about 20 dBm). Reverts by itself after 8 minutes at the latest.", "netemLoss"],
-  ["hwContention", "Board B", "30 Mbit/s of UDP to the laptop for 5 minutes on the same 2.4 GHz channel.", "toxiLatency"],
+  ["hwContention", "Board B", "30 Mbit/s of UDP to the PC for 5 minutes on the same 2.4 GHz channel.", "toxiLatency"],
   ["hwWifiOutage", "Board A", "Radio off for 30 seconds, then back on. Replaces unplugging the board by hand.", "toxiReset"],
 ];
 
@@ -34,14 +34,14 @@ export default function Hardware() {
           <p>
             A small Go program, <code>edge-relay</code>, runs as a systemd service on the board&apos;s
             Linux side. In the hardware wiring, checkout sends its payment requests to the board, which
-            forwards them over Wi-Fi to payment on the laptop.
+            forwards them over Wi-Fi to payment on the PC.
           </p>
         </div>
         <div className="board">
           <BoardFigure board="B" photo={photo("board-b")} />
           <h3>Board B, the crowd</h3>
           <p>
-            Runs iperf3 to fill the 2.4 GHz channel with traffic to a server on the laptop, and can log
+            Runs iperf3 to fill the 2.4 GHz channel with traffic to a server on the PC, and can log
             signal strength and throughput. The optional demo panel (buttons, LEDs and a small display on
             the microcontroller) lives here too, for the launch video only.
           </p>
@@ -80,7 +80,7 @@ export default function Hardware() {
         <li>
           <div>
             <strong>Own network only</strong>
-            <p>The contention script refuses any server outside private address ranges and points at the laptop.</p>
+            <p>The contention script refuses any server outside private address ranges and points at the PC.</p>
           </div>
         </li>
         <li>

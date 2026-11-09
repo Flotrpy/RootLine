@@ -10,7 +10,7 @@ connects on to the payment service. Each connection becomes a
 
 ## Build and install
 
-On the laptop:
+On the PC:
 
 ```bash
 GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -o edge-relay .

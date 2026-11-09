@@ -24,7 +24,7 @@ DEFAULTS = {"PANEL_FAULTS": "paymentFailure,toxiReset", "POLL_SECONDS": "1"}
 
 def load_settings(path: Path, env: Mapping[str, str] = os.environ) -> dict[str, str]:
     """Environment first, then the JSON file, then defaults.
-    CONTROLLER_URL has no default: the panel cannot guess the laptop's IP."""
+    CONTROLLER_URL has no default: the panel cannot guess the PC's IP."""
     from_file: dict[str, str] = {}
     if path.exists():
         from_file = {k: str(v) for k, v in json.loads(path.read_text()).items()}

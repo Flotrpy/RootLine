@@ -6,7 +6,7 @@
 #     -f "$ROOTLINE_DIR/compose.override.yml" -f "$ROOTLINE_DIR/compose.hardware.yml" up -d
 #
 # HW_LAN_BIND defaults to 0.0.0.0 (all interfaces), which is what Docker
-# Desktop on Windows needs to publish on the host; set it to the laptop's LAN
+# Desktop on Windows needs to publish on the host; set it to the PC's LAN
 # IP on Linux to keep these ports off other interfaces. Windows Firewall
 # asks once to allow Docker on private networks: allow it.
 
