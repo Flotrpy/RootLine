@@ -115,7 +115,11 @@ To remove pieces individually instead:
 6. ONLINE ACCOUNTS AND SERVICES
 -------------------------------
   GitHub repository Flotrpy/RootLine (branch claude/optimistic-johnson-tp1lxw, PR #1)
-  (planned) Hugging Face dataset, Zenodo record, GitHub Pages site at release
+  Hugging Face account Flotrpy, private dataset Flotrpy/rootline
+      Remove: huggingface.co > dataset > Settings > Delete this dataset
+  Hugging Face write token (saved on the cloud environment as a network secret)
+      Remove: huggingface.co > Settings > Access Tokens > delete it
+  (planned) Zenodo record, GitHub Pages site at release
   (planned) Groq account and API key (free tier, no card)
       Remove: delete the key and the account at console.groq.com
 

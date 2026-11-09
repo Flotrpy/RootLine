@@ -31,8 +31,10 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 
 - [ ] Decide or list as limitations every `TODO(flotrpy)` (`make release-check` lists them)
 - [ ] `make release-check`: no FAIL
-- [ ] Hugging Face account; confirm the dataset id in `analysis/dataset.py`
-- [ ] `make dataset`, then upload to Hugging Face (CC BY 4.0)
+- [x] Hugging Face account (Flotrpy); dataset id `Flotrpy/rootline` set in `analysis/dataset.py`
+- [x] Private work-in-progress upload to Hugging Face (40 snapshots, no runs)
+- [ ] Upload again after the reruns and model runs (`make dataset`, then upload)
+- [ ] Make the Hugging Face dataset public at release (CC BY 4.0)
 - [ ] Turn on Zenodo's GitHub integration (gives the release a DOI)
 - [ ] Merge the PR with "Create a merge commit"
 - [ ] Tag `v0.1.0` and create the GitHub release from `docs/RELEASE_NOTES_v0.1.0.md`
