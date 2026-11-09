@@ -1,0 +1,9 @@
+{
+  "fault": "imageSlowLoad",
+  "service": "frontend-proxy",
+  "category": "latency",
+  "layer": "application",
+  "edge": null,
+  "flag": "imageSlowLoad",
+  "variant": "5sec"
+}

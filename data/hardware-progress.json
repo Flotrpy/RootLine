@@ -1,0 +1,132 @@
+{
+  "plan": "hardware",
+  "done": {
+    "hwWeakSignal-r1": {
+      "incident_id": "hwWeakSignal-r1",
+      "t0_unix_ms": 1794203896101,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2811.636363636311
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2907.118644067802
+      },
+      "recovered": true,
+      "recovery_seconds": 0.005216846,
+      "finished_unix_ms": 1794204400202
+    },
+    "hwWeakSignal-r2": {
+      "incident_id": "hwWeakSignal-r2",
+      "t0_unix_ms": 1794204704209,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2988.301886792478
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2968.7931034482353
+      },
+      "recovered": true,
+      "recovery_seconds": 0.004730181,
+      "finished_unix_ms": 1794205208704
+    },
+    "hwWeakSignal-r3": {
+      "incident_id": "hwWeakSignal-r3",
+      "t0_unix_ms": 1794206321096,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2860.526315789512
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3006.451612903207
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003104407,
+      "finished_unix_ms": 1794206825300
+    },
+    "hwWeakSignal-r4": {
+      "incident_id": "hwWeakSignal-r4",
+      "t0_unix_ms": 1794203087597,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2966.500000000008
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2943.593750000007
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003851308,
+      "finished_unix_ms": 1794203592125
+    },
+    "hwWifiOutage-r1": {
+      "incident_id": "hwWifiOutage-r1",
+      "t0_unix_ms": 1794207825141,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2938.85245901641
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2936.0000000000064
+      },
+      "recovered": true,
+      "recovery_seconds": 0.002979329,
+      "finished_unix_ms": 1794208329656
+    },
+    "hwWifiOutage-r2": {
+      "incident_id": "hwWifiOutage-r2",
+      "t0_unix_ms": 1794208633649,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2910.1694915254457
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3145.5
+      },
+      "recovered": true,
+      "recovery_seconds": 0.00328749,
+      "finished_unix_ms": 1794209137980
+    },
+    "hwWifiOutage-r3": {
+      "incident_id": "hwWifiOutage-r3",
+      "t0_unix_ms": 1794201587437,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3021.9354838709546
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3045.161290322574
+      },
+      "recovered": true,
+      "recovery_seconds": 0.002830352,
+      "finished_unix_ms": 1794202091735
+    },
+    "hwWifiOutage-r4": {
+      "incident_id": "hwWifiOutage-r4",
+      "t0_unix_ms": 1794205512650,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3046.2499999999745
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2973.4482758620197
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003629711,
+      "finished_unix_ms": 1794206017213
+    }
+  },
+  "failed": {
+    "hwContention-r1": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: ",
+    "hwContention-r2": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: ",
+    "hwContention-r3": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: ",
+    "hwContention-r4": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+  },
+  "pending": []
+}

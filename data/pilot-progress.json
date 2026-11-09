@@ -1,0 +1,457 @@
+{
+  "plan": "pilot",
+  "done": {
+    "adHighCpu-r1": {
+      "incident_id": "adHighCpu-r1",
+      "t0_unix_ms": 1794187390587,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3244.5588235293926
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3075.7142857142744
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003965092,
+      "finished_unix_ms": 1794187887843
+    },
+    "adHighCpu-r2": {
+      "incident_id": "adHighCpu-r2",
+      "t0_unix_ms": 1794196241994,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3022.9032258064517
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2965.593220338982
+      },
+      "recovered": true,
+      "recovery_seconds": 0.005053815,
+      "finished_unix_ms": 1794196741606
+    },
+    "emailMemoryLeak-r1": {
+      "incident_id": "emailMemoryLeak-r1",
+      "t0_unix_ms": 1794186593194,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3081.9047619047715
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3082.903225806464
+      },
+      "recovered": true,
+      "recovery_seconds": 0.005045322,
+      "finished_unix_ms": 1794187090346
+    },
+    "emailMemoryLeak-r2": {
+      "incident_id": "emailMemoryLeak-r2",
+      "t0_unix_ms": 1794175473478,
+      "baseline": {
+        "error_ratio": 0.14367816091954025,
+        "p99_ms": 15000
+      },
+      "final": {
+        "error_ratio": 0.13546255506607932,
+        "p99_ms": 15000
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003272564,
+      "finished_unix_ms": 1794175969398
+    },
+    "healthy-r1": {
+      "incident_id": "healthy-r1",
+      "t0_unix_ms": 1794188992653,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3157.213114754092
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3003.7704918033055
+      },
+      "recovered": true,
+      "recovery_seconds": 0.004677979,
+      "finished_unix_ms": 1794189489402
+    },
+    "healthy-r2": {
+      "incident_id": "healthy-r2",
+      "t0_unix_ms": 1794184998881,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2846.9230769230744
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3021.525423728816
+      },
+      "recovered": true,
+      "recovery_seconds": 0.006333741,
+      "finished_unix_ms": 1794185495865
+    },
+    "imageSlowLoad-r1": {
+      "incident_id": "imageSlowLoad-r1",
+      "t0_unix_ms": 1794173880861,
+      "baseline": {
+        "error_ratio": 0.1196319018404908,
+        "p99_ms": 15000
+      },
+      "final": {
+        "error_ratio": 0.12444444444444443,
+        "p99_ms": 15000
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003081334,
+      "finished_unix_ms": 1794174376937
+    },
+    "imageSlowLoad-r2": {
+      "incident_id": "imageSlowLoad-r2",
+      "t0_unix_ms": 1794179456539,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3056.6666666666665
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3221.6923076923194
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003390691,
+      "finished_unix_ms": 1794179953091
+    },
+    "intlShippingSlowdown-r1": {
+      "incident_id": "intlShippingSlowdown-r1",
+      "t0_unix_ms": 1794198639807,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2786.999999999968
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3190.307692307685
+      },
+      "recovered": true,
+      "recovery_seconds": 0.004688081,
+      "finished_unix_ms": 1794199136610
+    },
+    "intlShippingSlowdown-r2": {
+      "incident_id": "intlShippingSlowdown-r2",
+      "t0_unix_ms": 1794184201820,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3019.491525423702
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3109.531250000002
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003383977,
+      "finished_unix_ms": 1794184698677
+    },
+    "kafkaQueueProblems-r1": {
+      "incident_id": "kafkaQueueProblems-r1",
+      "t0_unix_ms": 1794183404601,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3093.593750000005
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3044.5901639344065
+      },
+      "recovered": true,
+      "recovery_seconds": 0.004308695,
+      "finished_unix_ms": 1794183901603
+    },
+    "kafkaQueueProblems-r2": {
+      "incident_id": "kafkaQueueProblems-r2",
+      "t0_unix_ms": 1794170889261,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2963.5000000000114
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3069.6874999999873
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003106252,
+      "finished_unix_ms": 1794171386170
+    },
+    "netemLoss-r1": {
+      "incident_id": "netemLoss-r1",
+      "t0_unix_ms": 1794182607137,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2981.864406779626
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2872.105263157915
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003963739,
+      "finished_unix_ms": 1794183104222
+    },
+    "netemLoss-r2": {
+      "incident_id": "netemLoss-r2",
+      "t0_unix_ms": 1794197842458,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2953.653846153832
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3040.999999999999
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003592536,
+      "finished_unix_ms": 1794198339466
+    },
+    "paymentFailure-r1": {
+      "incident_id": "paymentFailure-r1",
+      "t0_unix_ms": 1794199436825,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2922.5000000000023
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3114.218749999981
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003254821,
+      "finished_unix_ms": 1794199933441
+    },
+    "paymentFailure-r2": {
+      "incident_id": "paymentFailure-r2",
+      "t0_unix_ms": 1794181809284,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2983.8983050847273
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2945.263157894773
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003284359,
+      "finished_unix_ms": 1794182306827
+    },
+    "paymentUnreachable-r1": {
+      "incident_id": "paymentUnreachable-r1",
+      "t0_unix_ms": 1794178659285,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2973.064516129055
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3040.3571428571468
+      },
+      "recovered": true,
+      "recovery_seconds": 0.006148555,
+      "finished_unix_ms": 1794179156328
+    },
+    "paymentUnreachable-r2": {
+      "incident_id": "paymentUnreachable-r2",
+      "t0_unix_ms": 1794197041848,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3038.620689655172
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2795.7894736841895
+      },
+      "recovered": true,
+      "recovery_seconds": 0.005981698,
+      "finished_unix_ms": 1794197542257
+    },
+    "productCatalogFailure-r1": {
+      "incident_id": "productCatalogFailure-r1",
+      "t0_unix_ms": 1794171686453,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3005.7142857142826
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2913.2203389830734
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003068225,
+      "finished_unix_ms": 1794172183177
+    },
+    "productCatalogFailure-r2": {
+      "incident_id": "productCatalogFailure-r2",
+      "t0_unix_ms": 1794185796116,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3066.2711864406656
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3287.6923076922953
+      },
+      "recovered": true,
+      "recovery_seconds": 0.00522037,
+      "finished_unix_ms": 1794186292934
+    },
+    "productCatalogLockContention-r1": {
+      "incident_id": "productCatalogLockContention-r1",
+      "t0_unix_ms": 1794181012636,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3115.2380952380645
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3041.7741935483573
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003347542,
+      "finished_unix_ms": 1794181508982
+    },
+    "productCatalogLockContention-r2": {
+      "incident_id": "productCatalogLockContention-r2",
+      "t0_unix_ms": 1794189789707,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2992.631578947348
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3080.4761904761576
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003069372,
+      "finished_unix_ms": 1794190286651
+    },
+    "recommendationCacheFailure-r1": {
+      "incident_id": "recommendationCacheFailure-r1",
+      "t0_unix_ms": 1794190586856,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2951.7241379310317
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3115.999999999994
+      },
+      "recovered": true,
+      "recovery_seconds": 0.007290754,
+      "finished_unix_ms": 1794191083696
+    },
+    "recommendationCacheFailure-r2": {
+      "incident_id": "recommendationCacheFailure-r2",
+      "t0_unix_ms": 1794194572915,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2873.559322033897
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3091.052631578962
+      },
+      "recovered": true,
+      "recovery_seconds": 75.055968591,
+      "finished_unix_ms": 1794195144743
+    },
+    "toxiBandwidth-r1": {
+      "incident_id": "toxiBandwidth-r1",
+      "t0_unix_ms": 1794188188044,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3102.9687500000364
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3172.033898305073
+      },
+      "recovered": true,
+      "recovery_seconds": 0.004190983,
+      "finished_unix_ms": 1794188692215
+    },
+    "toxiBandwidth-r2": {
+      "incident_id": "toxiBandwidth-r2",
+      "t0_unix_ms": 1794192181127,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3077.9661016949117
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3014.406779660997
+      },
+      "recovered": true,
+      "recovery_seconds": 0.002944038,
+      "finished_unix_ms": 1794192678008
+    },
+    "toxiLatency-r1": {
+      "incident_id": "toxiLatency-r1",
+      "t0_unix_ms": 1794193775535,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3033.500000000001
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3010.4999999999736
+      },
+      "recovered": true,
+      "recovery_seconds": 0.005025164,
+      "finished_unix_ms": 1794194272459
+    },
+    "toxiLatency-r2": {
+      "incident_id": "toxiLatency-r2",
+      "t0_unix_ms": 1794191384021,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3186.451612903229
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3031.718749999971
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003670905,
+      "finished_unix_ms": 1794191880721
+    },
+    "toxiReset-r1": {
+      "incident_id": "toxiReset-r1",
+      "t0_unix_ms": 1794195444948,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 2890.8474576270846
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 3018.500000000002
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003543075,
+      "finished_unix_ms": 1794195941701
+    },
+    "toxiReset-r2": {
+      "incident_id": "toxiReset-r2",
+      "t0_unix_ms": 1794192978308,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 3088.852459016386
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 2908.135593220333
+      },
+      "recovered": true,
+      "recovery_seconds": 0.003169027,
+      "finished_unix_ms": 1794193475246
+    }
+  },
+  "failed": {},
+  "pending": []
+}

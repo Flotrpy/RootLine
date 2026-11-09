@@ -1,0 +1,9 @@
+{
+  "fault": "adHighCpu",
+  "service": "ad",
+  "category": "cpu_saturation",
+  "layer": "application",
+  "edge": null,
+  "flag": "adHighCpu",
+  "variant": "on"
+}

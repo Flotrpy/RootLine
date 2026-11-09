@@ -1,0 +1,9 @@
+{
+  "fault": "intlShippingSlowdown",
+  "service": "shipping",
+  "category": "latency",
+  "layer": "application",
+  "edge": null,
+  "flag": "intlShippingSlowdown",
+  "variant": "5sec"
+}

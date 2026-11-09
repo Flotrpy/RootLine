@@ -1,0 +1,768 @@
+[2026-11-08T20:31:57Z] 1/4 demo with the emulated wiring
+ snapshotter Skipped No image to be pulled
+ Image ghcr.io/open-telemetry/demo:3.1.0-email Pulling 
+ Image ghcr.io/shopify/toxiproxy:2.12.0 Pulling 
+ Image quay.io/prometheus/prometheus:v3.13.1 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-fraud-detection Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-payment Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-load-generator Pulling 
+ Image ghcr.io/valkey-io/valkey:9.0.4-alpine3.23 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend-proxy Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-checkout Pulling 
+ Image postgres:18.4 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opamp-server Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-cart Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-accounting Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-recommendation Pulling 
+ Image quay.io/jaegertracing/jaeger:2.19.0 Pulling 
+ Image alpine:3.22 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opensearch Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-kafka Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-flagd-ui Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-quote Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-image-provider Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-ad Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-telemetry-docs Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-product-catalog Pulling 
+ Image ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.159.0 Pulling 
+ Image grafana/grafana:13.1.0 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-currency Pulling 
+ Image ghcr.io/open-feature/flagd:v0.16.0 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-shipping Pulling 
+ Image ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.159.0 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opamp-server Pulled 
+ Image ghcr.io/shopify/toxiproxy:2.12.0 Pulled 
+ Image alpine:3.22 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-currency Pulled 
+ Image quay.io/jaegertracing/jaeger:2.19.0 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-cart Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-flagd-ui Pulled 
+ Image quay.io/prometheus/prometheus:v3.13.1 Pulled 
+ Image ghcr.io/valkey-io/valkey:9.0.4-alpine3.23 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-ad Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-load-generator Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-accounting Pulled 
+ Image grafana/grafana:13.1.0 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opensearch Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-email Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-recommendation Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend-proxy Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-image-provider Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-telemetry-docs Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-kafka Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-checkout Pulled 
+ Image postgres:18.4 Pulled 
+ Image ghcr.io/open-feature/flagd:v0.16.0 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-product-catalog Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-quote Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-shipping Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-payment Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-fraud-detection Pulled 
+ Image opentelemetry-demo-snapshotter Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 612B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 492B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/golang:1.24
+#3 ...
+
+#4 [internal] load metadata for gcr.io/distroless/static-debian12:nonroot
+#4 DONE 0.4s
+
+#3 [internal] load metadata for docker.io/library/golang:1.24
+#3 DONE 0.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [build 1/6] FROM docker.io/library/golang:1.24@sha256:d2d2bc1c84f7e60d7d2438a3836ae7d0c847f4888464e7ec9ba3a1339a1ee804
+#7 resolve docker.io/library/golang:1.24@sha256:d2d2bc1c84f7e60d7d2438a3836ae7d0c847f4888464e7ec9ba3a1339a1ee804 0.1s done
+#7 DONE 0.1s
+
+#8 [stage-1 1/2] FROM gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
+#8 resolve gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
+#8 resolve gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab 0.1s done
+#8 DONE 0.1s
+
+#6 [internal] load build context
+#6 transferring context: 1.09kB done
+#6 DONE 0.0s
+
+#9 [build 2/6] WORKDIR /src
+#9 CACHED
+
+#10 [build 3/6] COPY go.mod go.sum ./
+#10 CACHED
+
+#11 [build 4/6] RUN go mod download
+#11 CACHED
+
+#12 [build 5/6] COPY . .
+#12 CACHED
+
+#13 [build 6/6] RUN CGO_ENABLED=0 go build -trimpath     -ldflags "-s -w -X github.com/flotrpy/rootline/snapshotter/internal/server.BuildSHA=unknown"     -o /snapshotter ./cmd/snapshotter
+#13 DONE 35.4s
+
+#8 [stage-1 1/2] FROM gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
+#8 CACHED
+
+#14 [stage-1 2/2] COPY --from=build /snapshotter /snapshotter
+#14 DONE 0.2s
+
+#15 exporting to image
+#15 exporting layers
+#15 exporting layers 1.5s done
+#15 exporting manifest sha256:d0fc2e6e0c6b7a63c350cadba7e75de04cd4bb8fbf3bd1f903b7dedac3396470 0.1s done
+#15 exporting config sha256:d755ed72078cea10b5e707806a2fc6f3b71e1e76328259135028200ad475586d 0.1s done
+#15 exporting attestation manifest sha256:2ead2808aa64940d2be2106763e72a89e5112b8dd749a998e2661c542de4d89f 0.1s done
+#15 exporting manifest list sha256:8f50bb616ac9567e9389cb1a4056b61516057a48343faaf3e7efa855f7b1f624
+#15 exporting manifest list sha256:8f50bb616ac9567e9389cb1a4056b61516057a48343faaf3e7efa855f7b1f624 0.1s done
+#15 naming to docker.io/library/opentelemetry-demo-snapshotter:latest done
+#15 unpacking to docker.io/library/opentelemetry-demo-snapshotter:latest
+#15 unpacking to docker.io/library/opentelemetry-demo-snapshotter:latest 0.3s done
+#15 DONE 2.2s
+
+#16 resolving provenance for metadata file
+#16 DONE 0.0s
+ Image opentelemetry-demo-snapshotter Built 
+wrote /home/affan/RootLine/data/image-digests.json
+ Container netem-catalog Running 
+ Container payment Running 
+ Container frontend-proxy Running 
+ Container frontend Running 
+ Container toxiproxy-payment Running 
+ Container quote Running 
+ Container otel-collector Running 
+ Container toxiproxy-catalog Running 
+ Container load-generator Running 
+ Container cart Running 
+ Container currency Running 
+ Container ad Running 
+ Container image-provider Running 
+ Container valkey-cart Running 
+ Container flagd-ui Running 
+ Container netem-payment Running 
+ Container astronomy-db Running 
+ Container flagd Running 
+ Container grafana Running 
+ Container opamp-server Running 
+ Container telemetry-docs Running 
+ Container fraud-detection Running 
+ Container kafka Running 
+ Container product-catalog Running 
+ Container prometheus Running 
+ Container opensearch Running 
+ Container email Running 
+ Container checkout Running 
+ Container accounting Running 
+ Container recommendation Running 
+ Container shipping Running 
+ Container jaeger Running 
+ Container snapshotter Recreate 
+ Container snapshotter Recreated 
+ Container snapshotter Starting 
+ Container snapshotter Started 
+ Container opamp-server Waiting 
+ Container opensearch Waiting 
+ Container opamp-server Healthy 
+ Container opensearch Healthy 
+ Container kafka Waiting 
+ Container opamp-server Waiting 
+ Container valkey-cart Waiting 
+ Container kafka Waiting 
+ Container astronomy-db Waiting 
+ Container opamp-server Waiting 
+ Container opamp-server Healthy 
+ Container kafka Healthy 
+ Container opamp-server Healthy 
+ Container kafka Healthy 
+ Container astronomy-db Healthy 
+ Container valkey-cart Healthy 
+ Container currency Waiting 
+ Container email Waiting 
+ Container kafka Waiting 
+ Container payment Waiting 
+ Container payment Healthy 
+ Container kafka Healthy 
+ Container email Healthy 
+ Container currency Healthy 
+ Container quote Waiting 
+ Container image-provider Waiting 
+ Container currency Waiting 
+ Container ad Waiting 
+ Container recommendation Waiting 
+ Container recommendation Healthy 
+ Container ad Healthy 
+ Container quote Healthy 
+ Container currency Healthy 
+ Container image-provider Healthy 
+ Container frontend Waiting 
+ Container frontend Healthy 
+ Container opamp-server Waiting 
+ Container frontend Waiting 
+ Container flagd-ui Waiting 
+ Container telemetry-docs Waiting 
+ Container flagd-ui Healthy 
+ Container opamp-server Healthy 
+ Container telemetry-docs Healthy 
+ Container frontend Healthy 
+[2026-11-08T20:33:08Z] 2/4 pilot campaign (30 snapshots, ~6.5 h)
+time=2026-11-08T15:33:09.129-05:00 level=INFO msg=warm-up incident=kafkaQueueProblems-r2 for=10m0s
+time=2026-11-08T15:43:09.176-05:00 level=INFO msg=baseline incident=kafkaQueueProblems-r2 for=5m0s
+time=2026-11-08T15:48:09.262-05:00 level=INFO msg=inject incident=kafkaQueueProblems-r2 fault=kafkaQueueProblems
+time=2026-11-08T15:53:09.344-05:00 level=INFO msg=snapshot incident=kafkaQueueProblems-r2 window_ms=600000
+time=2026-11-08T15:53:26.101-05:00 level=INFO msg=cool-down incident=kafkaQueueProblems-r2 for=3m0s
+time=2026-11-08T15:56:26.170-05:00 level=INFO msg=done incident=kafkaQueueProblems-r2 recovered=true recovery_s=0.003106252
+time=2026-11-08T15:56:26.370-05:00 level=INFO msg=baseline incident=productCatalogFailure-r1 for=5m0s
+time=2026-11-08T16:01:26.453-05:00 level=INFO msg=inject incident=productCatalogFailure-r1 fault=productCatalogFailure
+time=2026-11-08T16:06:26.535-05:00 level=INFO msg=snapshot incident=productCatalogFailure-r1 window_ms=600000
+time=2026-11-08T16:06:43.090-05:00 level=INFO msg=cool-down incident=productCatalogFailure-r1 for=3m0s
+time=2026-11-08T16:09:43.177-05:00 level=INFO msg=done incident=productCatalogFailure-r1 recovered=true recovery_s=0.003068225
+time=2026-11-08T16:09:43.413-05:00 level=INFO msg=baseline incident=productCatalogLockContention-r1 for=5m0s
+time=2026-11-08T16:14:43.402-05:00 level=INFO msg=inject incident=productCatalogLockContention-r1 fault=productCatalogLockContention
+time=2026-11-08T16:19:43.387-05:00 level=INFO msg=snapshot incident=productCatalogLockContention-r1 window_ms=600000
+time=2026-11-08T16:20:00.251-05:00 level=INFO msg=cool-down incident=productCatalogLockContention-r1 for=3m0s
+time=2026-11-08T16:33:00.533-05:00 level=INFO msg=done incident=productCatalogLockContention-r1 recovered=false recovery_s=600.326405471
+time=2026-11-08T16:33:00.851-05:00 level=INFO msg=baseline incident=imageSlowLoad-r1 for=5m0s
+time=2026-11-08T16:38:00.861-05:00 level=INFO msg=inject incident=imageSlowLoad-r1 fault=imageSlowLoad
+time=2026-11-08T16:43:00.935-05:00 level=INFO msg=snapshot incident=imageSlowLoad-r1 window_ms=600000
+time=2026-11-08T16:43:16.946-05:00 level=INFO msg=cool-down incident=imageSlowLoad-r1 for=3m0s
+time=2026-11-08T16:46:16.937-05:00 level=INFO msg=done incident=imageSlowLoad-r1 recovered=true recovery_s=0.003081334
+time=2026-11-08T16:46:17.233-05:00 level=INFO msg=baseline incident=paymentFailure-r2 for=5m0s
+time=2026-11-08T16:51:17.218-05:00 level=INFO msg=inject incident=paymentFailure-r2 fault=paymentFailure
+time=2026-11-08T16:56:17.227-05:00 level=INFO msg=snapshot incident=paymentFailure-r2 window_ms=600000
+time=2026-11-08T16:56:33.172-05:00 level=INFO msg=cool-down incident=paymentFailure-r2 for=3m0s
+time=2026-11-08T16:59:33.166-05:00 level=INFO msg=done incident=paymentFailure-r2 recovered=true recovery_s=0.004417133
+time=2026-11-08T16:59:33.494-05:00 level=INFO msg=baseline incident=emailMemoryLeak-r2 for=5m0s
+time=2026-11-08T17:04:33.478-05:00 level=INFO msg=inject incident=emailMemoryLeak-r2 fault=emailMemoryLeak
+time=2026-11-08T17:09:33.487-05:00 level=INFO msg=snapshot incident=emailMemoryLeak-r2 window_ms=600000
+time=2026-11-08T17:09:49.404-05:00 level=INFO msg=cool-down incident=emailMemoryLeak-r2 for=3m0s
+time=2026-11-08T17:12:49.398-05:00 level=INFO msg=done incident=emailMemoryLeak-r2 recovered=true recovery_s=0.003272564
+time=2026-11-08T17:12:49.733-05:00 level=INFO msg=baseline incident=netemLoss-r1 for=5m0s
+time=2026-11-08T17:17:49.717-05:00 level=INFO msg=inject incident=netemLoss-r1 fault=netemLoss
+time=2026-11-08T17:22:49.927-05:00 level=INFO msg=snapshot incident=netemLoss-r1 window_ms=600000
+time=2026-11-08T17:23:06.282-05:00 level=INFO msg=cool-down incident=netemLoss-r1 for=3m0s
+time=2026-11-08T17:26:06.273-05:00 level=INFO msg=done incident=netemLoss-r1 recovered=true recovery_s=0.002709106
+time=2026-11-08T17:26:06.743-05:00 level=INFO msg=baseline incident=kafkaQueueProblems-r1 for=5m0s
+time=2026-11-08T17:31:06.728-05:00 level=INFO msg=inject incident=kafkaQueueProblems-r1 fault=kafkaQueueProblems
+time=2026-11-08T17:36:06.737-05:00 level=INFO msg=snapshot incident=kafkaQueueProblems-r1 window_ms=600000
+time=2026-11-08T17:36:22.700-05:00 level=INFO msg=cool-down incident=kafkaQueueProblems-r1 for=3m0s
+time=2026-11-08T17:39:22.694-05:00 level=INFO msg=done incident=kafkaQueueProblems-r1 recovered=true recovery_s=0.003277216
+time=2026-11-08T17:39:22.996-05:00 level=INFO msg=baseline incident=intlShippingSlowdown-r2 for=5m0s
+time=2026-11-08T17:44:22.978-05:00 level=INFO msg=inject incident=intlShippingSlowdown-r2 fault=intlShippingSlowdown
+time=2026-11-08T17:49:22.985-05:00 level=INFO msg=snapshot incident=intlShippingSlowdown-r2 window_ms=600000
+time=2026-11-08T17:49:39.108-05:00 level=INFO msg=cool-down incident=intlShippingSlowdown-r2 for=3m0s
+time=2026-11-08T17:52:39.100-05:00 level=INFO msg=done incident=intlShippingSlowdown-r2 recovered=true recovery_s=0.002952237
+time=2026-11-08T17:52:39.301-05:00 level=INFO msg=baseline incident=paymentUnreachable-r1 for=5m0s
+time=2026-11-08T17:57:39.285-05:00 level=INFO msg=inject incident=paymentUnreachable-r1 fault=paymentUnreachable
+time=2026-11-08T18:02:39.298-05:00 level=INFO msg=snapshot incident=paymentUnreachable-r1 window_ms=600000
+time=2026-11-08T18:02:56.331-05:00 level=INFO msg=cool-down incident=paymentUnreachable-r1 for=3m0s
+time=2026-11-08T18:05:56.328-05:00 level=INFO msg=done incident=paymentUnreachable-r1 recovered=true recovery_s=0.006148555
+time=2026-11-08T18:05:56.552-05:00 level=INFO msg=baseline incident=imageSlowLoad-r2 for=5m0s
+time=2026-11-08T18:10:56.539-05:00 level=INFO msg=inject incident=imageSlowLoad-r2 fault=imageSlowLoad
+time=2026-11-08T18:15:56.551-05:00 level=INFO msg=snapshot incident=imageSlowLoad-r2 window_ms=600000
+time=2026-11-08T18:16:13.095-05:00 level=INFO msg=cool-down incident=imageSlowLoad-r2 for=3m0s
+time=2026-11-08T18:19:13.091-05:00 level=INFO msg=done incident=imageSlowLoad-r2 recovered=true recovery_s=0.003390691
+time=2026-11-08T18:19:13.300-05:00 level=INFO msg=baseline incident=healthy-r2 for=5m0s
+campaign pilot: 11 done, 0 failed, 19 pending (progress in data/pilot-progress.json)
+rootlinectl: context canceled
+[2026-11-08T23:21:17Z] 1/4 demo with the emulated wiring
+ Image ghcr.io/open-telemetry/demo:3.1.0-payment Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-image-provider Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opensearch Pulling 
+ Image ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.159.0 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-checkout Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-recommendation Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-cart Pulling 
+ Image grafana/grafana:13.1.0 Pulling 
+ Image alpine:3.22 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-flagd-ui Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend Pulling 
+ Image quay.io/prometheus/prometheus:v3.13.1 Pulling 
+ Image ghcr.io/shopify/toxiproxy:2.12.0 Pulling 
+ Image quay.io/jaegertracing/jaeger:2.19.0 Pulling 
+ snapshotter Skipped No image to be pulled
+ Image ghcr.io/open-telemetry/demo:3.1.0-kafka Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-fraud-detection Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-shipping Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-telemetry-docs Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend-proxy Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-email Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-product-catalog Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-quote Pulling 
+ Image ghcr.io/valkey-io/valkey:9.0.4-alpine3.23 Pulling 
+ Image ghcr.io/open-feature/flagd:v0.16.0 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opamp-server Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-ad Pulling 
+ Image postgres:18.4 Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-load-generator Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-accounting Pulling 
+ Image ghcr.io/open-telemetry/demo:3.1.0-currency Pulling 
+ Image ghcr.io/shopify/toxiproxy:2.12.0 Pulled 
+ Image ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.159.0 Pulled 
+ Image alpine:3.22 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-currency Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opamp-server Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-flagd-ui Pulled 
+ Image quay.io/jaegertracing/jaeger:2.19.0 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-cart Pulled 
+ Image ghcr.io/valkey-io/valkey:9.0.4-alpine3.23 Pulled 
+ Image quay.io/prometheus/prometheus:v3.13.1 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-opensearch Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-load-generator Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-ad Pulled 
+ Image grafana/grafana:13.1.0 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend-proxy Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-email Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-accounting Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-recommendation Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-telemetry-docs Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-image-provider Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-kafka Pulled 
+ Image postgres:18.4 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-quote Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-checkout Pulled 
+ Image ghcr.io/open-feature/flagd:v0.16.0 Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-product-catalog Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-shipping Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-payment Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-frontend Pulled 
+ Image ghcr.io/open-telemetry/demo:3.1.0-fraud-detection Pulled 
+ Image opentelemetry-demo-snapshotter Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 612B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 492B done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for gcr.io/distroless/static-debian12:nonroot
+#3 DONE 0.4s
+
+#4 [internal] load metadata for docker.io/library/golang:1.24
+#4 DONE 0.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [stage-1 1/2] FROM gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
+#7 resolve gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
+#7 resolve gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab 0.1s done
+#7 DONE 0.1s
+
+#8 [build 1/6] FROM docker.io/library/golang:1.24@sha256:d2d2bc1c84f7e60d7d2438a3836ae7d0c847f4888464e7ec9ba3a1339a1ee804
+#8 resolve docker.io/library/golang:1.24@sha256:d2d2bc1c84f7e60d7d2438a3836ae7d0c847f4888464e7ec9ba3a1339a1ee804 0.1s done
+#8 DONE 0.1s
+
+#6 [internal] load build context
+#6 transferring context: 1.09kB done
+#6 DONE 0.0s
+
+#9 [build 2/6] WORKDIR /src
+#9 CACHED
+
+#10 [build 3/6] COPY go.mod go.sum ./
+#10 CACHED
+
+#11 [build 5/6] COPY . .
+#11 CACHED
+
+#12 [build 6/6] RUN CGO_ENABLED=0 go build -trimpath     -ldflags "-s -w -X github.com/flotrpy/rootline/snapshotter/internal/server.BuildSHA=unknown"     -o /snapshotter ./cmd/snapshotter
+#12 CACHED
+
+#13 [build 4/6] RUN go mod download
+#13 CACHED
+
+#14 [stage-1 2/2] COPY --from=build /snapshotter /snapshotter
+#14 CACHED
+
+#15 exporting to image
+#15 exporting layers done
+#15 exporting manifest sha256:d0fc2e6e0c6b7a63c350cadba7e75de04cd4bb8fbf3bd1f903b7dedac3396470 done
+#15 exporting config sha256:d755ed72078cea10b5e707806a2fc6f3b71e1e76328259135028200ad475586d 0.0s done
+#15 exporting attestation manifest sha256:3b19ccb18149a5b48f34085e1c1d8f09262f9bd57fc231597b6d534c5205bbde
+#15 exporting attestation manifest sha256:3b19ccb18149a5b48f34085e1c1d8f09262f9bd57fc231597b6d534c5205bbde 0.1s done
+#15 exporting manifest list sha256:206d366c004a1601000e8ec0ced8eff448a6c199daf75a51345b16bed4baa1a6 0.0s done
+#15 naming to docker.io/library/opentelemetry-demo-snapshotter:latest
+#15 naming to docker.io/library/opentelemetry-demo-snapshotter:latest done
+#15 unpacking to docker.io/library/opentelemetry-demo-snapshotter:latest 0.0s done
+#15 DONE 0.3s
+
+#16 resolving provenance for metadata file
+#16 DONE 0.0s
+ Image opentelemetry-demo-snapshotter Built 
+wrote /home/affan/RootLine/data/image-digests.json
+ Container shipping Running 
+ Container accounting Running 
+ Container load-generator Running 
+ Container frontend Running 
+ Container grafana Running 
+ Container snapshotter Running 
+ Container payment Running 
+ Container product-catalog Running 
+ Container fraud-detection Running 
+ Container flagd Running 
+ Container quote Running 
+ Container image-provider Running 
+ Container netem-payment Running 
+ Container email Running 
+ Container opamp-server Running 
+ Container ad Running 
+ Container toxiproxy-catalog Running 
+ Container currency Running 
+ Container frontend-proxy Running 
+ Container kafka Running 
+ Container astronomy-db Running 
+ Container flagd-ui Running 
+ Container checkout Running 
+ Container telemetry-docs Running 
+ Container prometheus Running 
+ Container otel-collector Running 
+ Container recommendation Running 
+ Container valkey-cart Running 
+ Container toxiproxy-payment Running 
+ Container cart Running 
+ Container opensearch Running 
+ Container jaeger Running 
+ Container netem-catalog Running 
+ Container opensearch Waiting 
+ Container opamp-server Waiting 
+ Container opamp-server Healthy 
+ Container opensearch Healthy 
+ Container opamp-server Waiting 
+ Container valkey-cart Waiting 
+ Container astronomy-db Waiting 
+ Container opamp-server Waiting 
+ Container kafka Waiting 
+ Container kafka Waiting 
+ Container kafka Healthy 
+ Container opamp-server Healthy 
+ Container valkey-cart Healthy 
+ Container kafka Healthy 
+ Container astronomy-db Healthy 
+ Container opamp-server Healthy 
+ Container kafka Waiting 
+ Container currency Waiting 
+ Container email Waiting 
+ Container payment Waiting 
+ Container currency Healthy 
+ Container payment Healthy 
+ Container kafka Healthy 
+ Container email Healthy 
+ Container recommendation Waiting 
+ Container ad Waiting 
+ Container currency Waiting 
+ Container image-provider Waiting 
+ Container quote Waiting 
+ Container ad Healthy 
+ Container image-provider Healthy 
+ Container quote Healthy 
+ Container recommendation Healthy 
+ Container currency Healthy 
+ Container frontend Waiting 
+ Container frontend Healthy 
+ Container frontend Waiting 
+ Container flagd-ui Waiting 
+ Container telemetry-docs Waiting 
+ Container opamp-server Waiting 
+ Container flagd-ui Healthy 
+ Container telemetry-docs Healthy 
+ Container opamp-server Healthy 
+ Container frontend Healthy 
+[2026-11-08T23:21:52Z] 2/4 pilot campaign (30 snapshots, ~6.5 h)
+time=2026-11-08T18:21:52.489-05:00 level=INFO msg=warm-up incident=productCatalogLockContention-r1 for=10m0s
+time=2026-11-08T18:31:52.550-05:00 level=INFO msg=baseline incident=productCatalogLockContention-r1 for=5m0s
+time=2026-11-08T18:36:52.636-05:00 level=INFO msg=inject incident=productCatalogLockContention-r1 fault=productCatalogLockContention
+time=2026-11-08T18:41:52.719-05:00 level=INFO msg=snapshot incident=productCatalogLockContention-r1 window_ms=600000
+time=2026-11-08T18:42:08.912-05:00 level=INFO msg=cool-down incident=productCatalogLockContention-r1 for=3m0s
+time=2026-11-08T18:45:08.982-05:00 level=INFO msg=done incident=productCatalogLockContention-r1 recovered=true recovery_s=0.003347542
+time=2026-11-08T18:45:09.198-05:00 level=INFO msg=baseline incident=paymentFailure-r2 for=5m0s
+time=2026-11-08T18:50:09.284-05:00 level=INFO msg=inject incident=paymentFailure-r2 fault=paymentFailure
+time=2026-11-08T18:55:09.365-05:00 level=INFO msg=snapshot incident=paymentFailure-r2 window_ms=600000
+time=2026-11-08T18:55:26.764-05:00 level=INFO msg=cool-down incident=paymentFailure-r2 for=3m0s
+time=2026-11-08T18:58:26.827-05:00 level=INFO msg=done incident=paymentFailure-r2 recovered=true recovery_s=0.003284359
+time=2026-11-08T18:58:27.055-05:00 level=INFO msg=baseline incident=netemLoss-r1 for=5m0s
+time=2026-11-08T19:03:27.138-05:00 level=INFO msg=inject incident=netemLoss-r1 fault=netemLoss
+time=2026-11-08T19:08:27.316-05:00 level=INFO msg=snapshot incident=netemLoss-r1 window_ms=600000
+time=2026-11-08T19:08:44.132-05:00 level=INFO msg=cool-down incident=netemLoss-r1 for=3m0s
+time=2026-11-08T19:11:44.222-05:00 level=INFO msg=done incident=netemLoss-r1 recovered=true recovery_s=0.003963739
+time=2026-11-08T19:11:44.584-05:00 level=INFO msg=baseline incident=kafkaQueueProblems-r1 for=5m0s
+time=2026-11-08T19:16:44.601-05:00 level=INFO msg=inject incident=kafkaQueueProblems-r1 fault=kafkaQueueProblems
+time=2026-11-08T19:21:44.613-05:00 level=INFO msg=snapshot incident=kafkaQueueProblems-r1 window_ms=600000
+time=2026-11-08T19:22:01.607-05:00 level=INFO msg=cool-down incident=kafkaQueueProblems-r1 for=3m0s
+time=2026-11-08T19:25:01.603-05:00 level=INFO msg=done incident=kafkaQueueProblems-r1 recovered=true recovery_s=0.004308695
+time=2026-11-08T19:25:01.829-05:00 level=INFO msg=baseline incident=intlShippingSlowdown-r2 for=5m0s
+time=2026-11-08T19:30:01.820-05:00 level=INFO msg=inject incident=intlShippingSlowdown-r2 fault=intlShippingSlowdown
+time=2026-11-08T19:35:01.815-05:00 level=INFO msg=snapshot incident=intlShippingSlowdown-r2 window_ms=600000
+time=2026-11-08T19:35:18.682-05:00 level=INFO msg=cool-down incident=intlShippingSlowdown-r2 for=3m0s
+time=2026-11-08T19:38:18.677-05:00 level=INFO msg=done incident=intlShippingSlowdown-r2 recovered=true recovery_s=0.003383977
+time=2026-11-08T19:38:18.890-05:00 level=INFO msg=baseline incident=healthy-r2 for=5m0s
+time=2026-11-08T19:43:18.882-05:00 level=INFO msg=inject incident=healthy-r2 fault=healthy
+time=2026-11-08T19:48:18.896-05:00 level=INFO msg=snapshot incident=healthy-r2 window_ms=600000
+time=2026-11-08T19:48:35.869-05:00 level=INFO msg=cool-down incident=healthy-r2 for=3m0s
+time=2026-11-08T19:51:35.865-05:00 level=INFO msg=done incident=healthy-r2 recovered=true recovery_s=0.006333741
+time=2026-11-08T19:51:36.131-05:00 level=INFO msg=baseline incident=productCatalogFailure-r2 for=5m0s
+time=2026-11-08T19:56:36.116-05:00 level=INFO msg=inject incident=productCatalogFailure-r2 fault=productCatalogFailure
+time=2026-11-08T20:01:36.126-05:00 level=INFO msg=snapshot incident=productCatalogFailure-r2 window_ms=600000
+time=2026-11-08T20:01:52.937-05:00 level=INFO msg=cool-down incident=productCatalogFailure-r2 for=3m0s
+time=2026-11-08T20:04:52.934-05:00 level=INFO msg=done incident=productCatalogFailure-r2 recovered=true recovery_s=0.00522037
+time=2026-11-08T20:04:53.207-05:00 level=INFO msg=baseline incident=emailMemoryLeak-r1 for=5m0s
+time=2026-11-08T20:09:53.195-05:00 level=INFO msg=inject incident=emailMemoryLeak-r1 fault=emailMemoryLeak
+time=2026-11-08T20:14:53.205-05:00 level=INFO msg=snapshot incident=emailMemoryLeak-r1 window_ms=600000
+time=2026-11-08T20:15:10.350-05:00 level=INFO msg=cool-down incident=emailMemoryLeak-r1 for=3m0s
+time=2026-11-08T20:18:10.346-05:00 level=INFO msg=done incident=emailMemoryLeak-r1 recovered=true recovery_s=0.005045322
+time=2026-11-08T20:18:10.596-05:00 level=INFO msg=baseline incident=adHighCpu-r1 for=5m0s
+time=2026-11-08T20:23:10.587-05:00 level=INFO msg=inject incident=adHighCpu-r1 fault=adHighCpu
+time=2026-11-08T20:28:10.600-05:00 level=INFO msg=snapshot incident=adHighCpu-r1 window_ms=600000
+time=2026-11-08T20:28:27.847-05:00 level=INFO msg=cool-down incident=adHighCpu-r1 for=3m0s
+time=2026-11-08T20:31:27.843-05:00 level=INFO msg=done incident=adHighCpu-r1 recovered=true recovery_s=0.003965092
+time=2026-11-08T20:31:28.056-05:00 level=INFO msg=baseline incident=toxiBandwidth-r1 for=5m0s
+time=2026-11-08T20:36:28.044-05:00 level=INFO msg=inject incident=toxiBandwidth-r1 fault=toxiBandwidth
+time=2026-11-08T20:41:28.061-05:00 level=INFO msg=snapshot incident=toxiBandwidth-r1 window_ms=600000
+time=2026-11-08T20:41:52.219-05:00 level=INFO msg=cool-down incident=toxiBandwidth-r1 for=3m0s
+time=2026-11-08T20:44:52.215-05:00 level=INFO msg=done incident=toxiBandwidth-r1 recovered=true recovery_s=0.004190983
+time=2026-11-08T20:44:52.664-05:00 level=INFO msg=baseline incident=healthy-r1 for=5m0s
+time=2026-11-08T20:49:52.653-05:00 level=INFO msg=inject incident=healthy-r1 fault=healthy
+time=2026-11-08T20:54:52.666-05:00 level=INFO msg=snapshot incident=healthy-r1 window_ms=600000
+time=2026-11-08T20:55:09.405-05:00 level=INFO msg=cool-down incident=healthy-r1 for=3m0s
+time=2026-11-08T20:58:09.402-05:00 level=INFO msg=done incident=healthy-r1 recovered=true recovery_s=0.004677979
+time=2026-11-08T20:58:09.718-05:00 level=INFO msg=baseline incident=productCatalogLockContention-r2 for=5m0s
+time=2026-11-08T21:03:09.707-05:00 level=INFO msg=inject incident=productCatalogLockContention-r2 fault=productCatalogLockContention
+time=2026-11-08T21:08:09.716-05:00 level=INFO msg=snapshot incident=productCatalogLockContention-r2 window_ms=600000
+time=2026-11-08T21:08:26.658-05:00 level=INFO msg=cool-down incident=productCatalogLockContention-r2 for=3m0s
+time=2026-11-08T21:11:26.651-05:00 level=INFO msg=done incident=productCatalogLockContention-r2 recovered=true recovery_s=0.003069372
+time=2026-11-08T21:11:26.875-05:00 level=INFO msg=baseline incident=recommendationCacheFailure-r1 for=5m0s
+time=2026-11-08T21:16:26.857-05:00 level=INFO msg=inject incident=recommendationCacheFailure-r1 fault=recommendationCacheFailure
+time=2026-11-08T21:21:26.866-05:00 level=INFO msg=snapshot incident=recommendationCacheFailure-r1 window_ms=600000
+time=2026-11-08T21:21:43.698-05:00 level=INFO msg=cool-down incident=recommendationCacheFailure-r1 for=3m0s
+time=2026-11-08T21:24:43.696-05:00 level=INFO msg=done incident=recommendationCacheFailure-r1 recovered=true recovery_s=0.007290754
+time=2026-11-08T21:24:44.036-05:00 level=INFO msg=baseline incident=toxiLatency-r2 for=5m0s
+time=2026-11-08T21:29:44.021-05:00 level=INFO msg=inject incident=toxiLatency-r2 fault=toxiLatency
+time=2026-11-08T21:34:44.034-05:00 level=INFO msg=snapshot incident=toxiLatency-r2 window_ms=600000
+time=2026-11-08T21:35:00.727-05:00 level=INFO msg=cool-down incident=toxiLatency-r2 for=3m0s
+time=2026-11-08T21:38:00.721-05:00 level=INFO msg=done incident=toxiLatency-r2 recovered=true recovery_s=0.003670905
+time=2026-11-08T21:38:01.137-05:00 level=INFO msg=baseline incident=toxiBandwidth-r2 for=5m0s
+time=2026-11-08T21:43:01.128-05:00 level=INFO msg=inject incident=toxiBandwidth-r2 fault=toxiBandwidth
+time=2026-11-08T21:48:01.144-05:00 level=INFO msg=snapshot incident=toxiBandwidth-r2 window_ms=600000
+time=2026-11-08T21:48:18.014-05:00 level=INFO msg=cool-down incident=toxiBandwidth-r2 for=3m0s
+time=2026-11-08T21:51:18.008-05:00 level=INFO msg=done incident=toxiBandwidth-r2 recovered=true recovery_s=0.002944038
+time=2026-11-08T21:51:18.317-05:00 level=INFO msg=baseline incident=toxiReset-r2 for=5m0s
+time=2026-11-08T21:56:18.308-05:00 level=INFO msg=inject incident=toxiReset-r2 fault=toxiReset
+time=2026-11-08T22:01:18.322-05:00 level=INFO msg=snapshot incident=toxiReset-r2 window_ms=600000
+time=2026-11-08T22:01:35.253-05:00 level=INFO msg=cool-down incident=toxiReset-r2 for=3m0s
+time=2026-11-08T22:04:35.246-05:00 level=INFO msg=done incident=toxiReset-r2 recovered=true recovery_s=0.003169027
+time=2026-11-08T22:04:35.546-05:00 level=INFO msg=baseline incident=toxiLatency-r1 for=5m0s
+time=2026-11-08T22:09:35.535-05:00 level=INFO msg=inject incident=toxiLatency-r1 fault=toxiLatency
+time=2026-11-08T22:14:35.551-05:00 level=INFO msg=snapshot incident=toxiLatency-r1 window_ms=600000
+time=2026-11-08T22:14:52.463-05:00 level=INFO msg=cool-down incident=toxiLatency-r1 for=3m0s
+time=2026-11-08T22:17:52.459-05:00 level=INFO msg=done incident=toxiLatency-r1 recovered=true recovery_s=0.005025164
+time=2026-11-08T22:17:52.926-05:00 level=INFO msg=baseline incident=recommendationCacheFailure-r2 for=5m0s
+time=2026-11-08T22:22:52.915-05:00 level=INFO msg=inject incident=recommendationCacheFailure-r2 fault=recommendationCacheFailure
+time=2026-11-08T22:27:52.924-05:00 level=INFO msg=snapshot incident=recommendationCacheFailure-r2 window_ms=600000
+time=2026-11-08T22:28:09.699-05:00 level=INFO msg=cool-down incident=recommendationCacheFailure-r2 for=3m0s
+time=2026-11-08T22:32:24.743-05:00 level=INFO msg=done incident=recommendationCacheFailure-r2 recovered=true recovery_s=75.055968591
+time=2026-11-08T22:32:24.958-05:00 level=INFO msg=baseline incident=toxiReset-r1 for=5m0s
+time=2026-11-08T22:37:24.949-05:00 level=INFO msg=inject incident=toxiReset-r1 fault=toxiReset
+time=2026-11-08T22:42:24.961-05:00 level=INFO msg=snapshot incident=toxiReset-r1 window_ms=600000
+time=2026-11-08T22:42:41.708-05:00 level=INFO msg=cool-down incident=toxiReset-r1 for=3m0s
+time=2026-11-08T22:45:41.701-05:00 level=INFO msg=done incident=toxiReset-r1 recovered=true recovery_s=0.003543075
+time=2026-11-08T22:45:42.008-05:00 level=INFO msg=baseline incident=adHighCpu-r2 for=5m0s
+time=2026-11-08T22:50:41.994-05:00 level=INFO msg=inject incident=adHighCpu-r2 fault=adHighCpu
+time=2026-11-08T22:55:42.005-05:00 level=INFO msg=snapshot incident=adHighCpu-r2 window_ms=600000
+time=2026-11-08T22:56:01.611-05:00 level=INFO msg=cool-down incident=adHighCpu-r2 for=3m0s
+time=2026-11-08T22:59:01.606-05:00 level=INFO msg=done incident=adHighCpu-r2 recovered=true recovery_s=0.005053815
+time=2026-11-08T22:59:01.862-05:00 level=INFO msg=baseline incident=paymentUnreachable-r2 for=5m0s
+time=2026-11-08T23:04:01.848-05:00 level=INFO msg=inject incident=paymentUnreachable-r2 fault=paymentUnreachable
+time=2026-11-08T23:09:01.838-05:00 level=INFO msg=snapshot incident=paymentUnreachable-r2 window_ms=600000
+time=2026-11-08T23:09:18.466-05:00 level=INFO msg=cool-down incident=paymentUnreachable-r2 for=3m0s
+time=2026-11-08T23:12:22.257-05:00 level=INFO msg=done incident=paymentUnreachable-r2 recovered=true recovery_s=0.005981698
+time=2026-11-08T23:12:22.471-05:00 level=INFO msg=baseline incident=netemLoss-r2 for=5m0s
+time=2026-11-08T23:17:22.458-05:00 level=INFO msg=inject incident=netemLoss-r2 fault=netemLoss
+time=2026-11-08T23:22:22.578-05:00 level=INFO msg=snapshot incident=netemLoss-r2 window_ms=600000
+time=2026-11-08T23:22:39.470-05:00 level=INFO msg=cool-down incident=netemLoss-r2 for=3m0s
+time=2026-11-08T23:25:39.466-05:00 level=INFO msg=done incident=netemLoss-r2 recovered=true recovery_s=0.003592536
+time=2026-11-08T23:25:39.817-05:00 level=INFO msg=baseline incident=intlShippingSlowdown-r1 for=5m0s
+time=2026-11-08T23:30:39.807-05:00 level=INFO msg=inject incident=intlShippingSlowdown-r1 fault=intlShippingSlowdown
+time=2026-11-08T23:35:39.820-05:00 level=INFO msg=snapshot incident=intlShippingSlowdown-r1 window_ms=600000
+time=2026-11-08T23:35:56.613-05:00 level=INFO msg=cool-down incident=intlShippingSlowdown-r1 for=3m0s
+time=2026-11-08T23:38:56.610-05:00 level=INFO msg=done incident=intlShippingSlowdown-r1 recovered=true recovery_s=0.004688081
+time=2026-11-08T23:38:56.833-05:00 level=INFO msg=baseline incident=paymentFailure-r1 for=5m0s
+time=2026-11-08T23:43:56.825-05:00 level=INFO msg=inject incident=paymentFailure-r1 fault=paymentFailure
+time=2026-11-08T23:48:56.841-05:00 level=INFO msg=snapshot incident=paymentFailure-r1 window_ms=600000
+time=2026-11-08T23:49:13.444-05:00 level=INFO msg=cool-down incident=paymentFailure-r1 for=3m0s
+time=2026-11-08T23:52:13.441-05:00 level=INFO msg=done incident=paymentFailure-r1 recovered=true recovery_s=0.003254821
+campaign pilot: 30 done, 0 failed, 0 pending (progress in data/pilot-progress.json)
+[2026-11-09T04:52:13Z] 3/4 hardware wiring and iperf3 server
+ Container frontend Running 
+ Container astronomy-db Running 
+ Container product-catalog Running 
+ Container opamp-server Running 
+ Container telemetry-docs Running 
+ Container flagd Running 
+ Container toxiproxy-catalog Running 
+ Container shipping Running 
+ Container recommendation Running 
+ Container toxiproxy-payment Running 
+ Container opensearch Running 
+ Container fraud-detection Running 
+ Container currency Running 
+ Container cart Running 
+ Container quote Running 
+ Container grafana Running 
+ Container frontend-proxy Running 
+ Container otel-collector Running 
+ Container flagd-ui Running 
+ Container email Running 
+ Container prometheus Running 
+ Container valkey-cart Running 
+ Container kafka Running 
+ Container netem-payment Running 
+ Container ad Running 
+ Container netem-catalog Running 
+ Container image-provider Running 
+ Container accounting Running 
+ Container load-generator Running 
+ Container jaeger Running 
+ Container snapshotter Recreate 
+ Container payment Recreate 
+ Container snapshotter Recreated 
+ Container payment Recreated 
+ Container checkout Recreate 
+ Container checkout Recreated 
+ Container snapshotter Starting 
+ Container snapshotter Started 
+ Container opamp-server Waiting 
+ Container opensearch Waiting 
+ Container opensearch Healthy 
+ Container opamp-server Healthy 
+ Container opamp-server Waiting 
+ Container astronomy-db Waiting 
+ Container opamp-server Waiting 
+ Container valkey-cart Waiting 
+ Container payment Starting 
+ Container kafka Waiting 
+ Container kafka Waiting 
+ Container payment Started 
+ Container kafka Healthy 
+ Container opamp-server Healthy 
+ Container astronomy-db Healthy 
+ Container valkey-cart Healthy 
+ Container kafka Healthy 
+ Container opamp-server Healthy 
+ Container payment Waiting 
+ Container kafka Waiting 
+ Container email Waiting 
+ Container currency Waiting 
+ Container email Healthy 
+ Container kafka Healthy 
+ Container currency Healthy 
+ Container payment Healthy 
+ Container checkout Starting 
+ Container checkout Started 
+ Container ad Waiting 
+ Container image-provider Waiting 
+ Container recommendation Waiting 
+ Container currency Waiting 
+ Container quote Waiting 
+ Container quote Healthy 
+ Container image-provider Healthy 
+ Container recommendation Healthy 
+ Container ad Healthy 
+ Container currency Healthy 
+ Container frontend Waiting 
+ Container frontend Healthy 
+ Container opamp-server Waiting 
+ Container frontend Waiting 
+ Container flagd-ui Waiting 
+ Container telemetry-docs Waiting 
+ Container telemetry-docs Healthy 
+ Container opamp-server Healthy 
+ Container frontend Healthy 
+ Container flagd-ui Healthy 
+b266a6ac852fad279dcbe80fc81c8239d92edbdd3dc30308c3198c566f67b401
+PASS  Board A reachable by SSH key  
+PASS  Board A relay running  active
+PASS  Board A rootline-fault runs without a password  Connected to ac:91:9b:d7:24:13 (on wlan0)
+PASS  Board A transmit power can be lowered and restored  weak-on: wlan0 transmit power fixed at 100 mBm, auto revert in 60s
+PASS  Board B reachable by SSH key  
+PASS  Board B has iperf3 and the contention script  /usr/bin/iperf3
+PASS  Board B reaches the laptop's iperf3 server  contention: UDP 1Mbit/s to 192.168.1.178 for 2s (started 2026-11-09T04:53:10Z)
+[2026-11-09T04:53:13Z] 4/4 hardware campaign (12 snapshots, ~2.6 h)
+time=2026-11-08T23:53:13.268-05:00 level=INFO msg=warm-up incident=hwContention-r3 for=10m0s
+time=2026-11-09T00:03:13.314-05:00 level=INFO msg=baseline incident=hwContention-r3 for=5m0s
+time=2026-11-09T00:08:13.421-05:00 level=INFO msg=inject incident=hwContention-r3 fault=hwContention
+[2026-11-09T05:11:08Z] shutdown-watch: waiting for overnight.sh (pid 28467) to exit
+time=2026-11-09T00:13:17.185-05:00 level=INFO msg=snapshot incident=hwContention-r3 window_ms=600000
+time=2026-11-09T00:14:47.121-05:00 level=ERROR msg="incident failed" incident=hwContention-r3 err="clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+time=2026-11-09T00:14:47.348-05:00 level=INFO msg=baseline incident=hwWifiOutage-r3 for=5m0s
+time=2026-11-09T00:19:47.437-05:00 level=INFO msg=inject incident=hwWifiOutage-r3 fault=hwWifiOutage
+time=2026-11-09T00:24:51.305-05:00 level=INFO msg=snapshot incident=hwWifiOutage-r3 window_ms=600000
+time=2026-11-09T00:25:11.656-05:00 level=INFO msg=cool-down incident=hwWifiOutage-r3 for=3m0s
+time=2026-11-09T00:28:11.735-05:00 level=INFO msg=done incident=hwWifiOutage-r3 recovered=true recovery_s=0.002830352
+time=2026-11-09T00:28:15.632-05:00 level=INFO msg=baseline incident=hwContention-r1 for=5m0s
+time=2026-11-09T00:33:15.723-05:00 level=INFO msg=inject incident=hwContention-r1 fault=hwContention
+time=2026-11-09T00:38:19.340-05:00 level=INFO msg=snapshot incident=hwContention-r1 window_ms=600000
+time=2026-11-09T00:39:47.384-05:00 level=ERROR msg="incident failed" incident=hwContention-r1 err="clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+time=2026-11-09T00:39:47.611-05:00 level=INFO msg=baseline incident=hwWeakSignal-r4 for=5m0s
+time=2026-11-09T00:44:47.597-05:00 level=INFO msg=inject incident=hwWeakSignal-r4 fault=hwWeakSignal
+time=2026-11-09T00:49:51.466-05:00 level=INFO msg=snapshot incident=hwWeakSignal-r4 window_ms=600000
+time=2026-11-09T00:50:12.131-05:00 level=INFO msg=cool-down incident=hwWeakSignal-r4 for=3m0s
+time=2026-11-09T00:53:12.125-05:00 level=INFO msg=done incident=hwWeakSignal-r4 recovered=true recovery_s=0.003851308
+time=2026-11-09T00:53:16.111-05:00 level=INFO msg=baseline incident=hwWeakSignal-r1 for=5m0s
+time=2026-11-09T00:58:16.101-05:00 level=INFO msg=inject incident=hwWeakSignal-r1 fault=hwWeakSignal
+time=2026-11-09T01:03:19.864-05:00 level=INFO msg=snapshot incident=hwWeakSignal-r1 window_ms=600000
+time=2026-11-09T01:03:40.204-05:00 level=INFO msg=cool-down incident=hwWeakSignal-r1 for=3m0s
+time=2026-11-09T01:06:40.202-05:00 level=INFO msg=done incident=hwWeakSignal-r1 recovered=true recovery_s=0.005216846
+time=2026-11-09T01:06:44.220-05:00 level=INFO msg=baseline incident=hwWeakSignal-r2 for=5m0s
+time=2026-11-09T01:11:44.209-05:00 level=INFO msg=inject incident=hwWeakSignal-r2 fault=hwWeakSignal
+time=2026-11-09T01:16:48.020-05:00 level=INFO msg=snapshot incident=hwWeakSignal-r2 window_ms=600000
+time=2026-11-09T01:17:08.707-05:00 level=INFO msg=cool-down incident=hwWeakSignal-r2 for=3m0s
+time=2026-11-09T01:20:08.704-05:00 level=INFO msg=done incident=hwWeakSignal-r2 recovered=true recovery_s=0.004730181
+time=2026-11-09T01:20:12.661-05:00 level=INFO msg=baseline incident=hwWifiOutage-r4 for=5m0s
+time=2026-11-09T01:25:12.650-05:00 level=INFO msg=inject incident=hwWifiOutage-r4 fault=hwWifiOutage
+time=2026-11-09T01:30:16.470-05:00 level=INFO msg=snapshot incident=hwWifiOutage-r4 window_ms=600000
+time=2026-11-09T01:30:37.217-05:00 level=INFO msg=cool-down incident=hwWifiOutage-r4 for=3m0s
+time=2026-11-09T01:33:37.213-05:00 level=INFO msg=done incident=hwWifiOutage-r4 recovered=true recovery_s=0.003629711
+time=2026-11-09T01:33:41.108-05:00 level=INFO msg=baseline incident=hwWeakSignal-r3 for=5m0s
+time=2026-11-09T01:38:41.097-05:00 level=INFO msg=inject incident=hwWeakSignal-r3 fault=hwWeakSignal
+time=2026-11-09T01:43:44.890-05:00 level=INFO msg=snapshot incident=hwWeakSignal-r3 window_ms=600000
+time=2026-11-09T01:44:05.304-05:00 level=INFO msg=cool-down incident=hwWeakSignal-r3 for=3m0s
+time=2026-11-09T01:47:05.300-05:00 level=INFO msg=done incident=hwWeakSignal-r3 recovered=true recovery_s=0.003104407
+time=2026-11-09T01:47:09.264-05:00 level=INFO msg=baseline incident=hwContention-r2 for=5m0s
+time=2026-11-09T01:52:09.254-05:00 level=INFO msg=inject incident=hwContention-r2 fault=hwContention
+time=2026-11-09T01:57:12.785-05:00 level=INFO msg=snapshot incident=hwContention-r2 window_ms=600000
+time=2026-11-09T01:58:44.953-05:00 level=ERROR msg="incident failed" incident=hwContention-r2 err="clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+time=2026-11-09T01:58:45.152-05:00 level=INFO msg=baseline incident=hwWifiOutage-r1 for=5m0s
+time=2026-11-09T02:03:45.142-05:00 level=INFO msg=inject incident=hwWifiOutage-r1 fault=hwWifiOutage
+time=2026-11-09T02:08:48.871-05:00 level=INFO msg=snapshot incident=hwWifiOutage-r1 window_ms=600000
+time=2026-11-09T02:09:09.662-05:00 level=INFO msg=cool-down incident=hwWifiOutage-r1 for=3m0s
+time=2026-11-09T02:12:09.656-05:00 level=INFO msg=done incident=hwWifiOutage-r1 recovered=true recovery_s=0.002979329
+time=2026-11-09T02:12:13.632-05:00 level=INFO msg=baseline incident=hwWifiOutage-r2 for=5m0s
+time=2026-11-09T02:17:13.649-05:00 level=INFO msg=inject incident=hwWifiOutage-r2 fault=hwWifiOutage
+time=2026-11-09T02:22:17.423-05:00 level=INFO msg=snapshot incident=hwWifiOutage-r2 window_ms=600000
+time=2026-11-09T02:22:37.984-05:00 level=INFO msg=cool-down incident=hwWifiOutage-r2 for=3m0s
+time=2026-11-09T02:25:37.980-05:00 level=INFO msg=done incident=hwWifiOutage-r2 recovered=true recovery_s=0.00328749
+time=2026-11-09T02:25:41.909-05:00 level=INFO msg=baseline incident=hwContention-r4 for=5m0s
+time=2026-11-09T02:30:41.899-05:00 level=INFO msg=inject incident=hwContention-r4 fault=hwContention
+time=2026-11-09T02:35:45.434-05:00 level=INFO msg=snapshot incident=hwContention-r4 window_ms=600000
+time=2026-11-09T02:37:16.364-05:00 level=ERROR msg="incident failed" incident=hwContention-r4 err="clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+campaign hardware: 8 done, 4 failed, 0 pending (progress in data/hardware-progress.json)
+[2026-11-09T07:37:17Z] done: see data/pilot-progress.json and data/hardware-progress.json
+[2026-11-09T07:38:38Z] shutdown-watch: overnight run finished normally
+[2026-11-09T07:38:38Z] shutdown-watch: data: 42 snapshot folders; flushing disks
+[2026-11-09T07:38:38Z] shutdown-watch: shutting Windows down in 5 minutes (cancel with: shutdown /a)

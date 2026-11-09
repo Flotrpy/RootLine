@@ -1,0 +1,9 @@
+{
+  "fault": "recommendationCacheFailure",
+  "service": "recommendation",
+  "category": "memory_leak",
+  "layer": "application",
+  "edge": null,
+  "flag": "recommendationCacheFailure",
+  "variant": "on"
+}

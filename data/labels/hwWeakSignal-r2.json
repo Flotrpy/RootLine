@@ -1,0 +1,9 @@
+{
+  "fault": "hwWeakSignal",
+  "service": "payment",
+  "category": "network_loss",
+  "layer": "network",
+  "edge": "checkout->payment",
+  "flag": null,
+  "variant": null
+}
