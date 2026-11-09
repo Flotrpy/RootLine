@@ -50,7 +50,7 @@ healthy controls or the authorship checks.
    ```
 
    ```bash
-   huggingface-cli upload flotrpy/rootline dist/rootline-v0.1-data --repo-type dataset
+   huggingface-cli upload Flotrpy/rootline dist/rootline-v0.1-data --repo-type dataset
    ```
 
    Confirm the dataset id in `analysis/dataset.py` first.

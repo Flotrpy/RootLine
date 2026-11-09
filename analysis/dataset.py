@@ -15,8 +15,8 @@ import os
 import shutil
 from pathlib import Path
 
-DATASET_REPO = os.environ.get("ROOTLINE_HF_DATASET", "flotrpy/rootline")
-# TODO(flotrpy): confirm the Hugging Face dataset id before publishing.
+DATASET_REPO = os.environ.get("ROOTLINE_HF_DATASET", "Flotrpy/rootline")
+# Confirmed by flotrpy: the Hugging Face account is Flotrpy.
 
 CARD = """---
 license: cc-by-4.0
