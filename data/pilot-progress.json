@@ -46,21 +46,6 @@
       "recovery_seconds": 0.005045322,
       "finished_unix_ms": 1794187090346
     },
-    "emailMemoryLeak-r2": {
-      "incident_id": "emailMemoryLeak-r2",
-      "t0_unix_ms": 1794175473478,
-      "baseline": {
-        "error_ratio": 0.14367816091954025,
-        "p99_ms": 15000
-      },
-      "final": {
-        "error_ratio": 0.13546255506607932,
-        "p99_ms": 15000
-      },
-      "recovered": true,
-      "recovery_seconds": 0.003272564,
-      "finished_unix_ms": 1794175969398
-    },
     "healthy-r1": {
       "incident_id": "healthy-r1",
       "t0_unix_ms": 1794188992653,
@@ -90,21 +75,6 @@
       "recovered": true,
       "recovery_seconds": 0.006333741,
       "finished_unix_ms": 1794185495865
-    },
-    "imageSlowLoad-r1": {
-      "incident_id": "imageSlowLoad-r1",
-      "t0_unix_ms": 1794173880861,
-      "baseline": {
-        "error_ratio": 0.1196319018404908,
-        "p99_ms": 15000
-      },
-      "final": {
-        "error_ratio": 0.12444444444444443,
-        "p99_ms": 15000
-      },
-      "recovered": true,
-      "recovery_seconds": 0.003081334,
-      "finished_unix_ms": 1794174376937
     },
     "imageSlowLoad-r2": {
       "incident_id": "imageSlowLoad-r2",
@@ -453,5 +423,8 @@
     }
   },
   "failed": {},
-  "pending": []
+  "pending": [
+    "emailMemoryLeak-r2",
+    "imageSlowLoad-r1"
+  ]
 }

@@ -1,6 +1,70 @@
 {
   "plan": "hardware",
   "done": {
+    "hwContention-r1": {
+      "incident_id": "hwContention-r1",
+      "t0_unix_ms": 1794202395722,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "recovered": false,
+      "recovery_seconds": 0,
+      "finished_unix_ms": 1794202787384,
+      "note": "Snapshot taken. Clearing over SSH failed afterwards (Board B unreachable during its own flood); iperf3 stopped by itself after 300 s. Baseline and recovery were not recorded, so the health fields here are empty, not measured. Original error: clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+    },
+    "hwContention-r2": {
+      "incident_id": "hwContention-r2",
+      "t0_unix_ms": 1794207129254,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "recovered": false,
+      "recovery_seconds": 0,
+      "finished_unix_ms": 1794207524953,
+      "note": "Snapshot taken. Clearing over SSH failed afterwards (Board B unreachable during its own flood); iperf3 stopped by itself after 300 s. Baseline and recovery were not recorded, so the health fields here are empty, not measured. Original error: clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+    },
+    "hwContention-r3": {
+      "incident_id": "hwContention-r3",
+      "t0_unix_ms": 1794200893421,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "recovered": false,
+      "recovery_seconds": 0,
+      "finished_unix_ms": 1794201287121,
+      "note": "Snapshot taken. Clearing over SSH failed afterwards (Board B unreachable during its own flood); iperf3 stopped by itself after 300 s. Baseline and recovery were not recorded, so the health fields here are empty, not measured. Original error: clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+    },
+    "hwContention-r4": {
+      "incident_id": "hwContention-r4",
+      "t0_unix_ms": 1794209441899,
+      "baseline": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "final": {
+        "error_ratio": 0,
+        "p99_ms": 0
+      },
+      "recovered": false,
+      "recovery_seconds": 0,
+      "finished_unix_ms": 1794209836364,
+      "note": "Snapshot taken. Clearing over SSH failed afterwards (Board B unreachable during its own flood); iperf3 stopped by itself after 300 s. Baseline and recovery were not recorded, so the health fields here are empty, not measured. Original error: clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
+    },
     "hwWeakSignal-r1": {
       "incident_id": "hwWeakSignal-r1",
       "t0_unix_ms": 1794203896101,
@@ -122,11 +186,6 @@
       "finished_unix_ms": 1794206017213
     }
   },
-  "failed": {
-    "hwContention-r1": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: ",
-    "hwContention-r2": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: ",
-    "hwContention-r3": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: ",
-    "hwContention-r4": "clear: board B: ssh -o BatchMode=yes -o ConnectTimeout=10 -o ServerAliveInterval=5 -o ServerAliveCountMax=3 arduino@192.168.1.217 pkill -f 'iperf3 --client' || true: exit status 255: "
-  },
+  "failed": {},
   "pending": []
 }
