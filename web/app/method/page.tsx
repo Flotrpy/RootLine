@@ -20,7 +20,7 @@ const FAULTS: [string, string, string][] = [
 
 export default function Method() {
   return (
-    <>
+    <div className="wrap page">
       <h1>Method</h1>
       <p className="lede">
         Rootline runs the live system once to freeze snapshots, then replays the same snapshots to
@@ -93,6 +93,6 @@ export default function Method() {
         <li>Network faults are emulated; the hardware arm compares them with real Wi-Fi faults.</li>
         <li>Models may have seen the demo&apos;s public code; P1 measures reliance on names.</li>
       </ul>
-    </>
+    </div>
   );
 }

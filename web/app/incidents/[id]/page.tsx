@@ -21,16 +21,16 @@ export default async function IncidentPage({ params }: { params: Promise<{ id: s
   const incident = getIncidents().find((i) => i.id === id);
   if (!incident) {
     return (
-      <>
+      <div className="wrap page">
         <h1>No incidents yet</h1>
         <div className="card empty">
           Snapshots appear here once they are published. <Link href="/">Back to results</Link>
         </div>
-      </>
+      </div>
     );
   }
   return (
-    <>
+    <div className="wrap page">
       <p>
         <Link href="/incidents/">← All incidents</Link>
       </p>
@@ -46,6 +46,6 @@ export default async function IncidentPage({ params }: { params: Promise<{ id: s
         label={site.labels_included ? (incident.label ?? null) : null}
         hasRuns={site.has_runs}
       />
-    </>
+    </div>
   );
 }

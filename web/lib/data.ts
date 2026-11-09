@@ -32,3 +32,13 @@ export const getPack = (id: string, condition: string, perturbation: string): Pa
 // Static export needs at least one path per dynamic route; "none" renders
 // the empty state when there are no snapshots yet.
 export const NO_INCIDENT = "none";
+
+// A photo in web/public/photos/<name>.(jpg|jpeg|png|webp), if one was added.
+export function photo(name: string): string | undefined {
+  for (const ext of ["jpg", "jpeg", "png", "webp"]) {
+    if (existsSync(join(process.cwd(), "public", "photos", `${name}.${ext}`))) {
+      return `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/photos/${name}.${ext}`;
+    }
+  }
+  return undefined;
+}

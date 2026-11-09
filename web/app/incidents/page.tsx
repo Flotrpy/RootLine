@@ -8,7 +8,7 @@ export default function Incidents() {
   const site = getSite();
   const incidents = getIncidents();
   return (
-    <>
+    <div className="wrap page">
       <h1>Incidents</h1>
       <p className="lede">
         Each snapshot is ten minutes of telemetry around one injected fault, or a healthy control.{" "}
@@ -25,6 +25,6 @@ export default function Incidents() {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

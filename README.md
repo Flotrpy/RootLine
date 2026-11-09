@@ -252,6 +252,10 @@ uv run --project harness python -m analysis site-data
 cd web && pnpm install && NEXT_PUBLIC_BASE_PATH="" pnpm build
 ```
 
+Photos of the two boards go in `web/public/photos/board-a.jpg` and
+`board-b.jpg` (`.png` or `.webp` also work); the site shows them next to
+its drawings once they exist.
+
 The site deploys to GitHub Pages only at release, by hand (`pages.yml`),
 built with `--include-labels`: incident IDs name the faults, so an earlier
 deploy would reveal the answers.

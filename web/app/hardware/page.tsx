@@ -1,43 +1,111 @@
+import { BoardFigure } from "@/components/BoardFigure";
+import { WiringDiagram } from "@/components/WiringDiagram";
+import { photo } from "@/lib/data";
+
 export const metadata = { title: "Hardware · Rootline" };
+
+const FAULTS = [
+  ["hwWeakSignal", "Board A", "Transmit power to 1 dBm (from about 20 dBm). Reverts by itself after 8 minutes at the latest.", "netemLoss"],
+  ["hwContention", "Board B", "30 Mbit/s of UDP to the laptop for 5 minutes on the same 2.4 GHz channel.", "toxiLatency"],
+  ["hwWifiOutage", "Board A", "Radio off for 30 seconds, then back on. Replaces unplugging the board by hand.", "toxiReset"],
+];
 
 export default function Hardware() {
   return (
-    <>
-      <h1>Hardware: real Wi-Fi faults</h1>
+    <div className="wrap page">
+      <p className="eyebrow">
+        <b>●</b> Hardware arm · exploratory
+      </p>
+      <h1 className="page-title">
+        Real Wi-Fi faults on <em>two Arduino UNO Q</em> boards.
+      </h1>
       <p className="lede">
-        Two Arduino UNO Q boards test whether models diagnose a genuinely degraded Wi-Fi link the
-        same way they diagnose an emulated one (&quot;emulation validity&quot;).
+        Emulated network faults are clean: a proxy adds exactly 300 ms, or drops exactly 5% of
+        packets. A real radio link fails messily. The hardware arm routes one link of the shop over
+        real Wi-Fi, degrades it, and asks whether models read it the way they read the emulated
+        version (&quot;emulation validity&quot;). It is reported next to the main results, outside the
+        hypothesis tests.
       </p>
 
-      <div className="grid">
-        <div className="card">
-          <strong>Board A: real-network relay</strong>
+      <div className="boards" style={{ marginTop: 56 }}>
+        <div className="board">
+          <BoardFigure board="A" photo={photo("board-a")} />
+          <h3>Board A, the relay</h3>
           <p>
-            A small Go TCP relay on the board&apos;s Linux side carries the checkout → payment
-            traffic over Wi-Fi instead of through Toxiproxy, and exports OpenTelemetry data to the
-            snapshotter. Faults: reduced transmit power, a congested 2.4 GHz band, and a 30-second Wi-Fi outage.
+            A small Go program, <code>edge-relay</code>, runs as a systemd service on the board&apos;s
+            Linux side. In the hardware wiring, checkout sends its payment requests to the board, which
+            forwards them over Wi-Fi to payment on the laptop and reports its own telemetry to the
+            snapshotter.
           </p>
         </div>
-        <div className="card">
-          <strong>Board B: contention and demo panel</strong>
+        <div className="board">
+          <BoardFigure board="B" photo={photo("board-b")} />
+          <h3>Board B, the crowd</h3>
           <p>
-            Generates controlled contention on the lab&apos;s own network with iperf3 and logs
-            signal strength and throughput. Two buttons trigger a fault and a reset through the
-            controller; LEDs show healthy, faulty and diagnosing, and a small display shows the
-            model&apos;s top hypothesis.
+            Runs iperf3 to fill the 2.4 GHz channel with traffic to a server on the laptop, and can log
+            signal strength and throughput. The optional demo panel (buttons, LEDs and a small display on
+            the microcontroller) lives here too, for the launch video only.
           </p>
         </div>
       </div>
 
-      <h2>Safety</h2>
-      <p>
-        Contention is created only on the lab&apos;s own isolated network and channel, never on
-        anyone else&apos;s.
-      </p>
+      <h2>Wiring</h2>
+      <WiringDiagram />
 
-      <div className="card empty" style={{ marginTop: 24 }}>
-        Photos and hardware results are added after the hardware snapshots are collected.
+      <h2>The three faults</h2>
+      <div className="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Fault</th>
+              <th>Board</th>
+              <th>What happens</th>
+              <th>Compared with</th>
+            </tr>
+          </thead>
+          <tbody>
+            {FAULTS.map(([n, b, d, e]) => (
+              <tr key={n}>
+                <td className="mono">{n}</td>
+                <td>{b}</td>
+                <td>{d}</td>
+                <td className="mono">{e}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </>
+
+      <h2>Safety and limits</h2>
+      <ul className="limits">
+        <li>
+          <div>
+            <strong>Own network only</strong>
+            <p>The contention script refuses any server outside private address ranges and points at the laptop.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Undo is built in</strong>
+            <p>Each fault schedules its own revert on the board before it starts, so a lost SSH session never leaves it in place.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Not the same as distance</strong>
+            <p>Lower transmit power degrades Board A&apos;s uplink only. It is a real radio impairment, not the same as moving the board away.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Extra evidence</strong>
+            <p>Hardware snapshots contain the edge-relay service, which emulated snapshots do not.</p>
+          </div>
+        </li>
+      </ul>
+      <p className="q-deferred">
+        Results for the 12 hardware snapshots appear on the home page once they are scored.
+      </p>
+    </div>
   );
 }
