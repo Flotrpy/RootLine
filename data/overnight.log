@@ -766,3 +766,183 @@ campaign hardware: 8 done, 4 failed, 0 pending (progress in data/hardware-progre
 [2026-11-09T07:38:38Z] shutdown-watch: overnight run finished normally
 [2026-11-09T07:38:38Z] shutdown-watch: data: 42 snapshot folders; flushing disks
 [2026-11-09T07:38:38Z] shutdown-watch: shutting Windows down in 5 minutes (cancel with: shutdown /a)
+[2026-11-09T13:11:43Z] rerun: emailMemoryLeak-r2 imageSlowLoad-r1
+ Container astronomy-db Running 
+ Container shipping Running 
+ Container load-generator Running 
+ Container quote Running 
+ Container flagd-ui Running 
+ Container grafana Running 
+ Container frontend-proxy Running 
+ Container telemetry-docs Running 
+ Container jaeger Running 
+ Container frontend Running 
+ Container toxiproxy-catalog Running 
+ Container recommendation Running 
+ Container valkey-cart Running 
+ Container prometheus Running 
+ Container cart Running 
+ Container product-catalog Running 
+ Container fraud-detection Running 
+ Container email Running 
+ Container ad Running 
+ Container netem-payment Running 
+ Container opensearch Running 
+ Container toxiproxy-payment Running 
+ Container currency Running 
+ Container accounting Running 
+ Container kafka Running 
+ Container image-provider Running 
+ Container netem-catalog Running 
+ Container opamp-server Running 
+ Container flagd Running 
+ Container otel-collector Running 
+ Container snapshotter Recreate 
+ Container payment Recreate 
+ Container snapshotter Recreated 
+ Container payment Recreated 
+ Container checkout Recreate 
+ Container checkout Recreated 
+ Container snapshotter Starting 
+ Container snapshotter Started 
+ Container opamp-server Waiting 
+ Container opensearch Waiting 
+ Container opensearch Healthy 
+ Container opamp-server Healthy 
+ Container kafka Waiting 
+ Container kafka Waiting 
+ Container valkey-cart Waiting 
+ Container opamp-server Waiting 
+ Container payment Starting 
+ Container astronomy-db Waiting 
+ Container opamp-server Waiting 
+ Container payment Started 
+ Container kafka Healthy 
+ Container valkey-cart Healthy 
+ Container kafka Healthy 
+ Container astronomy-db Healthy 
+ Container opamp-server Healthy 
+ Container opamp-server Healthy 
+ Container email Waiting 
+ Container currency Waiting 
+ Container kafka Waiting 
+ Container payment Waiting 
+ Container kafka Healthy 
+ Container email Healthy 
+ Container currency Healthy 
+ Container payment Healthy 
+ Container checkout Starting 
+ Container checkout Started 
+ Container quote Waiting 
+ Container recommendation Waiting 
+ Container ad Waiting 
+ Container currency Waiting 
+ Container image-provider Waiting 
+ Container image-provider Healthy 
+ Container recommendation Healthy 
+ Container quote Healthy 
+ Container currency Healthy 
+ Container ad Healthy 
+ Container frontend Waiting 
+ Container frontend Healthy 
+ Container frontend Waiting 
+ Container flagd-ui Waiting 
+ Container telemetry-docs Waiting 
+ Container opamp-server Waiting 
+ Container telemetry-docs Healthy 
+ Container frontend Healthy 
+ Container flagd-ui Healthy 
+ Container opamp-server Healthy 
+[2026-11-09T13:12:02Z] checkout PAYMENT_ADDR is 'OCI runtime exec failed: exec failed: unable to start container process: exec: "printenv": executable file not found in $PATH', not Toxiproxy; stopping
+[2026-11-09T13:12:20Z] rerun: emailMemoryLeak-r2 imageSlowLoad-r1
+ Container ad Running 
+ Container kafka Running 
+ Container toxiproxy-catalog Running 
+ Container frontend-proxy Running 
+ Container netem-catalog Running 
+ Container jaeger Running 
+ Container load-generator Running 
+ Container astronomy-db Running 
+ Container checkout Running 
+ Container telemetry-docs Running 
+ Container prometheus Running 
+ Container frontend Running 
+ Container payment Running 
+ Container netem-payment Running 
+ Container valkey-cart Running 
+ Container email Running 
+ Container opamp-server Running 
+ Container cart Running 
+ Container snapshotter Running 
+ Container quote Running 
+ Container accounting Running 
+ Container product-catalog Running 
+ Container otel-collector Running 
+ Container opensearch Running 
+ Container toxiproxy-payment Running 
+ Container grafana Running 
+ Container shipping Running 
+ Container flagd Running 
+ Container fraud-detection Running 
+ Container recommendation Running 
+ Container currency Running 
+ Container flagd-ui Running 
+ Container image-provider Running 
+ Container opensearch Waiting 
+ Container opamp-server Waiting 
+ Container opamp-server Healthy 
+ Container opensearch Healthy 
+ Container kafka Waiting 
+ Container valkey-cart Waiting 
+ Container opamp-server Waiting 
+ Container astronomy-db Waiting 
+ Container kafka Waiting 
+ Container opamp-server Waiting 
+ Container kafka Healthy 
+ Container kafka Healthy 
+ Container astronomy-db Healthy 
+ Container valkey-cart Healthy 
+ Container opamp-server Healthy 
+ Container opamp-server Healthy 
+ Container kafka Waiting 
+ Container payment Waiting 
+ Container currency Waiting 
+ Container email Waiting 
+ Container kafka Healthy 
+ Container currency Healthy 
+ Container payment Healthy 
+ Container email Healthy 
+ Container currency Waiting 
+ Container ad Waiting 
+ Container image-provider Waiting 
+ Container recommendation Waiting 
+ Container quote Waiting 
+ Container image-provider Healthy 
+ Container recommendation Healthy 
+ Container currency Healthy 
+ Container ad Healthy 
+ Container quote Healthy 
+ Container frontend Waiting 
+ Container frontend Healthy 
+ Container opamp-server Waiting 
+ Container telemetry-docs Waiting 
+ Container frontend Waiting 
+ Container flagd-ui Waiting 
+ Container frontend Healthy 
+ Container flagd-ui Healthy 
+ Container opamp-server Healthy 
+ Container telemetry-docs Healthy 
+[2026-11-09T13:12:24Z] checkout -> payment goes through Toxiproxy (toxiproxy-payment:50051)
+time=2026-11-09T08:12:26.869-05:00 level=INFO msg=warm-up incident=imageSlowLoad-r1 for=10m0s
+time=2026-11-09T08:22:26.936-05:00 level=INFO msg=baseline incident=imageSlowLoad-r1 for=5m0s
+time=2026-11-09T08:27:27.028-05:00 level=INFO msg=inject incident=imageSlowLoad-r1 fault=imageSlowLoad
+time=2026-11-09T08:32:27.115-05:00 level=INFO msg=snapshot incident=imageSlowLoad-r1 window_ms=600000
+time=2026-11-09T08:32:43.634-05:00 level=INFO msg=cool-down incident=imageSlowLoad-r1 for=3m0s
+time=2026-11-09T08:35:43.702-05:00 level=INFO msg=done incident=imageSlowLoad-r1 recovered=true recovery_s=0.002871808
+time=2026-11-09T08:35:43.929-05:00 level=INFO msg=baseline incident=emailMemoryLeak-r2 for=5m0s
+time=2026-11-09T08:40:44.014-05:00 level=INFO msg=inject incident=emailMemoryLeak-r2 fault=emailMemoryLeak
+time=2026-11-09T08:45:44.073-05:00 level=INFO msg=snapshot incident=emailMemoryLeak-r2 window_ms=600000
+time=2026-11-09T08:46:00.429-05:00 level=INFO msg=cool-down incident=emailMemoryLeak-r2 for=3m0s
+time=2026-11-09T08:49:00.495-05:00 level=INFO msg=done incident=emailMemoryLeak-r2 recovered=true recovery_s=0.002712313
+campaign pilot: 30 done, 0 failed, 0 pending (progress in data/pilot-progress.json)
+[2026-11-09T13:49:00Z] rerun done: see data/pilot-progress.json
