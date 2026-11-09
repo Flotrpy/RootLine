@@ -22,17 +22,30 @@ class Model:
     litellm: str  # model string passed to LiteLLM
     tier: Tier
     provider: str
+    # Extra LiteLLM arguments, as (name, value) pairs so the model stays hashable.
+    options: tuple[tuple[str, object], ...] = ()
 
 
-# Tier C comes from the charter. TODO(flotrpy): add the Tier A (~3-4B) and
-# Tier B (7-9B) models once chosen, with exact tags and quantisation, e.g.
-#   Model("<name>-q4", "ollama/<tag>", "A", "ollama")
-#   Model("<name>-awq", "hosted_vllm/<hf-repo>", "B", "vllm")
+# The v0.1 models: one per size, all open-weight and free to run.
+# Tier A and B run locally in Ollama at its default 4-bit quantisation
+# (Q4_K_M); `ollama pull` the exact tags below. Ollama's default context
+# (2-4k) would silently cut a 6,000-token pack, so num_ctx is set with room
+# for tokenizers that count more tokens than cl100k_base. Qwen3 answers
+# without its thinking mode, so it returns the JSON directly.
+_LOCAL_CTX = ("num_ctx", 12288)
 MODELS: dict[str, Model] = {
     m.id: m
     for m in (
         Model("gpt-oss-120b@cerebras", "cerebras/gpt-oss-120b", "C", "cerebras"),
         Model("gpt-oss-120b@groq", "groq/openai/gpt-oss-120b", "C", "groq"),
+        Model(
+            "qwen3-8b-q4@ollama",
+            "ollama_chat/qwen3:8b",
+            "B",
+            "ollama",
+            (_LOCAL_CTX, ("reasoning_effort", "none")),
+        ),
+        Model("gemma3-4b-q4@ollama", "ollama_chat/gemma3:4b", "A", "ollama", (_LOCAL_CTX,)),
     )
 }
 

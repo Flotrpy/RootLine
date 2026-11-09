@@ -262,3 +262,10 @@ def test_litellm_client_reads_usage(monkeypatch) -> None:
     assert (c.prompt_tokens, c.completion_tokens, c.text) == (321, 45, GOOD)
     assert seen["temperature"] == 0.0 and seen["seed"] == 0 and seen["num_retries"] == 0
     assert seen["api_base"] == "http://localhost:11434"
+    assert "num_ctx" not in seen
+
+    # Local models get the full context window, and Qwen3 skips thinking.
+    seen.clear()
+    LiteLLMClient(lim).complete(MODELS["qwen3-8b-q4@ollama"], "prompt")
+    assert seen["model"] == "ollama_chat/qwen3:8b"
+    assert seen["num_ctx"] == 12288 and seen["reasoning_effort"] == "none"

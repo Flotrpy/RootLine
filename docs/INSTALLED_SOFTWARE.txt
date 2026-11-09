@@ -51,6 +51,14 @@ To remove pieces individually instead:
       Remove: rm ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.pub
   Go module cache .................... ~/go
       Remove: rm -rf ~/go
+  Claude Code ........................ ~/.local/bin/claude, settings in ~/.claude
+      Remove: rm -rf ~/.local/bin/claude ~/.local/share/claude ~/.claude
+  Ollama (planned) ................... runs Qwen3 8B and Gemma 3 4B locally
+      Remove: sudo systemctl disable --now ollama && sudo rm /usr/local/bin/ollama
+              /etc/systemd/system/ollama.service && sudo rm -rf /usr/share/ollama
+              && sudo userdel ollama
+  Ollama models (planned) ............ qwen3:8b (5.2 GB), gemma3:4b (3.4 GB)
+      Remove: ollama rm qwen3:8b gemma3:4b   (or delete them with Ollama itself)
 
 
 3. DOCKER (planned, created when the demo runs)
@@ -108,7 +116,8 @@ To remove pieces individually instead:
 -------------------------------
   GitHub repository Flotrpy/RootLine (branch claude/optimistic-johnson-tp1lxw, PR #1)
   (planned) Hugging Face dataset, Zenodo record, GitHub Pages site at release
-  (planned) API keys for Cerebras and Groq free tiers, Kaggle notebook
+  (planned) Cerebras account and API key (free trial; may ask for a card)
+      Remove: delete the key and the account at cloud.cerebras.ai
 
 
 TECHNOLOGIES USED (names only, for your notes)

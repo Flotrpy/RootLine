@@ -18,7 +18,9 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 
 ## Models and results
 
-- [ ] Choose the free models to score (Tier A/B still open)
+- [x] Choose the models: gpt-oss-120b (Cerebras), Qwen3 8B and Gemma 3 4B (Ollama)
+- [ ] Cerebras account and API key, set as `CEREBRAS_API_KEY` on the laptop (never in the repo)
+- [ ] Install Ollama on the laptop and `ollama pull qwen3:8b && ollama pull gemma3:4b` (after the campaign)
 - [ ] Gate 2: the same snapshot scored twice gives the same answer
 - [ ] Score all snapshots, default (P0) runs only: `run enqueue`, `run work`, `run export`
 - [ ] `make reproduce`: results table and the RQ1 and RQ2 charts
@@ -39,7 +41,6 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 ## Cleanup (later)
 
 - [ ] Uninstall what is no longer needed: see `docs/INSTALLED_SOFTWARE.txt`
-- [ ] Add Claude Code to that list (`rm -rf ~/.local/bin/claude ~/.claude`)
 
 ## v0.2 (held back)
 

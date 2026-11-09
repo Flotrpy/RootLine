@@ -10,11 +10,13 @@
 
 providers:
   cerebras:
+    # Free trial for gpt-oss-120b as reported in Nov 2026: 5 rpm, 30k
+    # uncached tokens/min, 1M tokens/hour and /day. Set a little below.
     api_base: null
-    rpm: 30
-    rpd: 14000
-    tpm: 60000
-    tpd: 1000000
+    rpm: 4
+    rpd: null
+    tpm: 25000
+    tpd: 900000
   groq:
     api_base: null
     rpm: 30

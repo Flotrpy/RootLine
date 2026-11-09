@@ -167,6 +167,25 @@ From the repository root, after the overnight campaign has written
 `data/snapshots/` and `data/labels/`. Models and provider caps live in
 `harness/rootline_harness/scheduler/` (`providers.py`, `ratelimits.yaml`).
 
+v0.1 scores three open-weight models, one per size:
+
+| Model ID | Size | Runs on |
+|----------|------|---------|
+| `gpt-oss-120b@cerebras` | 120B (Tier C) | Cerebras free tier (`CEREBRAS_API_KEY`) |
+| `qwen3-8b-q4@ollama` | 8B, Q4_K_M (Tier B) | Ollama on the laptop |
+| `gemma3-4b-q4@ollama` | 4B, Q4_K_M (Tier A) | Ollama on the laptop |
+
+For the local models, install [Ollama](https://ollama.com) and pull the
+exact tags (about 8.6 GB). Run them only when no campaign is running:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+```bash
+ollama pull qwen3:8b && ollama pull gemma3:4b
+```
+
 1. Gate 2, the same snapshot scored twice must match:
 
    ```bash
@@ -176,7 +195,7 @@ From the repository root, after the overnight campaign has written
 2. Queue and run (resumable; waits out rate limits instead of hitting them):
 
    ```bash
-   uv run --project harness python -m rootline_harness.run enqueue --models gpt-oss-120b@cerebras
+   uv run --project harness python -m rootline_harness.run enqueue --models gpt-oss-120b@cerebras qwen3-8b-q4@ollama gemma3-4b-q4@ollama
    uv run --project harness python -m rootline_harness.run work
    uv run --project harness python -m rootline_harness.run status
    uv run --project harness python -m rootline_harness.run export

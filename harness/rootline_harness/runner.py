@@ -85,7 +85,7 @@ class LiteLLMClient:
         from litellm import exceptions as llm_errors
 
         lim = self.limits.get(model.provider)
-        kwargs: dict[str, object] = {}
+        kwargs: dict[str, object] = dict(model.options)
         if lim and lim.api_base:
             kwargs["api_base"] = lim.api_base
         start = time.perf_counter()
