@@ -293,3 +293,23 @@ func TestHardwarePlanFile(t *testing.T) {
 		}
 	}
 }
+
+func TestSelfClearingFaultSurvivesFailedClear(t *testing.T) {
+	base := health.Sample{ErrorRatio: 0.01, P99Ms: 300}
+	r, _, snap, _ := newRunner(t, &scriptedProbe{samples: []health.Sample{base}})
+	r.Injector.Boards = &inject.FakeBoards{Err: errors.New("ssh: exit status 255"), ErrOn: "pkill"}
+	f, _ := catalog.Lookup("hwContention")
+	res, err := r.Run(context.Background(), f, 1, false)
+	if err != nil {
+		t.Fatalf("self-clearing fault failed the incident: %v", err)
+	}
+	if len(snap.reqs) != 1 || !res.Recovered || res.Note == "" {
+		t.Fatalf("want snapshot, recovery check and a note; got %+v", res)
+	}
+
+	// A fault that does not end by itself still fails loudly.
+	f.SelfClearing = false
+	if _, err := r.Run(context.Background(), f, 2, false); err == nil {
+		t.Fatal("failed clear of a lasting fault was ignored")
+	}
+}

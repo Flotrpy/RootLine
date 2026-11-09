@@ -3,6 +3,7 @@ package inject
 import (
 	"context"
 	"fmt"
+	"strings"
 	"sync"
 
 	"github.com/flotrpy/rootline/controller/internal/toxi"
@@ -130,11 +131,16 @@ type FakeBoards struct {
 	mu    sync.Mutex
 	Calls []string // "board|cmd|attempts"
 	Err   error
+	// ErrOn limits Err to commands containing this text (all when empty).
+	ErrOn string
 }
 
 func (f *FakeBoards) Exec(_ context.Context, board, cmd string, attempts int) error {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	f.Calls = append(f.Calls, fmt.Sprintf("%s|%s|%d", board, cmd, attempts))
+	if f.ErrOn != "" && !strings.Contains(cmd, f.ErrOn) {
+		return nil
+	}
 	return f.Err
 }

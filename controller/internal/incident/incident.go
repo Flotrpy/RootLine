@@ -127,6 +127,8 @@ type Result struct {
 	Recovered       bool          `json:"recovered"`
 	RecoverySeconds float64       `json:"recovery_seconds"`
 	FinishedUnixMs  int64         `json:"finished_unix_ms"`
+	// Note records anything unusual that did not invalidate the snapshot.
+	Note string `json:"note,omitempty"`
 }
 
 // Runner executes incidents.
@@ -192,7 +194,7 @@ func (r *Runner) Run(ctx context.Context, f catalog.Fault, replica int, warmup b
 		// Clear with a fresh context so a cancelled run still cleans up.
 		cctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
-		if cerr := r.Injector.Clear(cctx, f); cerr != nil && err == nil {
+		if cerr := r.Injector.Clear(cctx, f); cerr != nil && err == nil && !f.SelfClearing {
 			err = fmt.Errorf("clear: %w", cerr)
 		}
 	}()
@@ -213,7 +215,11 @@ func (r *Runner) Run(ctx context.Context, f catalog.Fault, replica int, warmup b
 	}
 
 	if err := r.Injector.Clear(ctx, f); err != nil {
-		return res, fmt.Errorf("clear: %w", err)
+		if !f.SelfClearing {
+			return res, fmt.Errorf("clear: %w", err)
+		}
+		lg.Warn("clear failed; the fault ends by itself", "err", err)
+		res.Note = "clear failed after the snapshot; the fault ended by itself: " + err.Error()
 	}
 	lg.Info("cool-down", "for", p.Cooldown)
 	if err := r.Clock.Sleep(ctx, p.Cooldown); err != nil {

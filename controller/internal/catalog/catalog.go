@@ -100,6 +100,11 @@ type Fault struct {
 	// Emulates names the emulated fault a hardware fault is compared with
 	// in the emulation-validity analysis.
 	Emulates string
+	// SelfClearing faults end by themselves (a timed iperf3 run, a revert
+	// timer on the board), so a failed clear after the snapshot is logged
+	// instead of failing the incident. Contention can make Board B
+	// unreachable over SSH until its own flood stops.
+	SelfClearing bool
 }
 
 // Label is the ground truth written to data/labels/<incident_id>.json.
@@ -161,17 +166,17 @@ var hardware = []Fault{
 		Board:        "A",
 		RemoteInject: "sudo -n /usr/local/bin/rootline-fault weak-on {txpower_mbm}",
 		RemoteClear:  "sudo -n /usr/local/bin/rootline-fault weak-off",
-		Emulates:     "netemLoss"},
+		Emulates:     "netemLoss", SelfClearing: true},
 	{Name: "hwContention", Kind: KindRemote, Service: "payment", Category: CatNetworkLatency, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
 		Board:        "B",
 		RemoteInject: "IPERF_SERVER={iperf_server} BITRATE={contention_bitrate} DURATION=300 nohup bash ~/iperf_contention.sh >/tmp/rootline-iperf.log 2>&1 </dev/null &",
 		RemoteClear:  "pkill -f 'iperf3 --client' || true",
-		Emulates:     "toxiLatency"},
+		Emulates:     "toxiLatency", SelfClearing: true},
 	{Name: "hwWifiOutage", Kind: KindRemote, Service: "payment", Category: CatNetworkReset, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
 		Board:        "A",
 		RemoteInject: "sudo -n /usr/local/bin/rootline-fault outage 30",
 		RemoteClear:  "sudo -n /usr/local/bin/rootline-fault status >/dev/null",
-		Emulates:     "toxiReset"},
+		Emulates:     "toxiReset", SelfClearing: true},
 }
 
 // Hardware returns the hardware-arm faults.
