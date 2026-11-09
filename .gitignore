@@ -6,6 +6,9 @@ data/labels/*
 data/runs/*
 !data/runs/.gitkeep
 data/holdout/
+# Scoring queues hold model answers; they live in the private Hugging Face
+# work dataset (scripts/score_daily.py), not in git.
+data/queue*.sqlite*
 # Moved-aside runs (labels included), this machine's image digests, the night log
 data/old/
 data/image-digests.json
