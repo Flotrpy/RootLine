@@ -44,3 +44,4 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 ## v0.2 (held back)
 
 - [ ] RQ3 name reliance (P1 runs), RQ4 cascade, RQ5 remediation trials, RQ6 baseline
+- [ ] Second testbed on Kubernetes (Docker Desktop single-node cluster, demo's Helm chart; network faults via Chaos Mesh or in-cluster Toxiproxy). Only after v0.1, with the Compose demo stopped
