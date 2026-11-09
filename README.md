@@ -9,7 +9,8 @@ faults, how easily misleading evidence fools them, and whether their proposed
 fixes actually restore service.
 
 > Status: v0.1 pilot under construction. No results yet. Every number that
-> appears here later is produced by `make reproduce`.
+> appears here later is produced by `make reproduce`. v0.1 answers RQ1 and
+> RQ2 only; see [Limitations](#limitations).
 
 ## How it works
 
@@ -30,14 +31,18 @@ fixes actually restore service.
 
 ## Research questions
 
-| # | Question |
-|---|----------|
-| RQ1 | Which telemetry signals does a model need for a correct diagnosis? |
-| RQ2 | Can models tell network faults from application faults? |
-| RQ3 | Do models reason from evidence or from service names? |
-| RQ4 | How much accuracy does a cheap-first cascade keep? |
-| RQ5 | Do correct diagnoses lead to working fixes? |
-| RQ6 | Do LLMs beat a classical ML baseline? |
+| # | Question | Release |
+|---|----------|---------|
+| RQ1 | Which telemetry signals does a model need for a correct diagnosis? | v0.1 |
+| RQ2 | Can models tell network faults from application faults? | v0.1 |
+| RQ3 | Do models reason from evidence or from service names? | v0.2 |
+| RQ4 | How much accuracy does a cheap-first cascade keep? | v0.2 |
+| RQ5 | Do correct diagnoses lead to working fixes? | v0.2 |
+| RQ6 | Do LLMs beat a classical ML baseline? | v0.2 |
+
+v0.1 tests only RQ1 and RQ2, with Holm correction across those two. The
+code for RQ3 to RQ6 stays in the repository, but their hypotheses are
+reported as "deferred to v0.2" and not tested.
 
 Scope: only freely available open-weight models and free-tier APIs. Results
 characterise what budget-constrained teams can achieve today, not the frontier.
@@ -114,6 +119,44 @@ at a pinned release tag. Docs: [architecture](docs/ARCHITECTURE.md),
    ./bin/rootlinectl campaign --plan plans/pilot.yaml
    ```
 
+## Limitations
+
+v0.1 is a pilot. Read every result with these limits in mind.
+
+- **Small sample.** Two replicas of each of 15 incident types (30
+  snapshots). Confidence intervals are wide, and a result that misses
+  significance may only mean the sample is too small to show it. All
+  results are reported, including negative ones.
+- **Two questions only.** v0.1 tests RQ1 (which signals) and RQ2 (network
+  vs application). It says nothing about name reliance, cascades, whether
+  fixes work, or classical baselines; those are v0.2.
+- **One testbed, one machine.** Every snapshot comes from the
+  OpenTelemetry Demo 3.1.0 on Docker Compose, on one Windows laptop (WSL2),
+  under a fixed load of 20 simulated users. Real production systems are
+  larger, noisier and less tidy. Findings may not carry over.
+- **Changed resource limits.** To keep the demo stable at this load,
+  `compose.override.yml` raises the memory limits of a few services,
+  including the database (see the comments in that file). Snapshots that
+  overlapped a crash of the testbed itself were moved aside and run again;
+  their originals are kept, not deleted.
+- **Faults the models may have seen.** The application faults are the
+  demo's own public feature flags. Flag and fault names are removed from
+  every prompt, but service names are not, and models may know the demo's
+  source code from training.
+- **Scoring choices.** For network faults the scored root cause is the
+  downstream service of the broken edge (for example `payment` for
+  checkout → payment). Other reasonable choices would change some scores.
+  Prompts are capped at 6,000 tokens, so some evidence is dropped by design.
+- **Free models only.** Only open-weight models and free-tier APIs, each
+  scored once per snapshot and condition at temperature 0. Hosted models
+  can change without notice; the model ID and date of every run are
+  recorded.
+- **Hardware arm.** 12 snapshots on one home Wi-Fi network with two
+  Arduino UNO Q boards. Lowering transmit power affects only the board's
+  uplink, a 30-second radio-off stands in for a power cut, and hardware
+  snapshots contain an extra service (`edge-relay`) that emulated ones do
+  not. It is reported as exploratory, outside the hypothesis tests.
+
 ## Licence
 
 Code: Apache-2.0. Dataset: CC BY 4.0.
@@ -139,9 +182,10 @@ From the repository root, after the overnight campaign has written
    uv run --project harness python -m rootline_harness.run export
    ```
 
-   Add `--perturb p1` to `enqueue` for the anonymised-names runs.
+   v0.1 needs only the default (P0) runs. `--perturb p1` adds the
+   anonymised-names runs for RQ3 (v0.2).
 
-3. Live remediation trials with the best model's own actions:
+3. (v0.2, RQ5) Live remediation trials with the best model's own actions:
 
    ```bash
    uv run --project harness python -m analysis plan-remediation
