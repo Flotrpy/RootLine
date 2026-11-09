@@ -1,20 +1,22 @@
-/* Rootline. An incident report, set like a printed research brief:
-   warm paper, ink, one signal colour for faults, hairline rules.
+/* Rootline. An incident report in strict black and white: one fixed
+   theme, white type on black, greys for structure. Faults are marked in
+   pure white against grey, never in colour.
    Fraunces for display, IBM Plex Sans for reading, IBM Plex Mono for data. */
 
 :root {
-  --paper: #f3f0e8;
-  --surface: #faf8f3;
-  --ink: #151513;
-  --ink-2: #3b3a35;
-  --muted: #6d6a61;
-  --rule: #d6d0c2;
-  --rule-strong: #b9b2a1;
-  --signal: #c63d17;
-  --signal-soft: #f4dcd2;
-  --ok: #2d6a4f;
-  --ok-soft: #dce9e1;
-  --mark: #f6e7a8;
+  --paper: #000000;
+  --surface: #0b0b0b;
+  --ink: #ffffff;
+  --ink-2: #c4c4c4;
+  --muted: #8c8c8c;
+  --rule: #262626;
+  --rule-strong: #4a4a4a;
+  --signal: #ffffff;
+  --signal-soft: #1f1f1f;
+  --ok: #d9d9d9;
+  --ok-soft: #1a1a1a;
+  --mark: #333333;
+  --node: #8c8c8c;
 
   --display: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
   --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
@@ -34,40 +36,6 @@
   --bad: var(--signal);
   --bad-soft: var(--signal-soft);
 
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0f0f0d;
-    --surface: #171714;
-    --ink: #ece8de;
-    --ink-2: #c9c4b8;
-    --muted: #969186;
-    --rule: #2b2a26;
-    --rule-strong: #45433d;
-    --signal: #ff6a3d;
-    --signal-soft: #3a1d13;
-    --ok: #74c69d;
-    --ok-soft: #16291f;
-    --mark: #4a3f12;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
-  --paper: #0f0f0d;
-  --surface: #171714;
-  --ink: #ece8de;
-  --ink-2: #c9c4b8;
-  --muted: #969186;
-  --rule: #2b2a26;
-  --rule-strong: #45433d;
-  --signal: #ff6a3d;
-  --signal-soft: #3a1d13;
-  --ok: #74c69d;
-  --ok-soft: #16291f;
-  --mark: #4a3f12;
   color-scheme: dark;
 }
 
@@ -212,7 +180,7 @@ p { margin: 0 0 1em; }
   padding: 13px 18px; border: 1px solid var(--ink);
   transition: background 0.25s var(--ease), color 0.25s var(--ease);
 }
-.btn:hover { background: var(--signal); border-color: var(--signal); color: #fff; }
+.btn:hover { background: transparent; border-color: var(--ink); color: var(--ink); }
 .btn.ghost { background: transparent; color: var(--ink); }
 .btn.ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .btn .arr { transition: transform 0.25s var(--ease); }
@@ -241,7 +209,7 @@ p { margin: 0 0 1em; }
   white-space: nowrap; padding: 1px 4px; background: color-mix(in srgb, var(--paper) 70%, transparent);
   will-change: transform, opacity;
 }
-.stage-label.hot { color: var(--signal); font-weight: 500; }
+.stage-label.hot { color: var(--signal); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
 .stage-cap {
   position: absolute; left: 0; bottom: 8px; right: var(--gutter);
   font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.02em;
@@ -468,11 +436,6 @@ td.mono, .mono.nowrap { white-space: nowrap; }
 .seg.small button { padding: 6px 10px; font-size: 0.68rem; }
 .seg.small { margin-bottom: 8px; }
 
-.theme {
-  display: inline-grid; place-items: center; width: 30px; height: 30px; margin-left: 4px;
-  border: 1px solid var(--rule-strong); background: transparent; color: var(--ink); cursor: pointer;
-}
-.theme:hover { border-color: var(--ink); }
 
 /* Hero map */
 .hero-stage { display: flex; flex-direction: column; }
@@ -562,7 +525,7 @@ td.mono, .mono.nowrap { white-space: nowrap; }
 .plate svg .hot text { fill: var(--ink); font-family: var(--mono); pointer-events: none; }
 .plate svg .hot:hover circle { fill: var(--signal-soft); }
 .plate svg .hot.on circle { fill: var(--signal); stroke: var(--signal); }
-.plate svg .hot.on text { fill: #fff; }
+.plate svg .hot.on text { fill: var(--paper); }
 .plate svg .hot:focus-visible { outline: none; }
 .plate svg .hot:focus-visible circle { stroke: var(--signal); stroke-width: 3; }
 @media (prefers-reduced-motion: no-preference) {

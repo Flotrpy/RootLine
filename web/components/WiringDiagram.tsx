@@ -31,7 +31,7 @@ export function WiringDiagram() {
         <svg viewBox="0 0 900 360" role="img" aria-label={`Wiring of the hardware arm. ${cur.text}`}>
           <defs>
             <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0 0 L10 5 L0 10 z" fill="var(--ink)" />
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--node)" />
             </marker>
             <marker id="arr-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
               <path d="M0 0 L10 5 L0 10 z" fill="var(--signal)" />
@@ -39,7 +39,7 @@ export function WiringDiagram() {
           </defs>
 
           {/* Laptop */}
-          <rect x="20" y="40" width="300" height="280" fill="none" stroke="var(--ink)" strokeWidth="1.5" />
+          <rect x="20" y="40" width="300" height="280" fill="none" stroke="var(--node)" strokeWidth="1.5" />
           <text x="36" y="66" fontSize="13" fill="var(--ink)">Laptop · WSL · Docker</text>
           {[
             ["checkout", 92],
@@ -47,21 +47,21 @@ export function WiringDiagram() {
             ["snapshotter", 232],
           ].map(([n, y]) => (
             <g key={n as string}>
-              <rect x="40" y={y as number} width="150" height="44" fill="var(--paper)" stroke="var(--ink)" />
+              <rect x="40" y={y as number} width="150" height="44" fill="var(--paper)" stroke="var(--node)" />
               <text x="56" y={(y as number) + 27} fontSize="13" fill="var(--ink)">{n}</text>
             </g>
           ))}
-          <rect x="210" y="232" width="96" height="44" fill="var(--paper)" stroke={f === "contention" ? "var(--signal)" : "var(--ink)"} />
+          <rect x="210" y="232" width="96" height="44" fill="var(--paper)" stroke={f === "contention" ? "var(--signal)" : "var(--node)"} strokeWidth={f === "contention" ? 2.5 : 1} />
           <text x="222" y="259" fontSize="12" fill={f === "contention" ? "var(--signal)" : "var(--ink)"}>iperf3 srv</text>
 
           {/* Router */}
-          <rect x="400" y="150" width="120" height="60" fill="none" stroke="var(--ink)" />
+          <rect x="400" y="150" width="120" height="60" fill="none" stroke="var(--node)" />
           <text x="414" y="176" fontSize="12" fill="var(--ink)">Wi-Fi router</text>
           <text x="414" y="196" fontSize="11" fill="var(--muted)">2.4 GHz · ch 6</text>
           <line x1="320" y1="180" x2="400" y2="180" stroke="var(--rule-strong)" strokeWidth="1" />
 
           {/* Board A */}
-          <rect x="640" y="60" width="220" height="90" fill="none" stroke={f === "none" || f === "contention" ? "var(--ink)" : "var(--signal)"} strokeWidth="1.5" />
+          <rect x="640" y="60" width="220" height="90" fill="none" stroke={f === "none" || f === "contention" ? "var(--node)" : "var(--signal)"} strokeWidth={f === "none" || f === "contention" ? 1.5 : 2.5} />
           <text x="656" y="88" fontSize="13" fill="var(--ink)">Board A · affan1</text>
           <text x="656" y="110" fontSize="11" fill="var(--muted)">edge-relay :50051</text>
           <text x="656" y="130" fontSize="11" fill={f === "weak" ? "var(--signal)" : "var(--muted)"}>
@@ -83,7 +83,7 @@ export function WiringDiagram() {
             ))}
 
           {/* Board B */}
-          <rect x="640" y="230" width="220" height="90" fill="none" stroke={f === "contention" ? "var(--signal)" : "var(--ink)"} strokeWidth="1.5" />
+          <rect x="640" y="230" width="220" height="90" fill="none" stroke={f === "contention" ? "var(--signal)" : "var(--node)"} strokeWidth={f === "contention" ? 2.5 : 1.5} />
           <text x="656" y="258" fontSize="13" fill="var(--ink)">Board B · affan2</text>
           <text x="656" y="280" fontSize="11" fill={f === "contention" ? "var(--signal)" : "var(--muted)"}>
             iperf3 {f === "contention" ? "30 Mbit/s UDP, 5 min" : "idle"}
@@ -94,8 +94,8 @@ export function WiringDiagram() {
             className={`flow ${linkA}`}
             d="M190 114 C 300 114, 360 160, 400 168 M520 168 C 580 150, 600 110, 640 100"
             fill="none"
-            stroke={linkA === "ok" ? "var(--ink)" : "var(--signal)"}
-            strokeWidth="1.5"
+            stroke={linkA === "ok" ? "var(--node)" : "var(--signal)"}
+            strokeWidth={linkA === "ok" ? 1.5 : 2.5}
             strokeDasharray={linkA === "weak" ? "4 6" : linkA === "cut" ? "2 10" : "6 6"}
             markerEnd={linkA === "ok" ? "url(#arr)" : "url(#arr-s)"}
           />
@@ -103,8 +103,8 @@ export function WiringDiagram() {
             className={`flow ${linkA}`}
             d="M640 130 C 600 170, 560 190, 520 192 M400 192 C 330 200, 260 186, 190 184"
             fill="none"
-            stroke={linkA === "ok" ? "var(--ink)" : "var(--signal)"}
-            strokeWidth="1.5"
+            stroke={linkA === "ok" ? "var(--node)" : "var(--signal)"}
+            strokeWidth={linkA === "ok" ? 1.5 : 2.5}
             strokeDasharray={linkA === "weak" ? "4 6" : linkA === "cut" ? "2 10" : "6 6"}
             markerEnd={linkA === "ok" ? "url(#arr)" : "url(#arr-s)"}
           />

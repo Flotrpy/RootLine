@@ -74,14 +74,15 @@ export function ServiceMap3D({ mode }: { mode: MapMode }) {
         ring: new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.5, side: THREE.DoubleSide }),
       };
       const paint = () => {
+        // One fixed black-and-white theme: grey structure, the fault in white.
         const signal = new THREE.Color(cssColor("--signal"));
-        mat.node.color = new THREE.Color(cssColor("--ink"));
+        mat.node.color = new THREE.Color(cssColor("--node"));
         mat.hot.color = signal;
         mat.edge.color = new THREE.Color(cssColor("--rule-strong"));
         mat.flag.color = new THREE.Color(cssColor("--rule-strong"));
         mat.fault.color = signal;
-        mat.focus.color = new THREE.Color(cssColor("--ink"));
-        mat.packet.color = new THREE.Color(cssColor("--ink-2"));
+        mat.focus.color = new THREE.Color(cssColor("--ink-2"));
+        mat.packet.color = new THREE.Color(cssColor("--muted"));
         mat.bad.color = signal;
         mat.ring.color = signal;
       };
@@ -320,15 +321,6 @@ export function ServiceMap3D({ mode }: { mode: MapMode }) {
       const onVis = () => start();
       document.addEventListener("visibilitychange", onVis);
       reduced.addEventListener("change", start);
-      // Repaint when the colour scheme or the manual theme changes.
-      const scheme = window.matchMedia("(prefers-color-scheme: dark)");
-      const onScheme = () => {
-        paint();
-        draw();
-      };
-      scheme.addEventListener("change", onScheme);
-      const mo = new MutationObserver(onScheme);
-      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
       applyMode.current();
       step(0, 0);
@@ -340,13 +332,11 @@ export function ServiceMap3D({ mode }: { mode: MapMode }) {
         cancelAnimationFrame(raf);
         io.disconnect();
         ro.disconnect();
-        mo.disconnect();
         el.removeEventListener("pointerdown", onDown);
         window.removeEventListener("pointerup", onUp);
         window.removeEventListener("pointermove", onMove);
         document.removeEventListener("visibilitychange", onVis);
         reduced.removeEventListener("change", start);
-        scheme.removeEventListener("change", onScheme);
         spans.forEach(({ s }) => s.remove());
         scene.traverse((o) => (o as { geometry?: { dispose: () => void } }).geometry?.dispose());
         Object.values(mat).forEach((m) => m.dispose());

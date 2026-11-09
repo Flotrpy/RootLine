@@ -23,7 +23,7 @@ export function ServiceMapStatic() {
             x2={x2}
             y2={y2}
             stroke={hot ? "var(--signal)" : "var(--rule-strong)"}
-            strokeWidth={hot ? 1.6 : 1}
+            strokeWidth={hot ? 2 : 1}
             strokeDasharray={e.kind === "flag" ? "3 4" : undefined}
           />
         );
@@ -33,7 +33,7 @@ export function ServiceMapStatic() {
         const hot = n.id === FAULT_EDGE.to;
         return (
           <g key={n.id}>
-            <rect x={x - 4} y={y - 4} width={8} height={8} fill={hot ? "var(--signal)" : "var(--ink)"} />
+            <rect x={x - 4} y={y - 4} width={8} height={8} fill={hot ? "var(--signal)" : "var(--node)"} />
             <text x={x} y={y + 18} textAnchor="middle" fontSize="10.5" fontFamily="var(--mono)" fill="var(--ink-2)">
               {n.id}
             </text>

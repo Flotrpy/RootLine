@@ -12,7 +12,6 @@ import "./globals.css";
 
 import { Mark } from "@/components/Mark";
 import { Reveal } from "@/components/Reveal";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Rootline: which evidence does an AI need to find the root cause?",
@@ -21,23 +20,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f3f0e8" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0f0d" },
-  ],
+  themeColor: "#000000",
 };
 
 const REPO = "https://github.com/Flotrpy/RootLine";
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         {/* Scroll reveals only hide content once JS is known to run. */}
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "document.documentElement.classList.add('js');try{var t=localStorage.getItem('rootline-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}",
+              "document.documentElement.classList.add('js')",
           }}
         />
       </head>
@@ -58,7 +54,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 Method
               </Link>
               <Link href="/hardware/">Hardware</Link>
-              <ThemeToggle />
             </nav>
           </div>
         </header>
