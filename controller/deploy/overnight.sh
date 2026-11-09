@@ -14,7 +14,7 @@ set -uo pipefail
 
 : "${DEMO_DIR:?set DEMO_DIR to the OpenTelemetry Demo checkout}"
 : "${ROOTLINE_BOARD_A:?set ROOTLINE_BOARD_A}" "${ROOTLINE_BOARD_B:?set ROOTLINE_BOARD_B}"
-: "${ROOTLINE_IPERF_SERVER:?set ROOTLINE_IPERF_SERVER to the PC's LAN IP}"
+: "${ROOTLINE_IPERF_SERVER:?set ROOTLINE_IPERF_SERVER to the PC LAN IP}"
 : "${HW_RELAY_ADDR:?set HW_RELAY_ADDR to Board A ip:port}"
 
 ROOTLINE_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
