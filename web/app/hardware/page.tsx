@@ -34,8 +34,7 @@ export default function Hardware() {
           <p>
             A small Go program, <code>edge-relay</code>, runs as a systemd service on the board&apos;s
             Linux side. In the hardware wiring, checkout sends its payment requests to the board, which
-            forwards them over Wi-Fi to payment on the laptop and reports its own telemetry to the
-            snapshotter.
+            forwards them over Wi-Fi to payment on the laptop.
           </p>
         </div>
         <div className="board">
@@ -93,13 +92,13 @@ export default function Hardware() {
         <li>
           <div>
             <strong>Not the same as distance</strong>
-            <p>Lower transmit power degrades Board A&apos;s uplink only. It is a real radio impairment, not the same as moving the board away.</p>
+            <p>Lower transmit power degrades Board A&apos;s uplink only. With the board near the router it left no visible trace in the shop&apos;s calls.</p>
           </div>
         </li>
         <li>
           <div>
-            <strong>Extra evidence</strong>
-            <p>Hardware snapshots contain the edge-relay service, which emulated snapshots do not.</p>
+            <strong>Same services as emulated</strong>
+            <p>The relay sent no telemetry of its own, so hardware snapshots show the same services as emulated ones.</p>
           </div>
         </li>
       </ul>

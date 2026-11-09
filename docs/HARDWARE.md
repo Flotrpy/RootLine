@@ -138,10 +138,15 @@ a button press would inject a fault mid-incident.
 
 ## Known limits
 
-- Hardware snapshots contain the `edge-relay` service, which emulated
-  snapshots do not: extra evidence for models on hardware faults.
+- The relay sent no telemetry during the campaign (no `edge-relay` spans in
+  any hardware snapshot), so hardware snapshots contain the same services as
+  emulated ones.
 - Lower transmit power degrades the uplink from Board A; the downlink is
   unchanged. It is a real radio impairment, but not the same as moving the
-  board away.
+  board away. With the board near the router, `hwWeakSignal` left no visible
+  trace in checkout's calls to payment (see `fault_visibility.csv`).
+- Contention can make Board B unreachable over SSH until its own flood ends.
+  All three hardware faults end by themselves, so a failed clear after the
+  snapshot is logged as a note, not a failed incident.
 - The fault categories and emulated counterparts are `TODO(flotrpy)` in the
   controller's catalog.

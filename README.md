@@ -136,9 +136,7 @@ v0.1 is a pilot. Read every result with these limits in mind.
   larger, noisier and less tidy. Findings may not carry over.
 - **Changed resource limits.** To keep the demo stable at this load,
   `compose.override.yml` raises the memory limits of a few services,
-  including the database (see the comments in that file). Snapshots that
-  overlapped a crash of the testbed itself were moved aside and run again;
-  their originals are kept, not deleted.
+  including the database (see the comments in that file).
 - **Faults the models may have seen.** The application faults are the
   demo's own public feature flags. Flag and fault names are removed from
   every prompt, but service names are not, and models may know the demo's
@@ -151,11 +149,24 @@ v0.1 is a pilot. Read every result with these limits in mind.
   scored once per snapshot and condition at temperature 0. Hosted models
   can change without notice; the model ID and date of every run are
   recorded.
+- **Some faults left little trace.** A manipulation check
+  (`python -m analysis fault-visibility`, written to
+  `paper/figures/fault_visibility.csv`) compares each snapshot's affected
+  spans before and after fault onset. Several injected faults barely move
+  them, for example connection resets on a gRPC link that keeps one
+  connection open. These snapshots are kept and scored as they are: a model
+  cannot be expected to find a fault the evidence does not show, and the
+  report says which ones these are.
 - **Hardware arm.** 12 snapshots on one home Wi-Fi network with two
   Arduino UNO Q boards. Lowering transmit power affects only the board's
-  uplink, a 30-second radio-off stands in for a power cut, and hardware
-  snapshots contain an extra service (`edge-relay`) that emulated ones do
-  not. It is reported as exploratory, outside the hypothesis tests.
+  uplink, and with the board near the router it left no visible trace; a
+  30-second radio-off stands in for a power cut. The relay on the board
+  sent no telemetry of its own, so hardware snapshots contain the same
+  services as emulated ones. It is reported as exploratory, outside the
+  hypothesis tests.
+- **Reruns.** Snapshots that overlapped a crash of the testbed itself,
+  including two whose baseline was already unhealthy, were moved to
+  `data/old/` and run again with the same fault and replica number.
 
 ## Licence
 
