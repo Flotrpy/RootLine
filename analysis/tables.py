@@ -21,8 +21,8 @@ from rootline_harness.scorers import Label, brier, ece
 from rootline_harness.scorers.accuracy import claims_fault
 
 SINGLE_CONDITIONS = ("metrics", "traces", "logs")
-# TODO(flotrpy): pre-register the theta used for the RQ4 significance test
-# before the runs; the full sweep is reported either way.
+# RQ4 is v0.2: pre-register theta before its runs; the full sweep is
+# reported either way.
 RQ4_THETA = 0.7
 ALPHA = 0.05
 # v0.1 tests RQ1 and RQ2 only; the other four are held for v0.2 and
