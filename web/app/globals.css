@@ -60,6 +60,8 @@ body {
 }
 ::selection { background: var(--ink); color: var(--paper); }
 img, svg, canvas { display: block; max-width: 100%; }
+/* React Flow draws edges in a 0x0 SVG that must overflow. */
+.react-flow svg { display: inline; max-width: none; }
 a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 a:hover { color: var(--signal); }
 :focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }

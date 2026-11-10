@@ -48,9 +48,14 @@ export default function ServiceGraph({ graph }: { graph: Graph }) {
       style: {
         whiteSpace: "pre-line",
         fontSize: 12,
+        fontFamily: "var(--mono)",
         width: 170,
-        borderColor: n.errors ? "var(--bad)" : "var(--line)",
-        borderWidth: n.errors ? 2 : 1,
+        borderRadius: 0,
+        background: "var(--surface)",
+        color: "var(--ink)",
+        // Black and white: errors are a heavy white border, the rest grey.
+        borderColor: n.errors ? "var(--signal)" : "var(--rule-strong)",
+        borderWidth: n.errors ? 2.5 : 1,
       },
     }));
     const edges: Edge[] = graph.edges.map((e) => ({
@@ -60,9 +65,9 @@ export default function ServiceGraph({ graph }: { graph: Graph }) {
       label: e.errors ? `${e.errors}/${e.calls} err` : `${e.calls}`,
       animated: e.errors > 0,
       labelBgPadding: [4, 2],
-      labelBgStyle: { fill: "var(--card)" },
-      labelStyle: { fontSize: 11 },
-      style: { stroke: e.errors ? "var(--bad)" : undefined },
+      labelBgStyle: { fill: "var(--paper)" },
+      labelStyle: { fontSize: 11, fill: e.errors ? "var(--signal)" : "var(--ink-2)", fontFamily: "var(--mono)" },
+      style: { stroke: e.errors ? "var(--signal)" : "var(--node)", strokeWidth: e.errors ? 2 : 1 },
     }));
     return { nodes, edges };
   }, [graph]);
@@ -72,6 +77,7 @@ export default function ServiceGraph({ graph }: { graph: Graph }) {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        colorMode="dark"
         fitView
         fitViewOptions={{ padding: 0.1 }}
         minZoom={0.2}
