@@ -3,10 +3,9 @@
 **Which evidence does an AI need to find the root cause, and can it fix it?**
 
 Rootline is an open, reproducible benchmark and replay app for evidence-grounded
-AI diagnosis of microservice failures. It measures which telemetry signals free
-and open models need, whether they can tell network faults from application
-faults, how easily misleading evidence fools them, and whether their proposed
-fixes actually restore service.
+AI diagnosis of microservice failures. v0.1 measures which telemetry signals
+free and open models need, and whether they can tell network faults from
+application faults.
 
 > Status: v0.1 pilot under construction. No results yet. Every number that
 > appears here later is produced by `make reproduce`. v0.1 answers RQ1 and
@@ -145,6 +144,10 @@ v0.1 is a pilot. Read every result with these limits in mind.
   downstream service of the broken edge (for example `payment` for
   checkout → payment). Other reasonable choices would change some scores.
   Prompts are capped at 6,000 tokens, so some evidence is dropped by design.
+- **Fixed service list.** Every v0.1 prompt names the same 19 services.
+  `frontend-web` (browser spans) and `telemetry-docs` also appear in the
+  evidence, and `kafka` and `valkey-cart` are named but emit no spans. No
+  fault targets any of them; the list was kept so all prompts are identical.
 - **Free models only.** Only open-weight models and free-tier APIs, each
   scored once per snapshot and condition at temperature 0. Hosted models
   can change without notice; the model ID and date of every run are

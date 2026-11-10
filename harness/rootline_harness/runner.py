@@ -23,8 +23,9 @@ from rootline_harness.scorers import Label, score_run
 
 TEMPERATURE = 0.0
 SEED = 0
-# Reasoning models spend completion tokens before answering.
-# TODO(flotrpy): tune per model after the first Tier C runs.
+# Reasoning models spend completion tokens before answering. Decided for
+# v0.1: 2,048 by default; a model can set a lower budget (Groq's gpt-oss-120b
+# uses 1,536 to fit the free tier's 8,000 tokens a minute).
 MAX_TOKENS = 2048
 
 RUN_COLUMNS = (

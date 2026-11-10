@@ -32,7 +32,10 @@ SERVICES: Final[tuple[str, ...]] = (
 """OpenTelemetry Demo services, used to tell the model which names are valid
 and to drive P1 anonymisation.
 
-TODO(flotrpy): confirm against the pinned demo tag's compose file.
+Checked against the 42 v0.1 snapshots: frontend-web (browser spans) and
+telemetry-docs also appear in the evidence, and kafka and valkey-cart emit no
+spans. No fault targets any of them; the list stays as it was so every v0.1
+prompt is identical (a limitation, noted in the README).
 """
 
 CATEGORIES: Final[tuple[str, ...]] = (

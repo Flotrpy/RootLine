@@ -122,11 +122,12 @@ type Label struct {
 
 // Flag names and variants checked against demo.flagd.json at demo 3.1.0
 // (emailMemoryLeak offers 1x..10000x, intlShippingSlowdown 5sec/10sec).
-// TODO(flotrpy): confirm the 100x memory-leak level. flagd.Store.Set refuses unknown variants, so a
-// mismatch fails loudly at the dry run rather than silently.
+// Decided for v0.1: the 100x memory-leak level (the snapshots were collected
+// with it). flagd.Store.Set refuses unknown variants, so a mismatch fails
+// loudly rather than silently.
 //
-// TODO(flotrpy): confirm the scored service for paymentUnreachable and for
-// network faults. Here it is the downstream service of the broken edge.
+// Decided for v0.1: the scored service for paymentUnreachable and for network
+// faults is the downstream service of the broken edge (README, Limitations).
 var faults = []Fault{
 	// Application faults: OpenTelemetry Demo flagd flags.
 	{Name: "paymentFailure", Kind: KindFlag, Service: "payment", Category: CatError, Layer: LayerApplication, Flag: "paymentFailure", Variant: "50%"},
@@ -160,7 +161,8 @@ var faults = []Fault{
 // over SSH; hw/board/rootline-fault always schedules its own undo on the
 // board, so a lost SSH session cannot leave a fault in place.
 //
-// TODO(flotrpy): confirm each category and its emulated counterpart.
+// Decided for v0.1: these categories and emulated counterparts. hwWeakSignal
+// left no visible trace (see fault_visibility.csv), which the report states.
 var hardware = []Fault{
 	{Name: "hwWeakSignal", Kind: KindRemote, Service: "payment", Category: CatNetworkLoss, Layer: LayerNetwork, Edge: EdgeCheckoutPayment,
 		Board:        "A",

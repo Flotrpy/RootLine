@@ -31,10 +31,9 @@ sudo systemctl enable --now edge-relay
 Check it with `systemctl status edge-relay` and `journalctl -u edge-relay -f`.
 `Restart=always` keeps it running across reboots and crashes.
 
-## Known asymmetry
+## Telemetry
 
-Hardware snapshots contain an extra service (`edge-relay`) that the
-emulated network faults do not, because Toxiproxy is not instrumented.
-That is extra evidence for the models on hardware faults and is reported
-as a limitation of the emulation-validity comparison.
-TODO(flotrpy): decide whether to keep the relay's telemetry on.
+The relay can export its own spans, but in the v0.1 campaign none reached the
+snapshotter: no hardware snapshot contains an `edge-relay` service. That
+keeps hardware and emulated snapshots alike (Toxiproxy is not instrumented
+either). Decided for v0.1: leave it that way, so the comparison stays fair.

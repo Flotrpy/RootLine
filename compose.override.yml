@@ -16,8 +16,8 @@
 #
 # Ports and address variables checked against demo 3.1.0's compose.yaml and
 # .env (PAYMENT_PORT=50051, PRODUCT_CATALOG_PORT=3550).
-# TODO(flotrpy): record image digests after the first pull
-# (controller/deploy/record-digests.sh).
+# Image digests are recorded by controller/deploy/record-digests.sh before
+# the stack starts and pinned in every snapshot manifest.
 
 x-toxiproxy: &toxiproxy
   image: ghcr.io/shopify/toxiproxy:2.12.0
@@ -152,4 +152,5 @@ services:
 
   # 16 GB hosts: candidates to trim if memory is tight. Disabling a service
   # that a pipeline exports to also needs a collector config change.
-  # TODO(flotrpy): decide after the dry run (watch `docker stats`).
+  # Decided after the dry run: nothing trimmed; the services that ran out of
+  # memory got more instead (see above).

@@ -148,5 +148,5 @@ a button press would inject a fault mid-incident.
 - Contention can make Board B unreachable over SSH until its own flood ends.
   All three hardware faults end by themselves, so a failed clear after the
   snapshot is logged as a note, not a failed incident.
-- The fault categories and emulated counterparts are `TODO(flotrpy)` in the
+- The fault categories and emulated counterparts are fixed for v0.1 in the
   controller's catalog.

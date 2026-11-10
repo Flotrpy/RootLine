@@ -279,8 +279,8 @@ func (f *Flattener) metric(svc string, m *metricspb.Metric) []Metric {
 			}
 			out = append(out, Metric{ms(dp.GetTimeUnixNano()), svc, name + ".count", float64(dp.GetCount()), labels})
 		}
-		// TODO(flotrpy): exponential histograms are not flattened yet; the
-		// demo's collector config does not emit them.
+		// Exponential histograms are not flattened: the demo's collector
+		// config does not emit them (none in the v0.1 snapshots).
 	}
 	return out
 }

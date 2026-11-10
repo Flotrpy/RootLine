@@ -10,7 +10,8 @@ snake, flat, CamelCase and upper-case forms. Matches must sit on a token or
 camel-case boundary, so short names like "ad" never hit words like
 "handled".
 
-TODO(flotrpy): review the boundary rules against real demo span names.
+P1 runs are v0.2 (RQ3); review the boundary rules against the v0.1 span
+names before then.
 """
 
 from __future__ import annotations

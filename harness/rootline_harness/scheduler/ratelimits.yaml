@@ -2,8 +2,8 @@
 # per-minute caps over a rolling 60 s, per-day caps over a rolling 24 h
 # (stricter than a calendar-day reset, so it is safe either way).
 #
-# TODO(flotrpy): check each value against the provider's current free-tier
-# page before the first real run, and set them a little below the published
+# Groq's values were checked against its response headers in Nov 2026
+# (1,000 requests/day, 8,000 tokens/min); set a little below the published
 # figure. null means "no cap" (local servers).
 #
 # Keys: rpm/rpd = requests per minute/day, tpm/tpd = tokens per minute/day.

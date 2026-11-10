@@ -8,8 +8,8 @@ accepts. Tier C's answer is always accepted.
 An answer is escalated when it is unparsed, an abstention, or a fault claim
 whose top confidence is below theta. A "no fault" answer (layer none) has no
 confidence to compare and is accepted.
-TODO(flotrpy): confirm that rule; the alternative escalates every healthy
-claim, which would push all healthy controls to Tier C.
+The cascade is v0.2 (RQ4): confirm this rule before then; the alternative
+escalates every healthy claim, which would push all healthy controls to Tier C.
 
     uv run --project harness python -m cascade.sweep --runs data/runs/runs.parquet
 """

@@ -58,14 +58,15 @@ a netem rule on one edge from touching the other.
 | 8475 | Toxiproxy API, frontend->product-catalog |
 | 9090 | Prometheus (demo), used for health checks |
 
-## Decisions to confirm (TODO(flotrpy))
+## Decisions for v0.1
 
-- Scored service for `paymentUnreachable` and network faults: currently the
+- Scored service for `paymentUnreachable` and network faults: the
   downstream service of the edge (`payment`, `product-catalog`).
-- Flag variants (`50%`, `on`, `5sec`): verify against the pinned
-  `demo.flagd.json`. `flagd` refuses unknown variants, so the dry run will
-  catch a mismatch.
+- Flag variants (`50%`, `on`, `5sec`, `100x`): checked against the pinned
+  `demo.flagd.json` of 3.1.0; `flagd` refuses unknown variants.
 - Health queries use the demo's span metrics at `frontend-proxy`.
-- P1 matches CamelCase forms inside identifiers (`PaymentService`). Review
-  against real span names.
 - Evidence validity scores only the top hypothesis's citations.
+- The service list in prompts is the catalog's, unchanged for every v0.1 run
+  (`frontend-web` and `telemetry-docs` also appear in evidence).
+- Held for v0.2: P1 boundary rules (RQ3), the cascade's no-fault rule and
+  theta (RQ4).

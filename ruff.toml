@@ -1,7 +1,7 @@
 # Shared by harness/, cascade/, baselines/ and analysis/.
 line-length = 100
 target-version = "py313"
-extend-exclude = ["web", "replay", "controller", "snapshotter", "hw/edge-relay", "hw/mcu-panel"]
+extend-exclude = ["web", "replay", "controller", "snapshotter", "hw/edge-relay", "hw/mcu-panel", "scripts/*.ipynb"]  # Kaggle notebook: shell magics
 
 [lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
