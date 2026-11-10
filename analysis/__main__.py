@@ -69,9 +69,10 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
     trials_path = root / "data" / "runs" / "remediation.jsonl"
     trials = load_trials(trials_path)
     out.mkdir(parents=True, exist_ok=True)
-    from analysis.visibility import write as write_visibility
+    from analysis.visibility import visibility
 
-    write_visibility(root / "data", out)
+    vis = visibility(root / "data")
+    vis.write_csv(out / "fault_visibility.csv")
 
     baseline_preds = None
     snaps = root / "data" / "snapshots"
@@ -126,6 +127,7 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
         },
         "hypotheses": [{k: _clean(v) for k, v in r.items()} for r in hyp.to_dicts()],
         "emulation_validity": [{k: _clean(v) for k, v in r.items()} for r in emu.to_dicts()],
+        "fault_visibility": [{k: _clean(v) for k, v in r.items()} for r in vis.to_dicts()],
     }
     (out / "results.json").write_text(json.dumps(results, indent=2, sort_keys=True) + "\n")
     return results

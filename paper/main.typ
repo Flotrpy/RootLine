@@ -59,9 +59,16 @@ v0.2). We evaluate only freely available
 open-weight models and free-tier APIs; results characterise what
 budget-constrained teams can achieve today, not the frontier.
 
-Prior work. TODO(flotrpy): cite AIOpsLab, ITBench, RCAEval and the ACL 2026
-survey on agent evaluation once the references are confirmed, and centre the
-novelty claims on layer attribution, remediation and robustness.
+Prior work. AIOpsLab @aiopslab deploys microservice environments, injects
+faults and evaluates agents that act on the live system. ITBench @itbench
+collects real-world IT automation scenarios for agents across SRE,
+compliance and FinOps tasks. RCAEval @rcaeval provides 735 failure cases from
+three microservice systems with metrics, logs and traces, and fifteen
+root-cause-analysis baselines. Rootline is smaller and narrower: it holds the
+prompt budget fixed while varying which signals fill it, asks whether a
+model can place a fault in the network or the application, checks that cited
+evidence exists, and adds real Wi-Fi faults on hardware next to their
+emulated counterparts.
 
 = Method
 
@@ -159,6 +166,27 @@ to v0.2 and not tested here.
   )
 }
 
+== Manipulation check <visibility>
+
+Does each injected fault show in its own snapshot? For every snapshot, the
+spans that should carry the fault (the caller's calls across a broken edge,
+or the root-cause service's own spans) before and after fault onset.
+
+#if r.fault_visibility.len() > 0 {
+  figure(
+    table(
+      columns: 6,
+      align: (left, left, right, right, right, right),
+      table.header[*Snapshot*][*Measured*][*Errors before*][*Errors after*][*p95 before (ms)*][*p95 after (ms)*],
+      ..r.fault_visibility.map(v => (
+        raw(v.incident_id), v.measured, pct(v.error_rate_before), pct(v.error_rate_after),
+        fmt(v.before_p95_ms, digits: 0), fmt(v.after_p95_ms, digits: 0),
+      )).flatten()
+    ),
+    caption: [Fault visibility per snapshot, from the frozen telemetry only (no model).],
+  )
+}
+
 = Hardware arm: real Wi-Fi faults
 
 Two Arduino UNO Q boards route the checkout → payment edge over a real Wi-Fi
@@ -183,11 +211,16 @@ with its emulated counterpart.
 = Limitations
 
 This is a pilot: two replicas per incident type give wide confidence
-intervals. One testbed stands in for production systems that are larger and
-noisier. Models may have seen the demo's public code; P1 measures reliance on
-names. Hardware snapshots contain the relay's own telemetry, which emulated
-snapshots do not. Free-tier limits changed during 2026, so provider choices
-are recorded per run.
+intervals, and this release tests two of six pre-stated hypotheses. One
+testbed on one machine stands in for production systems that are larger and
+noisier, and a few services were given more memory to keep the testbed
+itself up; snapshots that overlapped a testbed crash were rerun. Models may
+have seen the demo's public code, and service names reach the model (name
+reliance, RQ3, is v0.2). Several injected faults left little trace in the
+evidence (@visibility); they are scored as they are. On hardware, lowering
+transmit power left no visible trace with the board near the router, and the
+relay sent no telemetry of its own. Free-tier limits changed during 2026, so
+provider choices are recorded per run.
 
 = Reproducibility
 
@@ -198,3 +231,5 @@ without network access. Inputs: #r.inputs.runs runs
 #r.inputs.remediation_trials remediation trials.
 
 AI tools assisted with writing the code.
+
+#bibliography("refs.yml", title: "References")

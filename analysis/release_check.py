@@ -143,11 +143,12 @@ def check_runs(root: Path) -> list[Check]:
 def check_remediation(root: Path) -> list[Check]:
     path = root / "data" / "runs" / "remediation.jsonl"
     n = len(path.read_text().splitlines()) if path.exists() else 0
+    # RQ5 is held for v0.2, so missing trials do not block v0.1.
     return [
         Check(
-            "remediation trials",
-            "PASS" if n >= REMEDIATION_TRIALS else "FAIL",
-            f"{n}/{REMEDIATION_TRIALS}",
+            "remediation trials (v0.2)",
+            "PASS" if n >= REMEDIATION_TRIALS else "WARN",
+            f"{n}/{REMEDIATION_TRIALS}" + ("" if n >= REMEDIATION_TRIALS else ", RQ5 is v0.2"),
         )
     ]
 

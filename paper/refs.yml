@@ -1,0 +1,24 @@
+aiopslab:
+  type: article
+  title: "AIOpsLab: A Holistic Framework to Evaluate AI Agents for Enabling Autonomous Clouds"
+  author: ["Chen, Yinfang", "Shetty, Manish", "Somashekar, Gagan", "Ma, Minghua", "Simmhan, Yogesh", "Mace, Jonathan", "Bansal, Chetan", "Wang, Rujia", "Rajmohan, Saravan"]
+  date: 2025
+  serial-number:
+    arxiv: "2501.06706"
+  url: https://arxiv.org/abs/2501.06706
+itbench:
+  type: article
+  title: "ITBench: Evaluating AI Agents across Diverse Real-World IT Automation Tasks"
+  author: ["Jha, Saurabh", "Arora, Rohan", "Watanabe, Yuji", "Yanagawa, Takumi", "Chen, Yinfang", "Clark, Jackson", "Bhavya, Bhavya", "Verma, Mudit", "Kumar, Harshit", "Kitahara, Hirokuni", "Zheutlin, Noah", "Takano, Saki", "Pathak, Divya", "George, Felix", "Wu, Xinbo", "Turkkan, Bekir O.", "Vanloo, Gerard", "Nidd, Michael", "Dai, Ting", "Chatterjee, Oishik", "Gupta, Pranjal", "Samanta, Suranjana", "Aggarwal, Pooja", "Lee, Rong", "Murali, Pavankumar", "Ahn, Jae-wook", "Kar, Debanjana", "Rahane, Ameet", "Fonseca, Carlos", "Paradkar, Amit", "Deng, Yu", "Moogi, Pratibha", "Mohapatra, Prateeti", "Abe, Naoki", "Narayanaswami, Chandrasekhar", "Xu, Tianyin", "Varshney, Lav R.", "Mahindru, Ruchi", "Sailer, Anca", "Shwartz, Laura", "Sow, Daby", "Fuller, Nicholas C. M.", "Puri, Ruchir"]
+  date: 2025
+  serial-number:
+    arxiv: "2502.05352"
+  url: https://arxiv.org/abs/2502.05352
+rcaeval:
+  type: article
+  title: "RCAEval: A Benchmark for Root Cause Analysis of Microservice Systems with Telemetry Data"
+  author: ["Pham, Luan", "Zhang, Hongyu", "Ha, Huong", "Salim, Flora", "Zhang, Xiuzhen"]
+  date: 2024
+  serial-number:
+    arxiv: "2412.17015"
+  url: https://arxiv.org/abs/2412.17015
