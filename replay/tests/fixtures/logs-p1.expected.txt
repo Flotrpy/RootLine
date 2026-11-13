@@ -1,0 +1,8 @@
+## LOGS: log templates per service, rate before vs after fault onset, with examples
+L-0001 svc=svc-12 sev=ERROR base=0.0/min fault=29.8/min tpl="svc-12 request failed. Invalid token. app.loyalty.level=gold txn=<NUM>" ex=['svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89145', 'svc-12 request failed. Invalid token. app.loyalty.level=gold txn=89266']
+L-0002 svc=svc-05 sev=INFO base=0.0/min fault=2.0/min tpl="flag <redacted> evaluated to variant <NUM>%" ex=['flag <redacted> evaluated to variant 50%', 'flag <redacted> evaluated to variant 50%']
+L-0003 svc=svc-09 sev=INFO base=12.0/min fault=12.0/min tpl="handled request in <NUM> ms" ex=['handled request in 5 ms', 'handled request in 30 ms']
+L-0004 svc=svc-18 sev=INFO base=12.0/min fault=12.0/min tpl="handled request in <NUM> ms" ex=['handled request in 32 ms', 'handled request in 39 ms']
+L-0005 svc=svc-17 sev=INFO base=12.0/min fault=12.0/min tpl="handled request in <NUM> ms" ex=['handled request in 26 ms', 'handled request in 24 ms']
+L-0006 svc=svc-12 sev=INFO base=12.0/min fault=12.0/min tpl="handled request in <NUM> ms" ex=['handled request in 6 ms', 'handled request in 44 ms']
+L-0007 svc=svc-14 sev=INFO base=12.0/min fault=12.0/min tpl="handled request in <NUM> ms" ex=['handled request in 35 ms', 'handled request in 10 ms']

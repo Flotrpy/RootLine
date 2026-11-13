@@ -1,0 +1,52 @@
+# Free-tier caps per provider. The scheduler never exceeds any of them:
+# per-minute caps over a rolling 60 s, per-day caps over a rolling 24 h
+# (stricter than a calendar-day reset, so it is safe either way).
+#
+# Groq's values were checked against its response headers in Nov 2026
+# (1,000 requests/day, 8,000 tokens/min); set a little below the published
+# figure. null means "no cap" (local servers).
+#
+# Keys: rpm/rpd = requests per minute/day, tpm/tpd = tokens per minute/day.
+
+providers:
+  cerebras:
+    # Free trial for gpt-oss-120b as reported in Nov 2026: 5 rpm, 30k
+    # uncached tokens/min, 1M tokens/hour and /day. Set a little below.
+    api_base: null
+    rpm: 4
+    rpd: null
+    tpm: 25000
+    tpd: 900000
+  groq:
+    # Free tier for openai/gpt-oss-120b as reported in Nov 2026: 30 rpm,
+    # 1,000 rpd, 8,000 tokens/min, 200,000 tokens/day. No card needed.
+    api_base: null
+    rpm: 30
+    rpd: 950
+    tpm: 8000
+    tpd: 195000
+  gemini:
+    api_base: null
+    rpm: 10
+    rpd: 250
+    tpm: 250000
+    tpd: null
+  openrouter:
+    api_base: null
+    rpm: 20
+    rpd: 50
+    tpm: null
+    tpd: null
+  ollama:
+    api_base: http://localhost:11434
+    rpm: null
+    rpd: null
+    tpm: null
+    tpd: null
+  vllm:
+    # The Kaggle notebook's OpenAI-compatible endpoint.
+    api_base: http://localhost:8000/v1
+    rpm: null
+    rpd: null
+    tpm: null
+    tpd: null

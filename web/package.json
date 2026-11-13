@@ -1,0 +1,35 @@
+{
+  "name": "rootline-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "prebuild": "node scripts/copy-duckdb.mjs",
+    "predev": "node scripts/copy-duckdb.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "1.29.0",
+    "@fontsource-variable/fraunces": "5.2.8",
+    "@fontsource/ibm-plex-mono": "5.2.7",
+    "@fontsource/ibm-plex-sans": "5.2.8",
+    "@xyflow/react": "12.12.1",
+    "next": "15.5.29",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/three": "0.180.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.29",
+    "typescript": "^5"
+  }
+}

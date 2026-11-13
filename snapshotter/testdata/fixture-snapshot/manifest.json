@@ -1,0 +1,10 @@
+{
+  "incident_id": "paymentFailure-r1",
+  "demo_git_tag": "fixture",
+  "image_digests": {},
+  "t0_unix_ms": 1800000000000,
+  "window_ms": 600000,
+  "collector_version": "fixture",
+  "snapshotter_git_sha": "unknown",
+  "host_ram_gb": 16
+}

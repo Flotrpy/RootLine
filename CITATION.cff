@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use Rootline, please cite it as below."
+title: "Rootline: an open benchmark and replay app for evidence-grounded AI diagnosis of microservice failures"
+type: software
+authors:
+  - alias: flotrpy
+version: 0.1.0
+license: Apache-2.0
+repository-code: "https://github.com/Flotrpy/RootLine"
+abstract: >-
+  Rootline is an open, reproducible benchmark and replay app for
+  evidence-grounded AI diagnosis of microservice failures. It measures which
+  telemetry signals free and open models need and whether they can tell
+  network faults from application faults (v0.1), with real Wi-Fi faults on
+  two Arduino UNO Q boards next to their emulated counterparts.
+keywords:
+  - root cause analysis
+  - observability
+  - OpenTelemetry
+  - large language models
+  - benchmark
+# TODO(flotrpy): at release, set date-released and add the Zenodo DOI.

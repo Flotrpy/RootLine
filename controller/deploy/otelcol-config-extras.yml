@@ -1,0 +1,19 @@
+# Merged into the demo collector's config (OpenTelemetry Demo 3.1.0, with
+# compose.full.yaml and compose.observability.yaml). It adds one OTLP/HTTP
+# exporter to the Rootline snapshotter on every pipeline.
+#
+# A pipeline's exporter list is replaced, not appended, when merged, so each
+# list repeats the demo's own exporters from otelcol-config-observability.yml.
+exporters:
+  otlp_http/rootline:
+    endpoint: http://snapshotter:4318
+    compression: gzip
+
+service:
+  pipelines:
+    traces:
+      exporters: [debug, otlp_grpc/jaeger, span_metrics, otlp_http/rootline]
+    metrics:
+      exporters: [debug, otlp_http/prometheus, otlp_http/rootline]
+    logs:
+      exporters: [debug, opensearch, otlp_http/rootline]
