@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import sqlite3
 import subprocess
 import sys
 from pathlib import Path
@@ -24,6 +25,11 @@ from huggingface_hub.errors import EntryNotFoundError
 
 ROOT = Path(__file__).resolve().parents[1]
 WORK_REPO = os.environ.get("ROOTLINE_HF_WORK", "Flotrpy/rootline-work")
+
+
+def done_count(db: Path) -> int:
+    with sqlite3.connect(db) as con:
+        return con.execute("SELECT COUNT(*) FROM jobs WHERE status='done'").fetchone()[0]
 
 
 def run(*args: str) -> str:
@@ -50,13 +56,20 @@ def main() -> int:
     if not api.repo_info(WORK_REPO, repo_type="dataset").private:
         raise SystemExit(f"{WORK_REPO} is public; refusing to store runs there")
 
-    if not db.exists():
-        try:
-            got = hf_hub_download(WORK_REPO, db.name, repo_type="dataset", token=token)
-            db.write_bytes(Path(got).read_bytes())
-            print(f"resumed {db.name} from {WORK_REPO}")
-        except EntryNotFoundError:
-            print(f"no {db.name} in {WORK_REPO} yet: starting a new queue")
+    # The Hugging Face copy is the only source of truth: a local queue left on
+    # this machine may be days old. Always start from the remote copy.
+    remote_done = 0
+    try:
+        got = hf_hub_download(
+            WORK_REPO, db.name, repo_type="dataset", token=token, force_download=True
+        )
+        for leftover in db.parent.glob(db.name + "*"):
+            leftover.rename(leftover.with_name(leftover.name + ".stale"))
+        db.write_bytes(Path(got).read_bytes())
+        remote_done = done_count(db)
+        print(f"resumed {db.name} from {WORK_REPO} ({remote_done} done)")
+    except EntryNotFoundError:
+        print(f"no {db.name} in {WORK_REPO} yet: starting a new queue")
 
     # Snapshots and labels live on Hugging Face, not in git.
     labels = ROOT / "data" / "labels"
@@ -76,6 +89,9 @@ def main() -> int:
     status = run("--db", str(db), "status")
     print(status)
 
+    # Never let progress go backwards on the remote copy.
+    if done_count(db) < remote_done:
+        raise SystemExit(f"local queue has fewer done jobs than {WORK_REPO}; not uploading")
     for path in (db, runs):
         api.upload_file(
             path_or_fileobj=str(path),

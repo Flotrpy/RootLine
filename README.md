@@ -152,6 +152,11 @@ v0.1 is a pilot. Read every result with these limits in mind.
   scored once per snapshot and condition at temperature 0. Hosted models
   can change without notice; the model ID and date of every run are
   recorded.
+- **Not fully deterministic.** Temperature 0 does not guarantee the same
+  answer from a hosted model. Gate 2 passed on one snapshot, but when twelve
+  gpt-oss-120b runs on Groq were accidentally repeated, five scored
+  differently the second time. Each result is one run; the first run of each
+  job is the one reported.
 - **Some faults left little trace.** A manipulation check
   (`python -m analysis fault-visibility`, written to
   `paper/figures/fault_visibility.csv`) compares each snapshot's affected
