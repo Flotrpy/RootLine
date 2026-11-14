@@ -20,6 +20,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import polars as pl
 from huggingface_hub import HfApi, hf_hub_download
 from huggingface_hub.errors import EntryNotFoundError
 
@@ -28,8 +29,21 @@ WORK_REPO = os.environ.get("ROOTLINE_HF_WORK", "Flotrpy/rootline-work")
 
 
 def done_count(db: Path) -> int:
-    with sqlite3.connect(db) as con:
+    con = sqlite3.connect(db)  # closed explicitly: an open handle blocks WAL checkpoints
+    try:
         return con.execute("SELECT COUNT(*) FROM jobs WHERE status='done'").fetchone()[0]
+    finally:
+        con.close()
+
+
+def checkpoint(db: Path) -> None:
+    """Fold the write-ahead log into the database file before it is uploaded;
+    otherwise the uploaded file can miss the latest jobs."""
+    con = sqlite3.connect(db)
+    try:
+        con.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+    finally:
+        con.close()
 
 
 def run(*args: str) -> str:
@@ -89,9 +103,14 @@ def main() -> int:
     status = run("--db", str(db), "status")
     print(status)
 
-    # Never let progress go backwards on the remote copy.
+    checkpoint(db)
+    exported = run("--db", str(db), "status")
+    # Never let progress go backwards on the remote copy, and make sure the
+    # file being uploaded holds every job the export holds.
     if done_count(db) < remote_done:
         raise SystemExit(f"local queue has fewer done jobs than {WORK_REPO}; not uploading")
+    if runs.exists() and pl.read_parquet(runs).height != done_count(db):
+        raise SystemExit(f"{db.name} and {runs.name} disagree; not uploading ({exported})")
     for path in (db, runs):
         api.upload_file(
             path_or_fileobj=str(path),
