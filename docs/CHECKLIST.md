@@ -47,9 +47,9 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 ## After the release
 
 - [x] DOI in `CITATION.cff` and the README
-- [ ] Attach `rootline-v0.1.pdf` to the v0.1.0 GitHub release
-- [ ] JOSS `paper.md`
-- [ ] Expanded report
+- [x] Publish the report: on the site (flotrpy.github.io/RootLine/rootline-v0.1.pdf) and the Hugging Face dataset
+- [x] JOSS `paper.md` (submitted 2026-11-16; add the AI model version to the disclosure)
+- [x] Expanded report
 
 ## Cleanup (later)
 
