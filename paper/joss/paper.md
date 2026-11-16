@@ -7,8 +7,8 @@ tags:
   - large language models
   - benchmark
 authors:
-  # TODO(flotrpy): JOSS needs your full name, ORCID and affiliation.
-  - name: flotrpy
+  # TODO(flotrpy): add your ORCID (orcid: 0000-0000-0000-0000) and affiliation.
+  - name: Affan Shaik
     affiliation: 1
 affiliations:
   - name: Independent researcher
