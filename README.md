@@ -1,5 +1,7 @@
 # Rootline
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24270040.svg)](https://doi.org/10.5281/zenodo.24270040)
+
 **Which evidence does an AI need to find the root cause, and can it fix it?**
 
 Rootline is an open, reproducible benchmark and replay app for evidence-grounded
@@ -7,7 +9,8 @@ AI diagnosis of microservice failures. v0.1 measures which telemetry signals
 free and open models need, and whether they can tell network faults from
 application faults.
 
-> Status: v0.1 pilot, results below. Every number in this README is produced
+> Status: v0.1.0 pilot, released 2026-11-16 ([release](https://github.com/Flotrpy/RootLine/releases/tag/v0.1.0),
+> [site](https://flotrpy.github.io/RootLine/), [dataset](https://huggingface.co/datasets/Flotrpy/rootline)). Results below. Every number in this README is produced
 > by `make reproduce` from the published runs. v0.1 answers RQ1 and RQ2 only;
 > see [Limitations](#limitations).
 
@@ -219,6 +222,13 @@ v0.1 is a pilot. Read every result with these limits in mind.
 - **Reruns.** Snapshots that overlapped a crash of the testbed itself,
   including two whose baseline was already unhealthy, were moved to
   `data/old/` and run again with the same fault and replica number.
+
+## Citing
+
+Cite the release on Zenodo: [10.5281/zenodo.24270040](https://doi.org/10.5281/zenodo.24270040)
+(v0.1.0), or [10.5281/zenodo.24270039](https://doi.org/10.5281/zenodo.24270039)
+for all versions. `CITATION.cff` has the details; GitHub's "Cite this
+repository" button reads it.
 
 ## Licence
 
