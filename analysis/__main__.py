@@ -91,6 +91,15 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
     from analysis.exploratory import edge_scoring
 
     edge = edge_scoring(runs, labels)
+    from analysis import discussion
+
+    disc = {
+        "by_condition": discussion.by_condition(runs),
+        "by_layer": discussion.by_layer(runs, labels),
+        "calibration": discussion.calibration(runs),
+        "false_alarm_targets": discussion.false_alarm_targets(runs, labels),
+        "layer_answers": discussion.layer_answers(runs),
+    }
     edge.write_csv(out / "exploratory_edge_scoring.csv")
     if not emu.is_empty():
         emu.write_csv(out / "emulation_validity.csv")
@@ -132,6 +141,10 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
         "hypotheses": [{k: _clean(v) for k, v in r.items()} for r in hyp.to_dicts()],
         "emulation_validity": [{k: _clean(v) for k, v in r.items()} for r in emu.to_dicts()],
         "fault_visibility": [{k: _clean(v) for k, v in r.items()} for r in vis.to_dicts()],
+        # Descriptive breakdowns for the discussion (no tests).
+        "discussion": {
+            k: [{c: _clean(v) for c, v in r.items()} for r in d.to_dicts()] for k, d in disc.items()
+        },
         # Exploratory, not pre-registered: edge faults scored at either end.
         "exploratory_edge_scoring": [{k: _clean(v) for k, v in r.items()} for r in edge.to_dicts()],
     }
