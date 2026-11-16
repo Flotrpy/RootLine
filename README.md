@@ -1,18 +1,70 @@
-# Rootline
+<p align="center">
+  <a href="https://flotrpy.github.io/RootLine/">
+    <img src="docs/assets/banner.svg" alt="Rootline: when the app breaks, can an AI find why?" width="100%">
+  </a>
+</p>
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24270040.svg)](https://doi.org/10.5281/zenodo.24270040)
+<p align="center">
+  <a href="https://github.com/Flotrpy/RootLine/releases/tag/v0.1.0"><img alt="Release" src="https://img.shields.io/github/v/release/Flotrpy/RootLine?label=release&color=black"></a>
+  <a href="https://github.com/Flotrpy/RootLine/actions/workflows/ci.yml"><img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/Flotrpy/RootLine/ci.yml?branch=main&label=tests"></a>
+  <a href="https://doi.org/10.5281/zenodo.24270040"><img alt="DOI" src="https://zenodo.org/badge/DOI/10.5281/zenodo.24270040.svg"></a>
+  <a href="https://flotrpy.github.io/RootLine/"><img alt="Website" src="https://img.shields.io/badge/website-live-black"></a>
+  <a href="https://flotrpy.github.io/RootLine/rootline-v0.1.pdf"><img alt="Report" src="https://img.shields.io/badge/report-PDF-black"></a>
+  <a href="https://huggingface.co/datasets/Flotrpy/rootline"><img alt="Dataset on Hugging Face" src="https://img.shields.io/badge/%F0%9F%A4%97%20dataset-Flotrpy%2Frootline-black"></a>
+  <br>
+  <a href="LICENSE"><img alt="Code licence" src="https://img.shields.io/badge/code-Apache--2.0-blue"></a>
+  <a href="https://creativecommons.org/licenses/by/4.0/"><img alt="Data licence" src="https://img.shields.io/badge/data-CC%20BY%204.0-blue"></a>
+  <img alt="Cost" src="https://img.shields.io/badge/cost-%240-brightgreen">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white">
+  <img alt="Go" src="https://img.shields.io/badge/Go-controller-00ADD8?logo=go&logoColor=white">
+  <img alt="Rust" src="https://img.shields.io/badge/Rust-replay%20CLI-000000?logo=rust&logoColor=white">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-site-000000?logo=nextdotjs&logoColor=white">
+  <img alt="Arduino" src="https://img.shields.io/badge/Arduino-UNO%20Q-00878F?logo=arduino&logoColor=white">
+</p>
 
-**Which evidence does an AI need to find the root cause, and can it fix it?**
+<p align="center">
+  <a href="https://flotrpy.github.io/RootLine/"><b>Website</b></a> ·
+  <a href="https://flotrpy.github.io/RootLine/rootline-v0.1.pdf"><b>Read the report</b></a> ·
+  <a href="https://huggingface.co/datasets/Flotrpy/rootline"><b>Download the data</b></a> ·
+  <a href="#results-v01-pilot"><b>Results</b></a> ·
+  <a href="#quick-start"><b>Run it yourself</b></a> ·
+  <a href="#citing"><b>Cite</b></a>
+</p>
 
-Rootline is an open, reproducible benchmark and replay app for evidence-grounded
-AI diagnosis of microservice failures. v0.1 measures which telemetry signals
-free and open models need, and whether they can tell network faults from
-application faults.
+---
 
-> Status: v0.1.0 pilot, released 2026-11-16 ([release](https://github.com/Flotrpy/RootLine/releases/tag/v0.1.0),
-> [site](https://flotrpy.github.io/RootLine/), [dataset](https://huggingface.co/datasets/Flotrpy/rootline)). Results below. Every number in this README is produced
-> by `make reproduce` from the published runs. v0.1 answers RQ1 and RQ2 only;
-> see [Limitations](#limitations).
+## In plain words
+
+When a website breaks, the error usually shows up far from where it started.
+Engineers dig through metrics, traces and logs to find the one thing that
+actually broke: the **root cause**. People want AI to do this job. Rootline
+tests how well free AI models really do it.
+
+1. **Break it.** We break a real online shop on purpose, in 14 different ways
+   plus normal runs as a control, and on real Wi-Fi with two Arduino boards.
+2. **Freeze it.** We save everything an engineer would see.
+3. **Ask the AI.** We give the same evidence to free AI models and ask what
+   broke, and every answer must point to the evidence it used.
+4. **Score it.** We check every answer against the truth.
+
+**What we found in v0.1:** the free models usually got it wrong (the best one
+found the exact root cause about 1 time in 10), they were very sure of
+themselves even when wrong, and they raised false alarms when nothing was
+broken. The full numbers are [below](#results-v01-pilot).
+
+**Start here**
+
+| I want to… | Go to |
+|---|---|
+| See the results and explore incidents | [the website](https://flotrpy.github.io/RootLine/) |
+| Read the research report | [report (PDF)](https://flotrpy.github.io/RootLine/rootline-v0.1.pdf) |
+| Download the data | [Hugging Face dataset](https://huggingface.co/datasets/Flotrpy/rootline) |
+| Rerun every number myself | [Quick start](#quick-start), then `make data && make reproduce` |
+| Cite this work | [Citing](#citing) · DOI [10.5281/zenodo.24270040](https://doi.org/10.5281/zenodo.24270040) |
+
+> **Status:** v0.1.0 pilot, released 2026-11-16. Every number in this README
+> is produced by `make reproduce` from the published runs. v0.1 answers two
+> research questions (RQ1, RQ2); see [Limitations](#limitations).
 
 ## How it works
 
