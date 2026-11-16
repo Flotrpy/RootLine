@@ -166,6 +166,29 @@ to v0.2 and not tested here.
   )
 }
 
+== Exploratory: either end of a broken link
+
+_Not pre-registered; it does not change any result above._ For a fault on a
+link, the pre-registered scoring expects the downstream service (payment for
+checkout → payment). Models often name the caller. Here the same answers are
+re-scored with one change: for link faults, naming either end of the link
+with the right category counts as correct.
+
+#if r.exploratory_edge_scoring.len() > 0 {
+  figure(
+    table(
+      columns: 6,
+      align: (left, right, right, right, right, right),
+      table.header[*Model*][*Top-1*][*Top-1, either end*][*Link faults*][*Link top-1*][*Link top-1, either end*],
+      ..r.exploratory_edge_scoring.map(e => (
+        raw(e.model_id), pct(e.top1_official), pct(e.top1_either_end),
+        str(e.n_edge_faults), pct(e.edge_top1_official), pct(e.edge_top1_either_end),
+      )).flatten()
+    ),
+    caption: [Combined evidence, unperturbed. Exploratory re-scoring of the same answers; the hypothesis tests use the pre-registered rule.],
+  )
+}
+
 == Manipulation check <visibility>
 
 Does each injected fault show in its own snapshot? For every snapshot, the

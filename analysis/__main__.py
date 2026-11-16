@@ -88,6 +88,10 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
     hyp, cascade_table = hypotheses(runs, labels, trials, baseline_preds)
     hyp.write_csv(out / "hypotheses.csv")
     emu = emulation_validity(runs, labels)
+    from analysis.exploratory import edge_scoring
+
+    edge = edge_scoring(runs, labels)
+    edge.write_csv(out / "exploratory_edge_scoring.csv")
     if not emu.is_empty():
         emu.write_csv(out / "emulation_validity.csv")
 
@@ -128,6 +132,8 @@ def reproduce(root: Path, out: Path) -> dict[str, object]:
         "hypotheses": [{k: _clean(v) for k, v in r.items()} for r in hyp.to_dicts()],
         "emulation_validity": [{k: _clean(v) for k, v in r.items()} for r in emu.to_dicts()],
         "fault_visibility": [{k: _clean(v) for k, v in r.items()} for r in vis.to_dicts()],
+        # Exploratory, not pre-registered: edge faults scored at either end.
+        "exploratory_edge_scoring": [{k: _clean(v) for k, v in r.items()} for r in edge.to_dicts()],
     }
     (out / "results.json").write_text(json.dumps(results, indent=2, sort_keys=True) + "\n")
     return results
