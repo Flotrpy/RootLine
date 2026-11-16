@@ -56,6 +56,8 @@ data/packs/
 
 # Built by `python -m analysis site-data`
 web/public/data/
+# The report PDF is built into the site by the pages workflow.
+web/public/*.pdf
 web/public/duckdb/
 web/out/
 web/.next/

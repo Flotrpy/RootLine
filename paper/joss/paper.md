@@ -124,13 +124,14 @@ figure.
 
 # AI usage disclosure
 
-<!-- TODO(flotrpy): JOSS requires the AI systems and versions used, where
-they were used (code, documentation, this paper), and a statement that a
-human reviewed and validated the output. Fill in and edit before
-submitting. -->
-Generative AI tools were used in writing the code, documentation and this
-paper. The author reviewed and validated all generated content, and every
-reported number is produced by the analysis code from the published runs.
+The software, tests, documentation, website and drafts of this paper and the
+technical report were written with the help of Claude Code (Anthropic), an
+AI coding assistant, working in this repository under the author's
+direction. The author chose the research questions, hypotheses, faults and
+models, set up and ran the testbed and the hardware, and reviewed and
+validated the generated code and text. Every reported number is produced by
+the analysis code from the published runs, and the test suite checks that
+none is typed by hand.
 
 # Acknowledgements
 
