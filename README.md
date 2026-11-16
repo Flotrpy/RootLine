@@ -7,9 +7,9 @@ AI diagnosis of microservice failures. v0.1 measures which telemetry signals
 free and open models need, and whether they can tell network faults from
 application faults.
 
-> Status: v0.1 pilot under construction. No results yet. Every number that
-> appears here later is produced by `make reproduce`. v0.1 answers RQ1 and
-> RQ2 only; see [Limitations](#limitations).
+> Status: v0.1 pilot, results below. Every number in this README is produced
+> by `make reproduce` from the published runs. v0.1 answers RQ1 and RQ2 only;
+> see [Limitations](#limitations).
 
 ## How it works
 
@@ -45,6 +45,50 @@ reported as "deferred to v0.2" and not tested.
 
 Scope: only freely available open-weight models and free-tier APIs. Results
 characterise what budget-constrained teams can achieve today, not the frontier.
+
+## Results (v0.1 pilot)
+
+504 scored runs: 3 models × 4 evidence conditions × 42 snapshots (30 pilot,
+12 hardware), all at temperature 0 within the same 6,000-token budget. Full
+details, tests and per-snapshot tables are in the technical report
+(`make paper`). **The headline is negative: these free models rarely find the
+root cause, and neither hypothesis is supported at a significant level.**
+
+**Combined evidence, all 42 snapshots** (95% bootstrap CI in brackets):
+
+| Model | Top-1 | Top-3 | Layer | Evidence validity | Healthy false alarms |
+|-------|-------|-------|-------|-------------------|----------------------|
+| `gpt-oss-120b@groq` | 9.5% [2.4–19.0] | 19.0% | 66.7% | 16.9% | 2 of 2 |
+| `gemma3-4b-q4@ollama` | 4.8% [0.0–11.9] | 9.5% | 47.6% | 14.8% | 2 of 2 |
+| `qwen3-8b-q4@ollama` | 2.4% [0.0–7.1] | 2.4% | 31.0% | 17.0% | 2 of 2 |
+
+Top-1 means the first hypothesis names the right service and category.
+With combined evidence every answer was valid JSON (12 of the small models'
+252 single-signal answers were not, all metrics-only), and every model raised
+a false alarm on both healthy controls.
+
+**The two questions** (tested on the strongest model, `gpt-oss-120b`):
+
+| | Hypothesis | Result |
+|-|------------|--------|
+| RQ1 | Combined signals beat the best single signal by ≥ 10 points top-1 | **Not supported.** Combined 9.5% vs 11.9% for logs and for metrics alone (traces: 0%); effect −2.4 points, McNemar p = 1.0 (Holm). |
+| RQ2 | Layer accuracy is ≥ 15 points lower on network faults than application faults | **Direction as predicted, not significant.** 55% on network faults vs 85% on application faults (20 each); effect 30 points, Fisher p = 0.16 (Holm). |
+
+**What the answers show.** On clear application faults the large model is
+often exactly right (for example `payment / error` for paymentFailure). On
+network faults it usually gets the layer and the kind of fault right but
+blames the caller (`checkout`), while the pre-registered rule scores the
+service at the far end of the link (`payment`). Under that rule no model gets
+any of the 22 link faults exactly right. An exploratory re-scoring that
+accepts either end of the link (not pre-registered, outside the tests)
+raises `gpt-oss-120b` to 16.7% top-1 overall and 13.6% on link faults. Even
+then, scores stay low.
+
+**Hardware arm.** With combined evidence, no model named the exact root
+cause of any hardware fault,
+so the comparison with emulated faults is uninformative at this sample size.
+Several injected faults also left little trace in their own snapshots; the
+report's fault-visibility table lists them.
 
 ## Repository layout
 

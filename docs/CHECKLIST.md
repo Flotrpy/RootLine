@@ -21,13 +21,13 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 
 - [x] Choose the models: gpt-oss-120b (Groq, no card), Qwen3 8B and Gemma 3 4B (Ollama)
 - [x] Groq account and API key, saved on the cloud environment (never in the repo)
-- [ ] Small models on Kaggle's free GPU (`scripts/kaggle_score.ipynb`; too slow on the PC's CPU)
+- [x] Small models on Kaggle's free GPU: 336 runs (`scripts/kaggle_score.ipynb`)
 - [x] Gate 2: the same snapshot scored twice gives the same answer (gpt-oss-120b, paymentFailure-r1)
-- [ ] Groq runs: daily scheduled job, 168 runs, about 5 days (queue in `Flotrpy/rootline-work`)
-- [ ] Merge the Groq and Kaggle exports: `run merge`
-- [ ] `make reproduce`: results table and the RQ1 and RQ2 charts
-- [ ] Publish the results table in the README, even if the result is negative
-- [ ] `make paper`: read the report
+- [x] Groq runs: 168 runs, finished Nov 15 (queue in `Flotrpy/rootline-work`)
+- [x] Merge the Groq and Kaggle exports: 504 runs
+- [x] `make reproduce`: results table and the RQ1 and RQ2 charts (also checked from a fresh download)
+- [x] Publish the results table in the README, even if the result is negative
+- [ ] `make paper`: read the report (built; flotrpy to read)
 
 ## Release (flotrpy only)
 
@@ -35,7 +35,7 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 - [ ] `make release-check`: no FAIL
 - [x] Hugging Face account (Flotrpy); dataset id `Flotrpy/rootline` set in `analysis/dataset.py`
 - [x] Private upload to Hugging Face: all 42 snapshots and labels; data out of git
-- [ ] Upload again after the reruns and model runs (`make dataset`, then upload)
+- [x] Upload again with all 42 snapshots and 504 runs (private)
 - [ ] Make the Hugging Face dataset public at release (CC BY 4.0)
 - [ ] Turn on Zenodo's GitHub integration (gives the release a DOI)
 - [x] Release notes and CITATION.cff updated for the v0.1 scope
