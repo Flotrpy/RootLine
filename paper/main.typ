@@ -20,7 +20,7 @@
 #let G = "gemma3-4b-q4@ollama"
 #let Q = "qwen3-8b-q4@ollama"
 
-#set document(title: "Rootline: which evidence does an AI need to find the root cause, and can it fix it?", author: "flotrpy")
+#set document(title: "Rootline: which evidence does an AI need to find the root cause, and can it fix it?", author: "Affan Shaik")
 #set page(paper: "a4", margin: (x: 2.2cm, y: 2.4cm), numbering: "1")
 #set text(size: 10.5pt)
 #set heading(numbering: "1.")
@@ -30,7 +30,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[Rootline: which evidence does an AI need to find the root cause, and can it fix it?]
   #v(0.4em)
-  flotrpy \
+  Affan Shaik · #link("https://orcid.org/0009-0008-6203-3226")[ORCID 0009-0008-6203-3226] \
   #text(size: 9pt)[Technical report v0.1 · #r.label · results are from a pilot and carry wide confidence intervals]
 ]
 

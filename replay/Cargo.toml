@@ -3,7 +3,7 @@ name = "rootline"
 version = "0.1.0"
 description = "Replay Rootline incident snapshots and evidence packs"
 license = "Apache-2.0"
-authors = ["flotrpy"]
+authors = ["Affan Shaik"]
 edition = "2021"
 
 [dependencies]
