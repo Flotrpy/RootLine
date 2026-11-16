@@ -125,7 +125,12 @@ def check_runs(root: Path) -> list[Check]:
     )
     p1 = runs.filter(pl.col("perturbation") == "p1")
     out.append(
-        Check("P1 (anonymised) runs present", "PASS" if p1.height else "FAIL", f"{p1.height} runs")
+        # P1 is RQ3, held for v0.2: missing runs do not block v0.1.
+        Check(
+            "P1 (anonymised) runs (v0.2)",
+            "PASS" if p1.height else "WARN",
+            f"{p1.height} runs" + ("" if p1.height else ", RQ3 is v0.2"),
+        )
     )
     tiers = sorted(runs["tier"].unique().to_list())
     out.append(
