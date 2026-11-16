@@ -27,22 +27,29 @@ v0.1 answers RQ1 and RQ2 only. Tick items as they are done.
 - [x] Merge the Groq and Kaggle exports: 504 runs
 - [x] `make reproduce`: results table and the RQ1 and RQ2 charts (also checked from a fresh download)
 - [x] Publish the results table in the README, even if the result is negative
-- [ ] `make paper`: read the report (built; flotrpy to read)
+- [x] `make paper`: report built and read
 
 ## Release (flotrpy only)
 
 - [x] Decide or list as limitations every `TODO(flotrpy)` (only the release-day DOI is left)
-- [ ] `make release-check`: no FAIL
+- [x] `make release-check`: no FAIL
 - [x] Hugging Face account (Flotrpy); dataset id `Flotrpy/rootline` set in `analysis/dataset.py`
 - [x] Private upload to Hugging Face: all 42 snapshots and labels; data out of git
 - [x] Upload again with all 42 snapshots and 504 runs (private)
-- [ ] Make the Hugging Face dataset public at release (CC BY 4.0)
-- [ ] Turn on Zenodo's GitHub integration (gives the release a DOI)
+- [x] Make the Hugging Face dataset public at release (CC BY 4.0)
+- [x] Zenodo: DOI 10.5281/zenodo.24270040 (all versions: 10.5281/zenodo.24270039)
 - [x] Release notes and CITATION.cff updated for the v0.1 scope
 - [x] Report: prior work with checked references, limitations, fault-visibility table
-- [ ] Merge the PR with "Create a merge commit"
-- [ ] Tag `v0.1.0` and create the GitHub release from `docs/RELEASE_NOTES_v0.1.0.md`
-- [ ] Run the `pages` workflow to deploy the results site
+- [x] Merge the PR with "Create a merge commit"
+- [x] Tag `v0.1.0` and create the GitHub release from `docs/RELEASE_NOTES_v0.1.0.md`
+- [x] Run the `pages` workflow to deploy the results site (flotrpy.github.io/RootLine)
+
+## After the release
+
+- [x] DOI in `CITATION.cff` and the README
+- [ ] Attach `rootline-v0.1.pdf` to the v0.1.0 GitHub release
+- [ ] JOSS `paper.md`
+- [ ] Expanded report
 
 ## Cleanup (later)
 

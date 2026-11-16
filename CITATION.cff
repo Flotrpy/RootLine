@@ -3,8 +3,13 @@ message: "If you use Rootline, please cite it as below."
 title: "Rootline: an open benchmark and replay app for evidence-grounded AI diagnosis of microservice failures"
 type: software
 authors:
-  - alias: flotrpy
+  - given-names: Affan
+    family-names: Shaik
+    orcid: "https://orcid.org/0009-0008-6203-3226"
+    alias: flotrpy
 version: 0.1.0
+date-released: 2026-11-16
+doi: 10.5281/zenodo.24270040
 license: Apache-2.0
 repository-code: "https://github.com/Flotrpy/RootLine"
 abstract: >-
@@ -19,4 +24,10 @@ keywords:
   - OpenTelemetry
   - large language models
   - benchmark
-# TODO(flotrpy): at release, set date-released and add the Zenodo DOI.
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24270040
+    description: Rootline v0.1.0 (this version)
+  - type: doi
+    value: 10.5281/zenodo.24270039
+    description: All versions

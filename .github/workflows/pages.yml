@@ -35,6 +35,12 @@ jobs:
       # The released dataset: snapshots, labels, runs (checksums verified).
       - run: uv run --project harness python -m analysis fetch-data
       - run: uv run --project harness python -m analysis site-data --include-labels
+      # The technical report, built from the same published runs.
+      - run: uv run --project harness python -m analysis reproduce
+      - uses: typst-community/setup-typst@v4
+        with:
+          typst-version: "0.13.1"
+      - run: typst compile paper/main.typ web/public/rootline-v0.1.pdf
       - run: pnpm install --frozen-lockfile
         working-directory: web
       - run: pnpm build

@@ -7,7 +7,9 @@ import { HeroMap } from "@/components/HeroMap";
 import { ProtocolScrubber } from "@/components/ProtocolScrubber";
 import { WiringDiagram } from "@/components/WiringDiagram";
 import { getHypotheses, getSite, getSummary, photo } from "@/lib/data";
-import { num, pct } from "@/lib/format";
+import { asset, num, pct } from "@/lib/format";
+
+const REPORT = asset("/rootline-v0.1.pdf");
 
 const REPO = "https://github.com/Flotrpy/RootLine";
 
@@ -73,6 +75,9 @@ export default function Home() {
               <div className="hero-actions">
                 <a className="btn" href="#results">
                   See the results <span className="arr">→</span>
+                </a>
+                <a className="btn ghost" href={REPORT}>
+                  Read the report <span className="arr">↓</span>
                 </a>
                 <a className="btn ghost" href={REPO}>
                   Code and data <span className="arr">↗</span>
@@ -491,6 +496,13 @@ export default function Home() {
             </h2>
           </div>
           <div className="open-grid rv">
+            <a className="open-link" href={REPORT}>
+              <span className="eyebrow">PDF</span>
+              <h3>
+                Report <span className="arr">↓</span>
+              </h3>
+              <p>The technical report: method, results, discussion and limitations, built from the runs.</p>
+            </a>
             <a className="open-link" href={REPO}>
               <span className="eyebrow">Apache-2.0</span>
               <h3>

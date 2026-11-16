@@ -11,8 +11,16 @@
 #let fmt(x, digits: 3) = if x == none { "–" } else { str(calc.round(x, digits: digits)) }
 #let pct(x) = if x == none { "–" } else { str(calc.round(x * 100, digits: 1)) + "%" }
 #let hyp(id) = r.hypotheses.find(h => h.rq == id)
+#let D = r.at("discussion", default: (:))
+#let drows(k) = D.at(k, default: ())
+#let dfind(k, m) = drows(k).find(x => x.model_id == m)
+#let dgroup(m, g) = drows("by_layer").find(x => x.model_id == m and x.group == g)
+#let dcond(m, c) = drows("by_condition").find(x => x.model_id == m and x.condition == c)
+#let dcondv(m, c, f) = { let x = dcond(m, c); if x == none { none } else { x.at(f) } }
+#let G = "gemma3-4b-q4@ollama"
+#let Q = "qwen3-8b-q4@ollama"
 
-#set document(title: "Rootline: which evidence does an AI need to find the root cause, and can it fix it?", author: "flotrpy")
+#set document(title: "Rootline: which evidence does an AI need to find the root cause, and can it fix it?", author: "Affan Shaik")
 #set page(paper: "a4", margin: (x: 2.2cm, y: 2.4cm), numbering: "1")
 #set text(size: 10.5pt)
 #set heading(numbering: "1.")
@@ -22,7 +30,7 @@
 #align(center)[
   #text(size: 16pt, weight: "bold")[Rootline: which evidence does an AI need to find the root cause, and can it fix it?]
   #v(0.4em)
-  flotrpy \
+  Affan Shaik · #link("https://orcid.org/0009-0008-6203-3226")[ORCID 0009-0008-6203-3226] \
   #text(size: 9pt)[Technical report v0.1 · #r.label · results are from a pilot and carry wide confidence intervals]
 ]
 
@@ -39,6 +47,12 @@
     On #r.n_snapshots snapshots, the best model (#raw(r.best_model)) reached
     #pct(r.leaderboard.at(0).top1) top-1 accuracy with combined evidence
     (95% CI #pct(r.leaderboard.at(0).top1_ci_low)–#pct(r.leaderboard.at(0).top1_ci_high)).
+    #if drows("calibration").len() > 0 [
+      Models were confident far beyond their accuracy (mean top confidence
+      #pct(calc.min(..drows("calibration").map(x => x.mean_confidence)))–#pct(calc.max(..drows("calibration").map(x => x.mean_confidence)))),
+      #let fa = drows("false_alarm_targets")
+      #if fa.all(x => x.fault_claims == x.answers) [and every model claimed a fault on every healthy snapshot.] else [and models often claimed a fault on healthy snapshots.]
+    ]
   ]
   #let tested = r.hypotheses.filter(h => h.status == "tested")
   This first release tests two of six pre-stated hypotheses (RQ1, RQ2); the
@@ -166,7 +180,30 @@ to v0.2 and not tested here.
   )
 }
 
-== Exploratory: either end of a broken link
+== Results by evidence condition
+
+#if drows("by_condition").len() > 0 {
+  let models = drows("by_condition").map(x => x.model_id).dedup()
+  figure(
+    table(
+      columns: 9,
+      align: (left, right, right, right, right, right, right, right, right),
+      table.header(
+        table.cell(rowspan: 2)[*Model*],
+        table.cell(colspan: 4)[*Top-1*], table.cell(colspan: 4)[*Layer*],
+        [Metrics], [Traces], [Logs], [Combined], [Metrics], [Traces], [Logs], [Combined],
+      ),
+      ..models.map(m => (
+        raw(m),
+        ..("metrics", "traces", "logs", "combined").map(c => pct(dcondv(m, c, "top1"))),
+        ..("metrics", "traces", "logs", "combined").map(c => pct(dcondv(m, c, "layer_acc"))),
+      )).flatten()
+    ),
+    caption: [Every model on every snapshot under each evidence condition, real service names. All conditions share the same 6,000-token budget.],
+  )
+}
+
+== Exploratory: either end of a broken link <tab-either>
 
 _Not pre-registered; it does not change any result above._ For a fault on a
 link, the pre-registered scoring expects the downstream service (payment for
@@ -230,6 +267,103 @@ with its emulated counterpart.
     caption: [Emulation validity: a large gap means emulated faults are not a fair stand-in for real ones.],
   )
 } else [Hardware snapshots not collected yet.]
+
+= Discussion
+
+#let B = r.best_model
+#let cb = dfind("calibration", B)
+#let cg = dfind("calibration", G)
+#let cq = dfind("calibration", Q)
+#let la-g = dfind("layer_answers", G)
+#let la-q = dfind("layer_answers", Q)
+#let la-b = dfind("layer_answers", B)
+#let fb = dfind("false_alarm_targets", B)
+#let hw-b = dgroup(B, "hardware (network)")
+#let net-b = dgroup(B, "network")
+#let have(..xs) = xs.pos().all(x => x != none)
+
+#if have(cb) [
+  == Mostly wrong, and confidently so
+  The headline is negative. With combined evidence the strongest model named
+  the right service and category first in #pct(cb.top1) of snapshots, yet
+  its top hypothesis carried a mean stated confidence of
+  #pct(cb.mean_confidence).
+  #if have(cg, cq) [The small models were more confident still
+  (#pct(cg.mean_confidence) and #pct(cq.mean_confidence)) and less often
+  right (#pct(cg.top1) and #pct(cq.top1)).]
+  A team that acted on the confidence field would be misled: none of the
+  models is calibrated well enough for its confidence to separate good
+  answers from bad ones.
+]
+
+#if have(la-g, la-q, la-b, dgroup(G, "application"), dgroup(G, "network")) [
+  == A layer answer can be a default, not a judgement
+  Layer accuracy looks better than service accuracy, but the answers show
+  why. Gemma 3 4B answered "application" on all #la-g.application of
+  #(la-g.application + la-g.network + la-g.none + la-g.unparsed) snapshots,
+  so its #pct(dgroup(G, "application").layer_acc) on application faults and
+  #pct(dgroup(G, "network").layer_acc) on network faults measure a habit, not
+  a skill. Qwen3 8B leaned the other way (#la-q.network network answers
+  against #la-q.application application answers). Only the strongest model
+  split its answers (#la-b.application application, #la-b.network network)
+  in a way that tracked the faults. Layer accuracy should therefore be read
+  next to the answer distribution, and v0.2 should report balanced accuracy.
+]
+
+#if r.at("exploratory_edge_scoring", default: ()).len() > 0 [
+  == The caller gets the blame on broken links
+  On faults that sit on a link, the strongest model got the layer right in
+  more than half of them and the kind of fault in a few, and in most it named
+  the caller (checkout) as the root cause rather than the service at the far
+  end (payment), which the pre-registered rule scores. Under that rule no
+  model got any link fault exactly right. The exploratory re-scoring in
+  @tab-either shows how much this one rule decides. Both readings are
+  defensible: from the caller's spans, the slow or failing dependency is
+  visible but the fault itself is not. A benchmark that wants to separate
+  "where it hurts" from "what broke" has to ask for both.
+]
+
+#if have(hw-b, net-b) [
+  == Real radio faults read more like network faults
+  For the strongest model, layer accuracy on the hardware faults was
+  #pct(hw-b.layer_acc) (#hw-b.n snapshots), against #pct(net-b.layer_acc)
+  on the emulated network faults (#net-b.n snapshots). This was not tested
+  and the samples are small, but it fits the manipulation check: the Wi-Fi
+  outage and contention produced clearly slow and failing calls, while
+  several emulated faults (connection resets on a link that keeps one
+  connection open, light packet loss) barely moved the evidence. An emulated
+  fault that leaves no trace cannot be diagnosed, so emulation validity
+  should be judged on faults that are visible in both settings.
+]
+
+#if have(fb) [
+  == Nothing was ever "nothing"
+  On the healthy snapshots, across all evidence conditions, the strongest
+  model claimed a fault in #fb.fault_claims of #fb.answers answers#if fb.most_blamed != none [ and blamed #raw(fb.most_blamed) most often]#if drows("false_alarm_targets").all(x => x.fault_claims == x.answers) [; every other model also claimed a fault in every answer].
+  Ordinary background noise in a live shop, such as the occasional failed
+  request or a service that logs errors by design, was enough to produce a
+  confident diagnosis. A useful assistant has to be able to say "no fault";
+  v0.2 needs more healthy snapshots to measure this properly.
+]
+
+#if have(dcond(B, "combined"), dcond(B, "logs"), dcond(B, "metrics"), dcond(B, "traces")) [
+  == More evidence did not help
+  RQ1 expected combined evidence to beat the best single signal. For the
+  strongest model, combined evidence scored #pct(dcond(B, "combined").top1)
+  top-1 against #pct(dcond(B, "logs").top1) for logs and
+  #pct(dcond(B, "metrics").top1) for metrics alone, while traces alone
+  scored #pct(dcond(B, "traces").top1). Because every condition has the same
+  budget, the combined pack carries only a third of each signal. With
+  answers this rarely right, the difference is within noise, but the design
+  question stands: at a fixed budget, breadth costs depth.
+]
+
+== What v0.2 should change
+Report balanced layer accuracy and ask for both the symptom and the cause on
+link faults; add healthy snapshots; strengthen or replace the faults that
+left no trace; run each job more than once, since hosted models were not
+fully deterministic at temperature 0; and test the four held-back questions
+(name reliance, cascades, remediation and the classical baseline).
 
 = Limitations
 

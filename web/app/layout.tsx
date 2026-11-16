@@ -91,7 +91,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </div>
               <div>
                 <h4>Author</h4>
-                <p>flotrpy</p>
+                <p>
+                  Affan Shaik ·{" "}
+                  <a href="https://orcid.org/0009-0008-6203-3226">ORCID</a>
+                </p>
               </div>
             </div>
           </div>
