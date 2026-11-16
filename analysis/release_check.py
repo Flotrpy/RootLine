@@ -214,11 +214,16 @@ def check_git(root: Path) -> list[Check]:
         ),
         Check(
             "all commits authored by flotrpy",
-            "PASS" if authors == {"flotrpy"} else "FAIL",
+            "PASS" if authors <= OWNER_NAMES else "FAIL",
             f"authors: {sorted(authors)}",
         ),
         Check("no attribution trailers", "FAIL" if trailers else "PASS"),
     ]
+
+
+# flotrpy's two commit names: the CLI identity and the GitHub account's
+# display name, which GitHub's web editor uses.
+OWNER_NAMES = {"flotrpy", "Affan Shaik"}
 
 
 def check_todos(root: Path) -> list[Check]:

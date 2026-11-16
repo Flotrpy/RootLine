@@ -49,6 +49,22 @@ def _git_repo(root) -> None:
     git("commit", "-q", "-m", "chore(ci): start")
 
 
+def _commit_as(root, name: str) -> None:
+    (root / f"{name}.txt").write_text(name)
+    for args in (["add", "-A"], ["-c", f"user.name={name}", "commit", "-q", "-m", "docs: x"]):
+        subprocess.run(["git", *args], cwd=root, check=True, capture_output=True)
+
+
+def test_authorship_accepts_both_owner_names_only(tmp_path) -> None:
+    _git_repo(tmp_path)
+    _commit_as(tmp_path, "Affan Shaik")  # GitHub web editor uses the display name
+    checks = {c.name: c for c in run_all(tmp_path)}
+    assert checks["all commits authored by flotrpy"].status == "PASS"
+    _commit_as(tmp_path, "Someone Else")
+    checks = {c.name: c for c in run_all(tmp_path)}
+    assert checks["all commits authored by flotrpy"].status == "FAIL"
+
+
 def test_release_check_on_empty_repo_fails_clearly(tmp_path) -> None:
     _git_repo(tmp_path)
     checks = {c.name: c for c in run_all(tmp_path)}

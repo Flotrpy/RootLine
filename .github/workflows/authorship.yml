@@ -23,7 +23,11 @@ jobs:
           fi
           authors=$(git log --no-merges --format='%an' "$range" | sort -u)
           echo "authors: $authors"
-          test "$authors" = "flotrpy"
+          # flotrpy's two names: the CLI identity and the GitHub display name.
+          if echo "$authors" | grep -vxE 'flotrpy|Affan Shaik' | grep -q .; then
+            echo "commits by someone other than flotrpy" >&2
+            exit 1
+          fi
           if git log --format='%B' "$range" | grep -qiE 'co-authored-by|generated with'; then
             echo "attribution trailer found" >&2
             exit 1
