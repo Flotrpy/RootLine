@@ -35,6 +35,7 @@ def test_report_compiles_from_results(tmp_path) -> None:
     paper = tmp_path / "paper"
     reproduce(tmp_path, paper / "figures")
     shutil.copy(PAPER, paper / "main.typ")
+    shutil.copy(PAPER.with_name("refs.yml"), paper / "refs.yml")
     out = subprocess.run(
         ["typst", "compile", "main.typ", "report.pdf"], cwd=paper, capture_output=True, text=True
     )
