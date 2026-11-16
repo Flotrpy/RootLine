@@ -1,0 +1,5 @@
+{
+  "CONTROLLER_URL": "http://192.168.1.20:8088",
+  "PANEL_FAULTS": "paymentFailure,toxiReset",
+  "POLL_SECONDS": "1"
+}

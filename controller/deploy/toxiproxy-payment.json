@@ -1,0 +1,8 @@
+[
+  {
+    "name": "payment",
+    "listen": "0.0.0.0:50051",
+    "upstream": "payment:50051",
+    "enabled": true
+  }
+]

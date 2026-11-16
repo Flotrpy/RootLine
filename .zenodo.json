@@ -1,0 +1,11 @@
+{
+  "title": "Rootline v0.1: benchmark, replay app and paper artifacts",
+  "upload_type": "software",
+  "description": "An open, reproducible benchmark and replay app for evidence-grounded AI diagnosis of microservice failures. Pilot study (v0.1).",
+  "creators": [{ "name": "flotrpy" }],
+  "license": "Apache-2.0",
+  "keywords": ["root cause analysis", "observability", "OpenTelemetry", "large language models", "benchmark"],
+  "related_identifiers": [
+    { "identifier": "https://github.com/Flotrpy/RootLine", "relation": "isSupplementTo", "scheme": "url" }
+  ]
+}

@@ -3,13 +3,13 @@
 **Which evidence does an AI need to find the root cause, and can it fix it?**
 
 Rootline is an open, reproducible benchmark and replay app for evidence-grounded
-AI diagnosis of microservice failures. It measures which telemetry signals free
-and open models need, whether they can tell network faults from application
-faults, how easily misleading evidence fools them, and whether their proposed
-fixes actually restore service.
+AI diagnosis of microservice failures. v0.1 measures which telemetry signals
+free and open models need, and whether they can tell network faults from
+application faults.
 
-> Status: v0.1 pilot under construction. No results yet. Every number that
-> appears here later is produced by `make reproduce`.
+> Status: v0.1 pilot, results below. Every number in this README is produced
+> by `make reproduce` from the published runs. v0.1 answers RQ1 and RQ2 only;
+> see [Limitations](#limitations).
 
 ## How it works
 
@@ -30,17 +30,65 @@ fixes actually restore service.
 
 ## Research questions
 
-| # | Question |
-|---|----------|
-| RQ1 | Which telemetry signals does a model need for a correct diagnosis? |
-| RQ2 | Can models tell network faults from application faults? |
-| RQ3 | Do models reason from evidence or from service names? |
-| RQ4 | How much accuracy does a cheap-first cascade keep? |
-| RQ5 | Do correct diagnoses lead to working fixes? |
-| RQ6 | Do LLMs beat a classical ML baseline? |
+| # | Question | Release |
+|---|----------|---------|
+| RQ1 | Which telemetry signals does a model need for a correct diagnosis? | v0.1 |
+| RQ2 | Can models tell network faults from application faults? | v0.1 |
+| RQ3 | Do models reason from evidence or from service names? | v0.2 |
+| RQ4 | How much accuracy does a cheap-first cascade keep? | v0.2 |
+| RQ5 | Do correct diagnoses lead to working fixes? | v0.2 |
+| RQ6 | Do LLMs beat a classical ML baseline? | v0.2 |
+
+v0.1 tests only RQ1 and RQ2, with Holm correction across those two. The
+code for RQ3 to RQ6 stays in the repository, but their hypotheses are
+reported as "deferred to v0.2" and not tested.
 
 Scope: only freely available open-weight models and free-tier APIs. Results
 characterise what budget-constrained teams can achieve today, not the frontier.
+
+## Results (v0.1 pilot)
+
+504 scored runs: 3 models × 4 evidence conditions × 42 snapshots (30 pilot,
+12 hardware), all at temperature 0 within the same 6,000-token budget. Full
+details, tests and per-snapshot tables are in the technical report
+(`make paper`). **The headline is negative: these free models rarely find the
+root cause, and neither hypothesis is supported at a significant level.**
+
+**Combined evidence, all 42 snapshots** (95% bootstrap CI in brackets):
+
+| Model | Top-1 | Top-3 | Layer | Evidence validity | Healthy false alarms |
+|-------|-------|-------|-------|-------------------|----------------------|
+| `gpt-oss-120b@groq` | 9.5% [2.4–19.0] | 19.0% | 66.7% | 16.9% | 2 of 2 |
+| `gemma3-4b-q4@ollama` | 4.8% [0.0–11.9] | 9.5% | 47.6% | 14.8% | 2 of 2 |
+| `qwen3-8b-q4@ollama` | 2.4% [0.0–7.1] | 2.4% | 31.0% | 17.0% | 2 of 2 |
+
+Top-1 means the first hypothesis names the right service and category.
+With combined evidence every answer was valid JSON (12 of the small models'
+252 single-signal answers were not, all metrics-only), and every model raised
+a false alarm on both healthy controls.
+
+**The two questions** (tested on the strongest model, `gpt-oss-120b`):
+
+| | Hypothesis | Result |
+|-|------------|--------|
+| RQ1 | Combined signals beat the best single signal by ≥ 10 points top-1 | **Not supported.** Combined 9.5% vs 11.9% for logs and for metrics alone (traces: 0%); effect −2.4 points, McNemar p = 1.0 (Holm). |
+| RQ2 | Layer accuracy is ≥ 15 points lower on network faults than application faults | **Direction as predicted, not significant.** 55% on network faults vs 85% on application faults (20 each); effect 30 points, Fisher p = 0.16 (Holm). |
+
+**What the answers show.** On clear application faults the large model is
+often exactly right (for example `payment / error` for paymentFailure). On
+network faults it usually gets the layer and the kind of fault right but
+blames the caller (`checkout`), while the pre-registered rule scores the
+service at the far end of the link (`payment`). Under that rule no model gets
+any of the 22 link faults exactly right. An exploratory re-scoring that
+accepts either end of the link (not pre-registered, outside the tests)
+raises `gpt-oss-120b` to 16.7% top-1 overall and 13.6% on link faults. Even
+then, scores stay low.
+
+**Hardware arm.** With combined evidence, no model named the exact root
+cause of any hardware fault,
+so the comparison with emulated faults is uninformative at this sample size.
+Several injected faults also left little trace in their own snapshots; the
+report's fault-visibility table lists them.
 
 ## Repository layout
 
@@ -58,10 +106,234 @@ characterise what budget-constrained teams can achieve today, not the frontier.
 ## Quick start
 
 ```bash
-make test        # run every module's unit tests
-make lint        # run every linter
+make test        # unit tests for both Go modules and the Python harness
+make lint        # go vet, golangci-lint, ruff, pyright
+make build       # bin/rootlinectl and bin/snapshotter
 ```
+
+## Running the pilot
+
+Needs Docker, about 16 GB of RAM, and a checkout of the OpenTelemetry Demo
+at a pinned release tag. Docs: [architecture](docs/ARCHITECTURE.md),
+[data contracts](docs/DATA.md).
+
+1. Start the demo with Rootline's wiring, from the demo checkout:
+
+   ```bash
+   export ROOTLINE_DIR=/path/to/RootLine DEMO_GIT_TAG=3.1.0 DEMO_VERSION=3.1.0
+   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" pull --ignore-pull-failures
+   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" build snapshotter
+   COMPOSE="docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f $ROOTLINE_DIR/compose.override.yml" "$ROOTLINE_DIR/controller/deploy/record-digests.sh"
+   docker compose -f compose.yaml -f compose.full.yaml -f compose.observability.yaml -f "$ROOTLINE_DIR/compose.override.yml" up -d --no-build
+   ```
+
+   The fourth line records image digests for the snapshot manifests. It must
+   run before `up`: the snapshotter exits at start without that file.
+
+2. Check that every container is up and none is unhealthy:
+
+   ```bash
+   docker ps --filter health=unhealthy --filter status=exited
+   ```
+
+3. From the RootLine checkout, check a flag round trip:
+
+   ```bash
+   export ROOTLINE_FLAGD_FILE=/path/to/opentelemetry-demo/src/flagd/demo.flagd.json
+   ./bin/rootlinectl flag set adHighCpu on && ./bin/rootlinectl flag reset --all
+   ```
+
+4. Gate 1, one full dry run (about 25 minutes with warm-up):
+
+   ```bash
+   ./bin/rootlinectl incident run --fault paymentFailure --replica 1 --warmup
+   cd harness && uv run python -m rootline_harness.packers ../data/snapshots/paymentFailure-r1 --condition combined
+   ```
+
+   Pass when `data/snapshots/paymentFailure-r1/` holds three Parquet files and
+   a manifest, `data/labels/paymentFailure-r1.json` exists, and the pack
+   shows payment errors near the top. Then move or delete that dry-run
+   snapshot so the campaign can write `paymentFailure-r1` again.
+
+5. Overnight collection (30 incidents, about 6.5 hours, safe to Ctrl-C and
+   rerun):
+
+   ```bash
+   ./bin/rootlinectl campaign --plan plans/pilot.yaml
+   ```
+
+## Limitations
+
+v0.1 is a pilot. Read every result with these limits in mind.
+
+- **Small sample.** Two replicas of each of 15 incident types (30
+  snapshots). Confidence intervals are wide, and a result that misses
+  significance may only mean the sample is too small to show it. All
+  results are reported, including negative ones.
+- **Two questions only.** v0.1 tests RQ1 (which signals) and RQ2 (network
+  vs application). It says nothing about name reliance, cascades, whether
+  fixes work, or classical baselines; those are v0.2.
+- **One testbed, one machine.** Every snapshot comes from the
+  OpenTelemetry Demo 3.1.0 on Docker Compose, on one Windows desktop PC (WSL2),
+  under a fixed load of 20 simulated users. Real production systems are
+  larger, noisier and less tidy. Findings may not carry over.
+- **Changed resource limits.** To keep the demo stable at this load,
+  `compose.override.yml` raises the memory limits of a few services,
+  including the database (see the comments in that file).
+- **Faults the models may have seen.** The application faults are the
+  demo's own public feature flags. Flag and fault names are removed from
+  every prompt, but service names are not, and models may know the demo's
+  source code from training.
+- **Scoring choices.** For network faults the scored root cause is the
+  downstream service of the broken edge (for example `payment` for
+  checkout → payment). Other reasonable choices would change some scores.
+  Prompts are capped at 6,000 tokens, so some evidence is dropped by design.
+- **Fixed service list.** Every v0.1 prompt names the same 19 services.
+  `frontend-web` (browser spans) and `telemetry-docs` also appear in the
+  evidence, and `kafka` and `valkey-cart` are named but emit no spans. No
+  fault targets any of them; the list was kept so all prompts are identical.
+- **Free models only.** Only open-weight models and free-tier APIs, each
+  scored once per snapshot and condition at temperature 0. Hosted models
+  can change without notice; the model ID and date of every run are
+  recorded.
+- **Not fully deterministic.** Temperature 0 does not guarantee the same
+  answer from a hosted model. Gate 2 passed on one snapshot, but when twelve
+  gpt-oss-120b runs on Groq were accidentally repeated, five scored
+  differently the second time. Each result is one run; the first run of each
+  job is the one reported.
+- **Some faults left little trace.** A manipulation check
+  (`python -m analysis fault-visibility`, written to
+  `paper/figures/fault_visibility.csv`) compares each snapshot's affected
+  spans before and after fault onset. Several injected faults barely move
+  them, for example connection resets on a gRPC link that keeps one
+  connection open. These snapshots are kept and scored as they are: a model
+  cannot be expected to find a fault the evidence does not show, and the
+  report says which ones these are.
+- **Hardware arm.** 12 snapshots on one home Wi-Fi network with two
+  Arduino UNO Q boards. Lowering transmit power affects only the board's
+  uplink, and with the board near the router it left no visible trace; a
+  30-second radio-off stands in for a power cut. The relay on the board
+  sent no telemetry of its own, so hardware snapshots contain the same
+  services as emulated ones. It is reported as exploratory, outside the
+  hypothesis tests.
+- **Reruns.** Snapshots that overlapped a crash of the testbed itself,
+  including two whose baseline was already unhealthy, were moved to
+  `data/old/` and run again with the same fault and replica number.
 
 ## Licence
 
 Code: Apache-2.0. Dataset: CC BY 4.0.
+
+## Running the models
+
+From the repository root, after the overnight campaign has written
+`data/snapshots/` and `data/labels/`. Models and provider caps live in
+`harness/rootline_harness/scheduler/` (`providers.py`, `ratelimits.yaml`).
+
+v0.1 scores three open-weight models, one per size:
+
+| Model ID | Size | Runs on |
+|----------|------|---------|
+| `gpt-oss-120b@groq` | 120B (Tier C), low reasoning effort | Groq free tier, no card (`GROQ_API_KEY`) |
+| `qwen3-8b-q4@ollama` | 8B, Q4_K_M (Tier B) | Ollama on the PC |
+| `gemma3-4b-q4@ollama` | 4B, Q4_K_M (Tier A) | Ollama on the PC |
+
+For the local models, install [Ollama](https://ollama.com) and pull the
+exact tags (about 8.6 GB). Run them only when no campaign is running:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+```bash
+ollama pull qwen3:8b && ollama pull gemma3:4b
+```
+
+1. Gate 2, the same snapshot scored twice must match:
+
+   ```bash
+   uv run --project harness python -m rootline_harness.run gate2 --incident paymentFailure-r1 --model gpt-oss-120b@groq
+   ```
+
+2. Queue and run (resumable; waits out rate limits instead of hitting them):
+
+   ```bash
+   uv run --project harness python -m rootline_harness.run enqueue --models gpt-oss-120b@groq qwen3-8b-q4@ollama gemma3-4b-q4@ollama
+   uv run --project harness python -m rootline_harness.run work
+   uv run --project harness python -m rootline_harness.run status
+   uv run --project harness python -m rootline_harness.run export
+   ```
+
+   v0.1 needs only the default (P0) runs. `--perturb p1` adds the
+   anonymised-names runs for RQ3 (v0.2).
+
+   Rate-limited providers can run one day at a time from any machine:
+   `scripts/score_daily.py --model gpt-oss-120b@groq` keeps its queue in a
+   private Hugging Face dataset, stops at the daily cap and resumes the
+   next day. Local models run with their own queue
+   (`--db data/queue-ollama.sqlite`). Each location exports to
+   `data/runs/runs-<name>.parquet`, and `run merge` combines them into
+   `runs.parquet`.
+
+3. (v0.2, RQ5) Live remediation trials with the best model's own actions:
+
+   ```bash
+   uv run --project harness python -m analysis plan-remediation
+   ```
+
+   Run the printed `rootlinectl remediate ... --jsonl data/runs/remediation.jsonl` commands.
+
+4. Regenerate every table and figure into `paper/figures/`, offline:
+
+   ```bash
+   make reproduce
+   ```
+
+## Replay without Python
+
+The Rust CLI renders the exact evidence a model saw and can ask a local
+model. Export the packs once, then:
+
+```bash
+uv run --project harness python -m rootline_harness.export_packs
+```
+
+```bash
+./bin/rootline info data/snapshots/paymentFailure-r1
+```
+
+```bash
+./bin/rootline replay data/snapshots/paymentFailure-r1 --condition combined --perturb p1
+```
+
+```bash
+./bin/rootline replay data/snapshots/paymentFailure-r1 --model ollama/<name>
+```
+
+## Results site
+
+A static site in `web/` (Next.js export, DuckDB-WASM in the browser).
+Build its data, then preview at the root path:
+
+```bash
+uv run --project harness python -m analysis site-data
+```
+
+```bash
+cd web && pnpm install && NEXT_PUBLIC_BASE_PATH="" pnpm build
+```
+
+Photos of the two boards go in `web/public/photos/board-a.jpg` and
+`board-b.jpg` (`.png` or `.webp` also work); the site shows them next to
+its drawings once they exist.
+
+The site deploys to GitHub Pages only at release, by hand (`pages.yml`),
+built with `--include-labels`: incident IDs name the faults, so an earlier
+deploy would reveal the answers.
+
+## Release
+
+`docs/RELEASE.md` is the ordered path from the first snapshot to launch,
+including when to set up the Arduino boards. `make release-check` reports
+what is still missing; `make dataset` builds the Hugging Face dataset;
+`make paper` compiles the technical report from `make reproduce` output.

@@ -1,0 +1,105 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [controller, snapshotter, hw/edge-relay]
+    defaults:
+      run:
+        working-directory: ${{ matrix.module }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ matrix.module }}/go.mod
+          cache-dependency-path: ${{ matrix.module }}/go.sum
+      - run: go vet ./...
+      - uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: ${{ matrix.module }}
+      - run: go test -race ./...
+      - if: matrix.module == 'hw/edge-relay'
+        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -trimpath -o /dev/null .
+
+  python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: harness
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+      - uses: typst-community/setup-typst@v4
+        with:
+          typst-version: "0.13.1"
+      - run: uv sync --frozen
+      - run: uv run ruff check ../harness ../cascade ../baselines ../analysis ../hw/bridge-app ../hw/contention
+      - run: uv run ruff format --check ../harness ../cascade ../baselines ../analysis ../hw/bridge-app ../hw/contention
+      - run: uv run pyright
+      - run: uv run pytest -q
+
+  rust:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: replay
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: replay
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - run: cargo test --locked
+
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      # No data in git: this builds the empty-state site.
+      - run: pnpm build
+
+  arduino:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Panel logic unit tests (desktop)
+        working-directory: hw/mcu-panel/test
+        run: g++ -std=c++17 -Wall -Wextra -Werror -I.. debounce_test.cpp -o t && ./t
+      - uses: arduino/setup-arduino-cli@v2
+      - uses: actions/cache@v4
+        with:
+          path: ~/.arduino15
+          key: arduino-zephyr-1.1.0-routerbridge-0.4.4
+      - run: arduino-cli core update-index
+      - run: arduino-cli core install arduino:zephyr@1.1.0
+      - run: arduino-cli lib install Arduino_RouterBridge@0.4.4
+      - run: arduino-cli compile --fqbn arduino:zephyr:unoq --warnings all hw/mcu-panel

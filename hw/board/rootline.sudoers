@@ -1,0 +1,4 @@
+# /etc/sudoers.d/rootline on Board A: lets the controller run rootline-fault
+# (and nothing else) without a password, so the overnight campaign can
+# degrade and restore the Wi-Fi link unattended.
+arduino ALL=(root) NOPASSWD: /usr/local/bin/rootline-fault

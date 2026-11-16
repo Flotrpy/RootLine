@@ -1,0 +1,30 @@
+name: authorship
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  authorship:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: All commits authored by flotrpy, no attribution trailers
+        run: |
+          if git rev-parse --verify -q origin/main >/dev/null; then
+            range="origin/main..HEAD"
+          else
+            range="HEAD"
+          fi
+          authors=$(git log --no-merges --format='%an' "$range" | sort -u)
+          echo "authors: $authors"
+          test "$authors" = "flotrpy"
+          if git log --format='%B' "$range" | grep -qiE 'co-authored-by|generated with'; then
+            echo "attribution trailer found" >&2
+            exit 1
+          fi

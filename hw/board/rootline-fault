@@ -1,0 +1,62 @@
+#!/bin/bash
+# Board A: the only command Rootline runs as root, through one sudo rule
+# (rootline.sudoers). It degrades the board's own real Wi-Fi link, and
+# always arranges its own undo on the board, so a fault can never get stuck
+# when the SSH connection that started it is lost.
+#
+#   rootline-fault weak-on <mBm> [revert-after-seconds]   transmit power down
+#   rootline-fault weak-off                               transmit power back to auto
+#   rootline-fault outage [seconds]                       Wi-Fi off, then on again
+#   rootline-fault status                                 link and transmit power
+set -euo pipefail
+
+IFACE="${ROOTLINE_IFACE:-wlan0}"
+IW="$(command -v iw || echo /usr/sbin/iw)"
+
+die() { echo "rootline-fault: $*" >&2; exit 2; }
+is_int() { [[ "$1" =~ ^[0-9]+$ ]]; }
+
+stop_revert() {
+  systemctl stop rootline-weak-revert.timer >/dev/null 2>&1 || true
+  systemctl reset-failed rootline-weak-revert.timer rootline-weak-revert.service >/dev/null 2>&1 || true
+}
+
+case "${1:-}" in
+  weak-on)
+    mbm="${2:-}"; after="${3:-480}"
+    is_int "$mbm" && ((mbm <= 2000)) || die "transmit power must be 0..2000 mBm"
+    is_int "$after" && ((after >= 60 && after <= 1800)) || die "revert must be 60..1800 s"
+    stop_revert
+    # Safety net first: put power back by itself even if nobody calls weak-off.
+    systemd-run --quiet --collect --unit=rootline-weak-revert --on-active="$after" \
+      "$IW" dev "$IFACE" set txpower auto
+    "$IW" dev "$IFACE" set txpower fixed "$mbm"
+    echo "weak-on: $IFACE transmit power fixed at $mbm mBm, auto revert in ${after}s"
+    ;;
+  weak-off)
+    "$IW" dev "$IFACE" set txpower auto
+    stop_revert
+    echo "weak-off: $IFACE transmit power auto"
+    ;;
+  outage)
+    secs="${2:-30}"
+    is_int "$secs" && ((secs >= 1 && secs <= 300)) || die "outage must be 1..300 s"
+    # Runs as its own systemd job: the SSH session that started it returns
+    # (the 1 s delay) before Wi-Fi drops, and the radio comes back regardless.
+    systemd-run --quiet --collect --unit="rootline-outage-$(date +%s)" /bin/sh -c "
+      sleep 1
+      if command -v nmcli >/dev/null 2>&1; then
+        nmcli radio wifi off; sleep $secs; nmcli radio wifi on
+      else
+        ip link set $IFACE down; sleep $secs; ip link set $IFACE up
+      fi"
+    echo "outage: $IFACE off for ${secs}s starting in 1s"
+    ;;
+  status)
+    "$IW" dev "$IFACE" link || true
+    "$IW" dev "$IFACE" info | grep -i txpower || echo "txpower: not reported"
+    ;;
+  *)
+    die "usage: rootline-fault weak-on <mBm> [revert-s] | weak-off | outage [s] | status"
+    ;;
+esac
