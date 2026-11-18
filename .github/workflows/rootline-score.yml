@@ -1,0 +1,60 @@
+# One free-tier day of scoring for one cloud model, started by the Rootline
+# MCP connector (or by hand from the Actions tab). It runs the repo's own
+# scripts/score_daily.py, which resumes the queue from the private Hugging Face
+# working dataset, scores until the provider's daily cap would make it wait
+# longer than max_wait seconds, then uploads the queue and the export again.
+# GitHub Actions minutes are free for public repositories.
+#
+# Repository secrets it reads (Settings > Secrets and variables > Actions):
+#   HF_TOKEN          Hugging Face token with write access to Flotrpy/rootline-work
+#   GROQ_API_KEY      for gpt-oss-120b@groq
+#   CEREBRAS_API_KEY  for gpt-oss-120b@cerebras (optional)
+name: rootline-score
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Model id (cloud models only)"
+        required: true
+        default: "gpt-oss-120b@groq"
+        type: choice
+        options: ["gpt-oss-120b@groq", "gpt-oss-120b@cerebras"]
+      max_wait:
+        description: "Stop for the day rather than wait longer than this many seconds"
+        required: false
+        default: "900"
+  # Uncomment to score one free-tier day automatically every morning (7:17 AM EST):
+  # schedule:
+  #   - cron: "17 12 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rootline-score-${{ inputs.model || 'gpt-oss-120b@groq' }}
+  cancel-in-progress: false
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      MODEL: ${{ inputs.model || 'gpt-oss-120b@groq' }}
+      MAX_WAIT: ${{ inputs.max_wait || '900' }}
+    steps:
+      - name: Check inputs
+        run: |
+          case "$MODEL" in gpt-oss-120b@groq|gpt-oss-120b@cerebras) ;; *) echo "bad model"; exit 1;; esac
+          case "$MAX_WAIT" in ''|*[!0-9]*) echo "max_wait must be a number"; exit 1;; esac
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+      - run: uv sync --frozen --project harness
+      - name: Score one free-tier day
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+        run: uv run --project harness python scripts/score_daily.py --model "$MODEL" --max-wait "$MAX_WAIT"
